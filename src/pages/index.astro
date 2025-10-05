@@ -20,7 +20,7 @@ const tools = [
         <section id="hero" class="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center p-4">
             <div class="max-w-4xl">
                 <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-white">
-                    <span class="animated-gradient-text">DevcitoUtils</span>
+                    <span class="bg-gradient-to-r from-blue-500 via-teal-500 to-yellow-500 bg-400% bg-clip-text text-transparent animate-gradient">DevcitoUtils</span>
                 </h1>
                 <p class="text-lg md:text-xl text-gray-400 mb-8">Una colección de herramientas útiles para desarrolladores, directamente en tu navegador.</p>
                 <a href="#tools" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
@@ -50,19 +50,3 @@ const tools = [
         </footer>
     </main>
 </Layout>
-
-<style>
-    .animated-gradient-text {
-        background: linear-gradient(90deg, #3b82f6, #14b8a6, #f59e0b, #ef4444);
-        background-size: 400% 400%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: gradient-animation 10s ease infinite;
-    }
-
-    @keyframes gradient-animation {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-</style>
