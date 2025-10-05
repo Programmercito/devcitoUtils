@@ -1,0 +1,63 @@
+---
+// No server-side logic needed for this component
+---
+
+<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label for="base64-input" class="block text-sm font-bold text-gray-300 mb-2">Entrada</label>
+            <textarea id="base64-input" rows="10" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Escribe o pega aquí..."></textarea>
+        </div>
+        <div>
+            <label for="base64-output" class="block text-sm font-bold text-gray-300 mb-2">Salida</label>
+            <textarea id="base64-output" rows="10" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" readonly placeholder="El resultado aparecerá aquí..."></textarea>
+        </div>
+    </div>
+    <div class="flex items-center justify-center flex-wrap gap-4 mt-6">
+        <button id="encode-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Codificar a Base64
+        </button>
+        <button id="decode-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Decodificar de Base64
+        </button>
+        <button id="copy-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Copiar Salida
+        </button>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('base64-input') as HTMLTextAreaElement;
+    const output = document.getElementById('base64-output') as HTMLTextAreaElement;
+    const encodeBtn = document.getElementById('encode-btn');
+    const decodeBtn = document.getElementById('decode-btn');
+    const copyBtn = document.getElementById('copy-btn');
+
+    encodeBtn?.addEventListener('click', () => {
+        try {
+            output.value = btoa(input.value);
+        } catch (error) {
+            output.value = 'Error: Entrada inválida para codificar a Base64.';
+        }
+    });
+
+    decodeBtn?.addEventListener('click', () => {
+        try {
+            output.value = atob(input.value);
+        } catch (error) {
+            output.value = 'Error: Entrada inválida para decodificar de Base64.';
+        }
+    });
+
+    copyBtn?.addEventListener('click', () => {
+        if (output.value) {
+            navigator.clipboard.writeText(output.value).then(() => {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        }
+    });
+</script>

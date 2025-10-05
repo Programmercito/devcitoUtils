@@ -1,7 +1,68 @@
 ---
-import "../layouts/layout.astro";
-import Layout from "../layouts/layout.astro";
+import Layout from '../layouts/Layout.astro';
+import ToolCard from '../components/ToolCard.astro';
+
+const base64Icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>`;
+
+const tools = [
+    {
+        title: "Codificador / Decodificador Base64",
+        description: "Codifica y decodifica texto fácilmente al formato Base64.",
+        href: "/tools/base64",
+        icon: base64Icon
+    }
+]
 ---
+
 <Layout>
-	
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center p-4">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-white">
+                    <span class="animated-gradient-text">DevcitoUtils</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-400 mb-8">Una colección de herramientas útiles para desarrolladores, directamente en tu navegador.</p>
+                <a href="#tools" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
+                    Explorar Herramientas
+                </a>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section id="tools" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 text-white">Herramientas Disponibles</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {tools.map(tool => <ToolCard {...tool} />)}
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <footer id="about" class="text-center py-16 border-t border-gray-800/50">
+            <div class="max-w-4xl mx-auto px-4">
+                <h3 class="text-3xl font-bold mb-4 text-white">Acerca de Devcito Utils</h3>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Devcito Utils es un proyecto para crear herramientas de acceso rápido que simplifiquen tareas comunes de desarrollo. Todo corre en el cliente, asegurando que tus datos permanezcan privados.
+                </p>
+            </div>
+        </footer>
+    </main>
 </Layout>
+
+<style>
+    .animated-gradient-text {
+        background: linear-gradient(90deg, #3b82f6, #14b8a6, #f59e0b, #ef4444);
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient-animation 10s ease infinite;
+    }
+
+    @keyframes gradient-animation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+</style>
