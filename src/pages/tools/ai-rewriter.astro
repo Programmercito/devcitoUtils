@@ -1,0 +1,92 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const title = "Reescritor de Texto con IA | Devcito Utils";
+const description = "Una herramienta para reformular y mejorar textos usando inteligencia artificial, a partir de un prompt y un texto de entrada.";
+---
+
+<Layout title={title} description={description}>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Reescritor de Texto con IA</h1>
+            <p class="text-lg text-gray-400 mt-2">Usa un prompt para darle instrucciones a la IA sobre cómo reescribir tu texto.</p>
+        </div>
+    
+        <div class="w-full">
+            <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
+                <div class="space-y-6">
+                    <div>
+                        <label for="ai-prompt" class="block text-sm font-bold text-gray-300 mb-2">Prompt (Instrucciones)</label>
+                        <textarea
+                            id="ai-prompt"
+                            rows="3"
+                            class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="Ej: Corrige la gramática y hazlo más formal."
+                        ></textarea>
+                    </div>
+    
+                    <div>
+                        <label for="ai-input" class="block text-sm font-bold text-gray-300 mb-2">Texto Original</label>
+                        <textarea
+                            id="ai-input"
+                            rows="8"
+                            class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="Pega aquí el texto que quieres reescribir..."
+                        ></textarea>
+                    </div>
+    
+                    <div class="flex items-center justify-center">
+                        <button id="rewrite-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-105">
+                            Reescribir Texto
+                        </button>
+                    </div>
+    
+                    <div>
+                        <label for="ai-output" class="block text-sm font-bold text-gray-300 mb-2">Texto de Salida</label>
+                        <textarea
+                            id="ai-output"
+                            rows="8"
+                            class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
+                            readonly
+                            placeholder="El texto reescrito aparecerá aquí..."
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<script>
+    const promptInput = document.getElementById('ai-prompt') as HTMLTextAreaElement;
+    const textInput = document.getElementById('ai-input') as HTMLTextAreaElement;
+    const outputText = document.getElementById('ai-output') as HTMLTextAreaElement;
+    const rewriteBtn = document.getElementById('rewrite-btn');
+
+    async function handleRewrite() {
+        const prompt = promptInput.value;
+        const text = textInput.value;
+
+        if (!prompt || !text) {
+            outputText.value = "Por favor, completa el prompt y el texto original.";
+            return;
+        }
+
+        outputText.value = "Procesando...";
+
+        try {
+            // --- AQUÍ VA LA LÓGICA DE LA IA ---
+            // Simulación de espera
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Placeholder para el resultado
+            outputText.value = "Aquí iría el resultado de la IA.";
+            // ------------------------------------
+
+        } catch (error) {
+            outputText.value = "Ocurrió un error.";
+        }
+    }
+
+    rewriteBtn?.addEventListener('click', handleRewrite);
+</script>
