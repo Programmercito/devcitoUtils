@@ -1,6 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ToolCard from '../components/ToolCard.astro';
+import Layout from "../layouts/Layout.astro";
+import ToolCard from "../components/ToolCard.astro";
 
 const base64Icon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>`;
 
@@ -27,86 +27,103 @@ const aiIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue
 const tools = [
     {
         title: "Codificador / Decodificador Base64",
-        description: "Codifica y decodifica texto fácilmente al formato Base64.",
-        href: "/tools/base64"
+        description:
+            "Codifica y decodifica texto fácilmente al formato Base64.",
+        href: "/tools/base64",
+    },
+    {
+        title: "Reescritor de Texto con IA",
+        description:
+            "Mejora o reformula textos utilizando un prompt personalizado.",
+        href: "/tools/ai-rewriter",
+        icon: aiIcon,
     },
     {
         title: "Formateador y Validador JSON",
         description: "Embellece, minifica y valida la sintaxis de código JSON.",
-        href: "/tools/json-formatter"
+        href: "/tools/json-formatter",
     },
     {
         title: "Decodificador de JWT",
-        description: "Inspecciona el contenido de tokens de autenticación (JWT).",
+        description:
+            "Inspecciona el contenido de tokens de autenticación (JWT).",
         href: "/tools/jwt-decoder",
-        icon: jwtIcon
+        icon: jwtIcon,
     },
     {
         title: "Verificador de Firma HMAC",
         description: "Valida una firma HMAC-SHA256 con una clave secreta.",
         href: "/tools/hmac-verifier",
-        icon: shieldIcon
+        icon: shieldIcon,
     },
     {
         title: "Conversor de Timestamp",
         description: "Convierte entre fechas legibles y timestamps de Unix.",
         href: "/tools/timestamp-converter",
-        icon: clockIcon
+        icon: clockIcon,
     },
     {
         title: "Conversor a Array de Bytes",
-        description: "Convierte una cadena de texto a su array de bytes (Hex, Dec, Bin).",
+        description:
+            "Convierte una cadena de texto a su array de bytes (Hex, Dec, Bin).",
         href: "/tools/bytes-converter",
-        icon: binaryIcon
+        icon: binaryIcon,
     },
     {
         title: "Generador de Hashes (SHA)",
-        description: "Calcula la huella digital de un texto con algoritmos seguros.",
+        description:
+            "Calcula la huella digital de un texto con algoritmos seguros.",
         href: "/tools/hash-generator",
-        icon: fingerprintIcon
+        icon: fingerprintIcon,
     },
     {
         title: "Previsualizador de Markdown",
-        description: "Escribe Markdown y ve el resultado en HTML en tiempo real.",
+        description:
+            "Escribe Markdown y ve el resultado en HTML en tiempo real.",
         href: "/tools/markdown-previewer",
-        icon: markdownIcon
+        icon: markdownIcon,
     },
     {
         title: "Contador de Texto",
         description: "Cuenta caracteres, palabras, líneas y tamaño en bytes.",
         href: "/tools/text-counter",
-        icon: textIcon
+        icon: textIcon,
     },
     {
         title: "Codificador/Decodificador URL",
         description: "Codifica y decodifica texto para que sea seguro en URLs.",
         href: "/tools/url-encoder",
-        icon: urlIcon
+        icon: urlIcon,
     },
-    {
-        title: "Reescritor de Texto con IA",
-        description: "Mejora o reformula textos utilizando un prompt personalizado.",
-        href: "/tools/ai-rewriter",
-        icon: aiIcon
-    }
-]
+];
 ---
 
-<Layout 
+<Layout
     title="Devcito Utils | Herramientas Online para Desarrolladores"
     description="Una colección de herramientas online gratuitas para desarrolladores: conversor Base64, formateador JSON, decodificador JWT, generador de hashes y más."
 >
     <main>
         <!-- Hero Section -->
-        <section id="hero" class="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center p-4">
+        <section
+            id="hero"
+            class="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center p-4"
+        >
             <div class="max-w-4xl">
                 <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-white">
-                    <span class="bg-gradient-to-r from-blue-500 via-teal-500 via-yellow-500 to-red-500 bg-clip-text text-transparent">
+                    <span
+                        class="bg-gradient-to-r from-blue-500 via-teal-500 via-yellow-500 to-red-500 bg-clip-text text-transparent"
+                    >
                         DevcitoUtils
                     </span>
                 </h1>
-                <p class="text-lg md:text-xl text-gray-400 mb-8">Una colección de herramientas útiles para desarrolladores, directamente en tu navegador.</p>
-                <a href="#tools" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105">
+                <p class="text-lg md:text-xl text-gray-400 mb-8">
+                    Una colección de herramientas útiles para desarrolladores,
+                    directamente en tu navegador.
+                </p>
+                <a
+                    href="#tools"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
+                >
                     Explorar Herramientas
                 </a>
             </div>
@@ -115,19 +132,31 @@ const tools = [
         <!-- Tools Section -->
         <section id="tools" class="py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-12 text-white">Herramientas Disponibles</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {tools.map(tool => <ToolCard {...tool} />)}
+                <h2 class="text-4xl font-bold text-center mb-12 text-white">
+                    Herramientas Disponibles
+                </h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                    {tools.map((tool) => <ToolCard {...tool} />)}
                 </div>
             </div>
         </section>
 
         <!-- About Section -->
-        <footer id="about" class="text-center py-16 border-t border-gray-800/50">
+        <footer
+            id="about"
+            class="text-center py-16 border-t border-gray-800/50"
+        >
             <div class="max-w-4xl mx-auto px-4">
-                <h3 class="text-3xl font-bold mb-4 text-white">Acerca de Devcito Utils</h3>
+                <h3 class="text-3xl font-bold mb-4 text-white">
+                    Acerca de Devcito Utils
+                </h3>
                 <p class="text-gray-400 max-w-2xl mx-auto">
-                    Devcito Utils es un proyecto para crear herramientas de acceso rápido que simplifiquen tareas comunes de desarrollo. Todo corre en el cliente, asegurando que tus datos permanezcan privados.
+                    Devcito Utils es un proyecto para crear herramientas de
+                    acceso rápido que simplifiquen tareas comunes de desarrollo.
+                    Todo corre en el cliente, asegurando que tus datos
+                    permanezcan privados.
                 </p>
             </div>
         </footer>
