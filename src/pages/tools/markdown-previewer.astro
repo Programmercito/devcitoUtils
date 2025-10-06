@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MarkdownPreviewer from '../../components/tools/MarkdownPreviewer.astro';
+---
+
+<Layout title="Previsualizador de Markdown | Devcito Utils">
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Previsualizador de Markdown</h1>
+            <p class="text-lg text-gray-400 mt-2">Escribe Markdown y ve el resultado renderizado en HTML en tiempo real.</p>
+        </div>
+        <div class="w-full">
+            <MarkdownPreviewer />
+        </div>
+    </main>
+</Layout>

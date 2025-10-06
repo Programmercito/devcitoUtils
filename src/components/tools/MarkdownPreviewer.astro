@@ -1,0 +1,91 @@
+--- 
+// Markdown Previewer Component
+---
+
+<div class="w-full max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-[70vh]">
+        <div>
+            <textarea id="markdown-input" class="w-full h-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+        </div>
+        <div id="html-output" class="w-full h-full p-4 bg-gray-900/70 border-2 border-gray-700 rounded-lg overflow-y-auto prose"></div>
+    </div>
+</div>
+
+<!-- Load Marked.js library from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const markdownInput = document.getElementById('markdown-input') as HTMLTextAreaElement;
+        const htmlOutput = document.getElementById('html-output') as HTMLDivElement;
+
+        function renderMarkdown() {
+            const markdownText = markdownInput.value;
+            // @ts-ignore
+            if (window.marked) {
+                // @ts-ignore
+                const html = marked.parse(markdownText);
+                htmlOutput.innerHTML = html;
+            }
+        }
+
+        function initialize() {
+            markdownInput.addEventListener('input', renderMarkdown);
+            const placeholder = `# ¡Bienvenido!\n\n## Título de ejemplo\n\nEscribe **Markdown** en el panel de la izquierda.\n\n- Las listas se renderizan\n- El código se resalta\n\n\
+\
+javascript\nconsole.log(\"Hola, Markdown!\");\n\
+\
+ `; 
+            markdownInput.value = placeholder;
+            renderMarkdown();
+        }
+
+        // Poll until marked.js is loaded from the CDN
+        const interval = setInterval(() => {
+            // @ts-ignore
+            if (window.marked) {
+                clearInterval(interval);
+                initialize();
+            }
+        }, 50);
+    });
+</script>
+
+<style is:global>
+    /* Basic prose styles for a dark theme */
+    .prose {
+        color: #d1d5db; /* text-gray-300 */
+        line-height: 1.6;
+    }
+    .prose :where(h1, h2, h3, h4, strong):not(:where([class~="not-prose"] *)) {
+        color: #f9fafb; /* text-gray-50 */
+    }
+    .prose :where(h1):not(:where([class~="not-prose"] *)) { font-size: 2em; font-weight: 700; margin-top: 1.2em; margin-bottom: 0.5em; }
+    .prose :where(h2):not(:where([class~="not-prose"] *)) { font-size: 1.5em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
+    .prose :where(h3):not(:where([class~="not-prose"] *)) { font-size: 1.25em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
+    .prose :where(code):not(:where([class~="not-prose"] *)) {
+        color: #f3f4f6;
+        background-color: #374151;
+        padding: .2em .4em;
+        border-radius: .25rem;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+    .prose :where(pre):not(:where([class~="not-prose"] *)) {
+        background-color: #1f2937;
+        padding: 1em;
+        border-radius: .5rem;
+    }
+    .prose :where(pre code):not(:where([class~="not-prose"] *)) {
+        background-color: transparent;
+        padding: 0;
+    }
+    .prose :where(blockquote):not(:where([class~="not-prose"] *)) {
+        border-left-color: #4b5563;
+        padding-left: 1em;
+        font-style: italic;
+    }
+    .prose :where(a):not(:where([class~="not-prose"] *)) {
+        color: #60a5fa; /* text-blue-400 */
+    }
+</style>
