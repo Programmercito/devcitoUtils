@@ -3,7 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import JWTDecoder from '../../components/tools/JWTDecoder.astro';
 ---
 
-<Layout title="Decodificador JWT | Devcito Utils">
+<Layout 
+    title="Decodificador de JWT (JSON Web Token) | Devcito Utils"
+    description="Pega un JWT para decodificar e inspeccionar el header y el payload. Ideal para depurar tokens de autenticación."
+>
     <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
         <div class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-bold text-white">Decodificador de JWT</h1>

@@ -3,19 +3,46 @@ import Header from '../components/Header.astro';
 import "../styles/global.css";
 
 export interface Props {
-	title?: string;
+	title: string;
+    description: string;
 }
 
-const { title = 'Devcito Utils' } = Astro.props;
+const { 
+    title = 'Devcito Utils | Herramientas para Desarrolladores', 
+    description = 'Una colección de herramientas online gratuitas para desarrolladores.' 
+} = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+const image = new URL("/social-card.svg", Astro.url.origin).href;
 ---
 
 <html lang="es">
 	<head>
+        <!-- SEO Meta Tags -->
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        <!-- Favicon -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={image} />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={image} />
+
+		<meta name="generator" content={Astro.generator} />
         <style>
             html {
                 scroll-behavior: smooth;
