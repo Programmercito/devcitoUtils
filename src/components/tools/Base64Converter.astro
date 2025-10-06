@@ -13,16 +13,23 @@
             <textarea id="base64-output" rows="10" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" readonly placeholder="El resultado aparecerá aquí..."></textarea>
         </div>
     </div>
-    <div class="flex items-center justify-center flex-wrap gap-4 mt-6">
+
+    <div id="error-message" class="hidden bg-red-900/50 border border-red-700 text-red-300 px-4 py-2 rounded-lg my-4 text-sm transition-all"></div>
+
+    <div class="flex items-center justify-center flex-wrap gap-x-6 gap-y-4 mt-6">
         <button id="encode-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Codificar a Base64
+            Codificar
         </button>
         <button id="decode-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Decodificar de Base64
+            Decodificar
         </button>
         <button id="copy-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
             Copiar Salida
         </button>
+        <div class="flex items-center gap-2 text-gray-300">
+            <input type="checkbox" id="url-safe-checkbox" class="h-4 w-4 rounded bg-gray-900 border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer">
+            <label for="url-safe-checkbox" class="cursor-pointer select-none">Formato URL-Safe</label>
+        </div>
     </div>
 </div>
 
@@ -32,20 +39,64 @@
     const encodeBtn = document.getElementById('encode-btn');
     const decodeBtn = document.getElementById('decode-btn');
     const copyBtn = document.getElementById('copy-btn');
+    const urlSafeCheckbox = document.getElementById('url-safe-checkbox') as HTMLInputElement;
+    const errorMessageDiv = document.getElementById('error-message') as HTMLDivElement;
+
+    function hideError() {
+        errorMessageDiv.classList.add('hidden');
+        errorMessageDiv.textContent = '';
+    }
+
+    function showError(message: string) {
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.classList.remove('hidden');
+        output.value = '';
+    }
 
     encodeBtn?.addEventListener('click', () => {
+        hideError();
+        if (!input.value) return;
+
         try {
-            output.value = btoa(input.value);
-        } catch (error) {
-            output.value = 'Error: Entrada inválida para codificar a Base64.';
+            // Esta técnica asegura que los caracteres Unicode (emojis, tildes) se codifiquen correctamente.
+            let base64 = btoa(unescape(encodeURIComponent(input.value)));
+            if (urlSafeCheckbox.checked) {
+                base64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            }
+            output.value = base64;
+        } catch (e) {
+            // Este error es muy raro con la técnica anterior, pero es una salvaguarda.
+            showError('Error inesperado: La entrada contiene caracteres que no se pudieron procesar.');
         }
     });
 
     decodeBtn?.addEventListener('click', () => {
+        hideError();
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Pre-validación: Comprobar si hay caracteres que definitivamente no son Base64.
+        // Se permiten A-Z, a-z, 0-9, +, /, =, -, _ (para URL-safe).
+        if (/[^A-Za-z0-9\+\/=\-_]/.test(text)) {
+            showError('Error: La entrada contiene caracteres inválidos (como espacios, comas, etc.) que no pertenecen al alfabeto Base64.');
+            return;
+        }
+
         try {
-            output.value = atob(input.value);
-        } catch (error) {
-            output.value = 'Error: Entrada inválida para decodificar de Base64.';
+            // Normalizar la entrada: convertir URL-safe a Base64 estándar.
+            let str = text.replace(/-/g, '+').replace(/_/g, '/');
+
+            // Añadir el padding necesario. atob() es estricto con esto.
+            while (str.length % 4) {
+                str += '=';
+            }
+
+            // Decodificar y asegurar que el resultado Unicode se muestre bien.
+            const decoded = decodeURIComponent(escape(atob(str)));
+            output.value = decoded;
+        } catch (e) {
+            // atob() falla si el padding o la longitud son incorrectos, incluso después de nuestros arreglos.
+            showError('Error: La entrada parece Base64 pero tiene un formato incorrecto. Revisa la longitud o el relleno ("=").');
         }
     });
 
