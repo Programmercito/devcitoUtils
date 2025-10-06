@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+    <defs>
+        <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#111827;" />
+            <stop offset="100%" style="stop-color:#0B1120;" />
+        </linearGradient>
+    </defs>
+    <rect width="1200" height="630" fill="url(#bg-gradient)" />
+    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Sora', sans-serif" font-size="100" fill="#ffffff" font-weight="bold">
+        Devcito<tspan fill="#3b82f6">Utils</tspan>
+    </text>
+    <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-family="'Sora', sans-serif" font-size="30" fill="#9ca3af">
+        Herramientas online para desarrolladores
+    </text>
+</svg>
