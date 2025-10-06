@@ -1,0 +1,131 @@
+---
+// String <-> Byte Array Converter Component
+---
+
+<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
+    <div class="space-y-4">
+        <div>
+            <label for="string-input" class="block text-sm font-bold text-gray-300 mb-2">Cadena de Texto</label>
+            <textarea id="string-input" rows="5" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Escribe algo..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="encoding-select" class="block text-sm font-bold text-gray-300 mb-2">Encoding</label>
+                <select id="encoding-select" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="utf-8">UTF-8</option>
+                    <option value="ascii">ASCII</option>
+                </select>
+            </div>
+            <div>
+                <label for="output-format-select" class="block text-sm font-bold text-gray-300 mb-2">Formato de Bytes</label>
+                <select id="output-format-select" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="hex">Hexadecimal</option>
+                    <option value="dec">Decimal</option>
+                    <option value="bin">Binario</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-center flex-wrap gap-4 py-4">
+            <button id="to-bytes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">Convertir a Bytes →</button>
+            <button id="to-string-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">← Convertir a Cadena</button>
+        </div>
+
+        <div>
+            <label for="bytes-output" class="block text-sm font-bold text-gray-300 mb-2">Array de Bytes</label>
+            <textarea id="bytes-output" rows="5" class="w-full p-3 bg-gray-900/70 text-white font-mono border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Pega aquí los bytes..."></textarea>
+        </div>
+    </div>
+
+    <div id="error-message" class="hidden bg-red-900/50 border border-red-700 text-red-300 px-4 py-2 rounded-lg my-4 text-sm transition-all"></div>
+
+</div>
+
+<script>
+    const stringInput = document.getElementById('string-input') as HTMLTextAreaElement;
+    const bytesOutput = document.getElementById('bytes-output') as HTMLTextAreaElement;
+    const encodingSelect = document.getElementById('encoding-select') as HTMLSelectElement;
+    const formatSelect = document.getElementById('output-format-select') as HTMLSelectElement;
+    const toBytesBtn = document.getElementById('to-bytes-btn');
+    const toStringBtn = document.getElementById('to-string-btn');
+    const errorMessageDiv = document.getElementById('error-message') as HTMLDivElement;
+
+    function hideError() { errorMessageDiv.classList.add('hidden'); }
+    function showError(message: string) {
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.classList.remove('hidden');
+    }
+
+    function stringToBytes() {
+        hideError();
+        const text = stringInput.value;
+        if (!text) {
+            bytesOutput.value = '';
+            return;
+        }
+
+        let byteArray: Uint8Array | number[] = [];
+        if (encodingSelect.value === 'utf-8') {
+            byteArray = new TextEncoder().encode(text);
+        } else if (encodingSelect.value === 'ascii') {
+            const asciiArray = [];
+            for (let i = 0; i < text.length; i++) {
+                const charCode = text.charCodeAt(i);
+                if (charCode > 127) {
+                    showError(`El caracter "${text[i]}" no es ASCII válido.`);
+                    bytesOutput.value = '';
+                    return;
+                }
+                asciiArray.push(charCode);
+            }
+            byteArray = asciiArray;
+        }
+
+        const format = formatSelect.value;
+        let outputString = '';
+        for (const byte of byteArray) {
+            if (format === 'hex') outputString += byte.toString(16).padStart(2, '0').toUpperCase() + ' ';
+            else if (format === 'dec') outputString += byte.toString(10) + ' ';
+            else if (format === 'bin') outputString += byte.toString(2).padStart(8, '0') + ' ';
+        }
+        bytesOutput.value = outputString.trim();
+    }
+
+    function bytesToString() {
+        hideError();
+        const byteString = bytesOutput.value.trim();
+        if (!byteString) {
+            stringInput.value = '';
+            return;
+        }
+
+        const parts = byteString.split(/\s+/);
+        const numbers: number[] = [];
+        const radix = formatSelect.value === 'hex' ? 16 : (formatSelect.value === 'dec' ? 10 : 2);
+
+        for (const part of parts) {
+            if (!part) continue;
+            const number = parseInt(part, radix);
+            if (isNaN(number)) {
+                showError(`"${part}" no es un número ${formatSelect.value} válido.`);
+                stringInput.value = '';
+                return;
+            }
+            numbers.push(number);
+        }
+
+        try {
+            const byteArray = new Uint8Array(numbers);
+            const decoder = new TextDecoder(encodingSelect.value, { fatal: true });
+            const decodedString = decoder.decode(byteArray);
+            stringInput.value = decodedString;
+        } catch (e) {
+            showError('El array de bytes no se pudo decodificar con el encoding seleccionado (puede estar corrupto o ser inválido).');
+            stringInput.value = '';
+        }
+    }
+
+    toBytesBtn?.addEventListener('click', stringToBytes);
+    toStringBtn?.addEventListener('click', bytesToString);
+</script>

@@ -1,0 +1,74 @@
+---
+// JSON Formatter Component
+---
+
+<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
+    <div id="status-message" class="h-10 mb-4 flex items-center"></div>
+    
+    <textarea id="json-input" rows="15" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Pega tu JSON aquí..."></textarea>
+
+    <div class="flex items-center justify-center flex-wrap gap-4 mt-6">
+        <button id="format-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Formatear
+        </button>
+        <button id="minify-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Minificar
+        </button>
+        <button id="copy-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Copiar
+        </button>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('json-input') as HTMLTextAreaElement;
+    const formatBtn = document.getElementById('format-btn');
+    const minifyBtn = document.getElementById('minify-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const statusMessage = document.getElementById('status-message') as HTMLDivElement;
+
+    function showStatus(message: string, type: 'success' | 'error') {
+        statusMessage.textContent = message;
+        if (type === 'success') {
+            statusMessage.className = 'h-10 mb-4 flex items-center text-green-400';
+        } else {
+            statusMessage.className = 'h-10 mb-4 flex items-center text-red-400';
+        }
+    }
+
+    function handleJSON(action: 'format' | 'minify') {
+        const text = input.value.trim();
+        if (!text) {
+            showStatus('El área de texto está vacía.', 'error');
+            return;
+        }
+
+        try {
+            const jsonObject = JSON.parse(text);
+            const newText = action === 'format' 
+                ? JSON.stringify(jsonObject, null, 4) 
+                : JSON.stringify(jsonObject);
+            
+            input.value = newText;
+            showStatus('JSON Válido y procesado correctamente.', 'success');
+        } catch (e: any) {
+            showStatus(`Error de sintaxis: ${e.message}`, 'error');
+        }
+    }
+
+    formatBtn?.addEventListener('click', () => handleJSON('format'));
+    minifyBtn?.addEventListener('click', () => handleJSON('minify'));
+
+    copyBtn?.addEventListener('click', () => {
+        if (input.value) {
+            navigator.clipboard.writeText(input.value).then(() => {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '¡Copiado!';
+                showStatus('Contenido copiado al portapapeles.', 'success');
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        }
+    });
+</script>

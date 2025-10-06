@@ -1,0 +1,115 @@
+---
+// HMAC Generator & Verifier Component
+---
+
+<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-2xl mx-auto border border-gray-700/80">
+    <div class="space-y-4">
+        <div>
+            <label for="hmac-payload" class="block text-sm font-bold text-gray-300 mb-2">Payload (Mensaje)</label>
+            <textarea id="hmac-payload" rows="5" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Pega el payload o mensaje original aquí..."></textarea>
+        </div>
+        <div>
+            <label for="hmac-secret" class="block text-sm font-bold text-gray-300 mb-2">Clave Secreta</label>
+            <input type="text" id="hmac-secret" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="La clave secreta usada para firmar">
+        </div>
+        <div>
+            <label for="hmac-signature" class="block text-sm font-bold text-gray-300 mb-2">Firma / Hash (Entrada o Salida)</label>
+            <input type="text" id="hmac-signature" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Pega una firma para verificar, o genera una nueva">
+        </div>
+    </div>
+
+    <div id="status-message" class="h-12 mt-6 flex items-center justify-center rounded-lg"></div>
+
+    <div class="flex items-center justify-center flex-wrap gap-4 mt-4">
+        <button id="generate-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Generar Firma
+        </button>
+        <button id="verify-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105">
+            Verificar Firma
+        </button>
+    </div>
+</div>
+
+<script>
+    const payloadInput = document.getElementById('hmac-payload') as HTMLTextAreaElement;
+    const secretInput = document.getElementById('hmac-secret') as HTMLInputElement;
+    const signatureInput = document.getElementById('hmac-signature') as HTMLInputElement;
+    const generateBtn = document.getElementById('generate-btn');
+    const verifyBtn = document.getElementById('verify-btn');
+    const statusMessage = document.getElementById('status-message') as HTMLDivElement;
+
+    function setStatus(message: string, type: 'success' | 'error' | 'info') {
+        statusMessage.textContent = message;
+        const classes = 'h-12 mt-6 flex items-center justify-center rounded-lg font-bold';
+        if (type === 'success') {
+            statusMessage.className = `${classes} bg-green-900/50 text-green-300`;
+        } else if (type === 'error') {
+            statusMessage.className = `${classes} bg-red-900/50 text-red-300`;
+        } else {
+            statusMessage.className = `${classes} bg-yellow-900/50 text-yellow-300`;
+        }
+    }
+
+    async function generateSignature() {
+        const payload = payloadInput.value;
+        const secret = secretInput.value;
+
+        if (!payload || !secret) {
+            setStatus('El Payload y la Clave Secreta son necesarios para generar.', 'info');
+            return;
+        }
+
+        try {
+            const encoder = new TextEncoder();
+            const keyData = encoder.encode(secret);
+            const messageData = encoder.encode(payload);
+
+            const key = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+            const signatureBuffer = await crypto.subtle.sign('HMAC', key, messageData);
+            
+            const hashArray = Array.from(new Uint8Array(signatureBuffer));
+            const signatureHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            signatureInput.value = signatureHex;
+            setStatus('Firma generada y copiada en el campo de abajo.', 'success');
+        } catch (e) {
+            setStatus('Error inesperado durante la generación.', 'error');
+        }
+    }
+
+    async function verifySignature() {
+        const payload = payloadInput.value;
+        const secret = secretInput.value;
+        const signature = signatureInput.value.toLowerCase().trim();
+
+        if (!payload || !secret || !signature) {
+            setStatus('Todos los campos son necesarios para verificar.', 'info');
+            return;
+        }
+
+        try {
+            const encoder = new TextEncoder();
+            const keyData = encoder.encode(secret);
+            const messageData = encoder.encode(payload);
+
+            const key = await crypto.subtle.importKey('raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+            const generatedSignatureBuffer = await crypto.subtle.sign('HMAC', key, messageData);
+            
+            const hashArray = Array.from(new Uint8Array(generatedSignatureBuffer));
+            const generatedSignatureHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            if (generatedSignatureHex === signature) {
+                setStatus('✅ Firma Válida', 'success');
+            } else {
+                setStatus('❌ Firma Inválida', 'error');
+            }
+
+        } catch (e) {
+            setStatus('Error inesperado durante la verificación.', 'error');
+        }
+    }
+
+    generateBtn?.addEventListener('click', generateSignature);
+    verifyBtn?.addEventListener('click', verifySignature);
+
+</script>

@@ -1,0 +1,91 @@
+---
+// JWT Decoder Component
+---
+
+<div class="w-full max-w-4xl mx-auto">
+    <textarea id="jwt-input" rows="5" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Pega tu token JWT aquí..."></textarea>
+
+    <div id="error-message" class="hidden bg-red-900/50 border border-red-700 text-red-300 px-4 py-2 rounded-lg my-4 text-sm transition-all"></div>
+
+    <div id="jwt-output" class="mt-6 space-y-4"> 
+        <!-- Header -->
+        <div id="jwt-header-section" class="hidden">
+            <h3 class="text-xl font-bold text-red-400 mb-2">HEADER: ALGORITMO Y TIPO DE TOKEN</h3>
+            <pre class="bg-red-900/20 text-red-300 p-4 rounded-lg overflow-x-auto"><code></code></pre>
+        </div>
+        <!-- Payload -->
+        <div id="jwt-payload-section" class="hidden">
+            <h3 class="text-xl font-bold text-purple-400 mb-2">PAYLOAD: DATOS</h3>
+            <pre class="bg-purple-900/20 text-purple-300 p-4 rounded-lg overflow-x-auto"><code></code></pre>
+        </div>
+        <!-- Signature -->
+        <div id="jwt-signature-section" class="hidden">
+            <h3 class="text-xl font-bold text-blue-400 mb-2">FIRMA</h3>
+            <pre class="bg-blue-900/20 text-blue-300 p-4 rounded-lg overflow-x-auto break-all"><code></code></pre>
+            <p class="text-sm text-gray-400 mt-2">Esta es la firma. No se puede decodificar. Se genera en el servidor usando el header, el payload y una clave secreta para verificar la autenticidad del token.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('jwt-input') as HTMLTextAreaElement;
+    const errorMessageDiv = document.getElementById('error-message') as HTMLDivElement;
+    const outputDiv = document.getElementById('jwt-output') as HTMLDivElement;
+
+    const headerSection = document.getElementById('jwt-header-section') as HTMLDivElement;
+    const payloadSection = document.getElementById('jwt-payload-section') as HTMLDivElement;
+    const signatureSection = document.getElementById('jwt-signature-section') as HTMLDivElement;
+
+    function hideError() {
+        errorMessageDiv.classList.add('hidden');
+    }
+
+    function showError(message: string) {
+        errorMessageDiv.textContent = message;
+        errorMessageDiv.classList.remove('hidden');
+        outputDiv.querySelectorAll('div').forEach(el => el.classList.add('hidden'));
+    }
+
+    function decodeJwtPart(part: string) {
+        const base64 = part.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+        return JSON.stringify(JSON.parse(jsonPayload), null, 2);
+    }
+
+    input?.addEventListener('input', () => {
+        const token = input.value.trim();
+        if (!token) {
+            hideError();
+            outputDiv.querySelectorAll('div').forEach(el => el.classList.add('hidden'));
+            return;
+        }
+
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            showError('El token JWT no es válido. Debe consistir en tres partes separadas por puntos.');
+            return;
+        }
+
+        hideError();
+
+        try {
+            // Header
+            const headerCode = headerSection.querySelector('code')!;
+            headerCode.textContent = decodeJwtPart(parts[0]);
+            headerSection.classList.remove('hidden');
+
+            // Payload
+            const payloadCode = payloadSection.querySelector('code')!;
+            payloadCode.textContent = decodeJwtPart(parts[1]);
+            payloadSection.classList.remove('hidden');
+
+            // Signature
+            const signatureCode = signatureSection.querySelector('code')!;
+            signatureCode.textContent = parts[2];
+            signatureSection.classList.remove('hidden');
+
+        } catch (e) {
+            showError('El token parece tener un formato JWT, pero una de sus partes (header o payload) no es un JSON válido o está corrupta.');
+        }
+    });
+</script>

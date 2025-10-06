@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import JSONFormatter from '../../components/tools/JSONFormatter.astro';
+---
+
+<Layout title="Formateador JSON | Devcito Utils">
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Formateador y Validador JSON</h1>
+            <p class="text-lg text-gray-400 mt-2">Pega tu JSON para embellecerlo, minificarlo o validarlo al instante.</p>
+        </div>
+        <div class="w-full">
+            <JSONFormatter />
+        </div>
+    </main>
+</Layout>

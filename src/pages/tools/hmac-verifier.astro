@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HMACVerifier from '../../components/tools/HMACVerifier.astro';
+---
+
+<Layout title="Verificador HMAC | Devcito Utils">
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Generador y Verificador de Firma HMAC</h1>
+            <p class="text-lg text-gray-400 mt-2">Crea o comprueba si una firma HMAC-SHA256 es válida para un mensaje y una clave secreta.</p>
+        </div>
+        <div class="w-full">
+            <HMACVerifier />
+        </div>
+    </main>
+</Layout>
