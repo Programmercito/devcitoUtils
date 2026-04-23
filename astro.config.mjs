@@ -7,6 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://tools.devcito.org',
   vite: {
+    resolve: {
+      tsconfigPaths: false,
+    },
     plugins: [tailwindcss()]
   }
 });

@@ -11,10 +11,11 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label for="encoding-select" class="block text-sm font-bold text-gray-300 mb-2">Encoding</label>
+                <label for="encoding-select" class="block text-sm font-bold text-gray-300 mb-2">Formato de texto</label>
                 <select id="encoding-select" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="utf-8">UTF-8</option>
                     <option value="ascii">ASCII</option>
+                    <option value="latin1">Latin1</option>
                 </select>
             </div>
             <div>
@@ -69,7 +70,7 @@
         if (encodingSelect.value === 'utf-8') {
             byteArray = new TextEncoder().encode(text);
         } else if (encodingSelect.value === 'ascii') {
-            const asciiArray = [];
+            const asciiArray: number[] = [];
             for (let i = 0; i < text.length; i++) {
                 const charCode = text.charCodeAt(i);
                 if (charCode > 127) {
@@ -80,6 +81,18 @@
                 asciiArray.push(charCode);
             }
             byteArray = asciiArray;
+        } else {
+            const latin1Array: number[] = [];
+            for (let i = 0; i < text.length; i++) {
+                const charCode = text.charCodeAt(i);
+                if (charCode > 255) {
+                    showError(`El caracter "${text[i]}" no es válido en Latin1.`);
+                    bytesOutput.value = '';
+                    return;
+                }
+                latin1Array.push(charCode);
+            }
+            byteArray = latin1Array;
         }
 
         const format = formatSelect.value;
@@ -117,11 +130,12 @@
 
         try {
             const byteArray = new Uint8Array(numbers);
-            const decoder = new TextDecoder(encodingSelect.value, { fatal: true });
+            const decoderEncoding = encodingSelect.value === 'latin1' ? 'iso-8859-1' : encodingSelect.value;
+            const decoder = new TextDecoder(decoderEncoding, { fatal: true });
             const decodedString = decoder.decode(byteArray);
             stringInput.value = decodedString;
         } catch (e) {
-            showError('El array de bytes no se pudo decodificar con el encoding seleccionado (puede estar corrupto o ser inválido).');
+            showError('El array de bytes no se pudo decodificar con el formato seleccionado (puede estar corrupto o ser inválido).');
             stringInput.value = '';
         }
     }

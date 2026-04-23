@@ -2,34 +2,64 @@
 // No server-side logic needed for this component
 ---
 
-<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-            <label for="base64-input" class="block text-sm font-bold text-gray-300 mb-2">Entrada</label>
-            <textarea id="base64-input" rows="10" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Escribe o pega aquí..."></textarea>
+<div class="bg-gray-800/60 backdrop-blur-sm p-6 rounded-2xl shadow-xl w-full max-w-5xl mx-auto border border-gray-700/80">
+    <div class="flex flex-col gap-6">
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_1fr] gap-6">
+            <div class="space-y-4 flex flex-col">
+                <label for="base64-input" class="block text-sm font-bold text-gray-300 mb-2">Entrada</label>
+                <textarea id="base64-input" rows="14" class="w-full min-h-[380px] flex-1 p-4 bg-gray-900/80 text-white border-2 border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Escribe o pega aquí..."></textarea>
+            </div>
+            <div class="space-y-4 flex flex-col">
+                <label for="base64-output" class="block text-sm font-bold text-gray-300 mb-2">Salida</label>
+                <textarea id="base64-output" rows="14" class="w-full min-h-[380px] flex-1 p-4 bg-gray-900/80 text-white border-2 border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-600" readonly placeholder="El resultado aparecerá aquí..."></textarea>
+            </div>
         </div>
-        <div>
-            <label for="base64-output" class="block text-sm font-bold text-gray-300 mb-2">Salida</label>
-            <textarea id="base64-output" rows="10" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" readonly placeholder="El resultado aparecerá aquí..."></textarea>
-        </div>
-    </div>
 
-    <div id="error-message" class="hidden bg-red-900/50 border border-red-700 text-red-300 px-4 py-2 rounded-lg my-4 text-sm transition-all"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.8fr] gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="text-encoding-select" class="block text-sm font-bold text-gray-300 mb-2">Formato de texto</label>
+                    <select id="text-encoding-select" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="utf-8">UTF-8</option>
+                        <option value="ascii">ASCII</option>
+                        <option value="latin1">Latin1</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-300 mb-2">Opciones</label>
+                    <div class="space-y-3 rounded-2xl border border-gray-700/80 bg-gray-900/60 p-4">
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <input type="checkbox" id="url-safe-checkbox" class="h-4 w-4 rounded bg-gray-900 border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                            <label for="url-safe-checkbox" class="cursor-pointer select-none">Base64 URL-Safe</label>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <input type="checkbox" id="url-encoded-checkbox" class="h-4 w-4 rounded bg-gray-900 border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                            <label for="url-encoded-checkbox" class="cursor-pointer select-none">Codificar/decodificar como URL</label>
+                        </div>
+                        <p class="text-xs text-gray-500 leading-5">
+                            URL-Safe cambia `+` y `/` por `-` y `_` y puede eliminar el relleno `=`. Codificar como URL aplica `encodeURIComponent` a la cadena Base64.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-    <div class="flex items-center justify-center flex-wrap gap-x-6 gap-y-4 mt-6">
-        <button id="encode-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Codificar
-        </button>
-        <button id="decode-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Decodificar
-        </button>
-        <button id="copy-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
-            Copiar Salida
-        </button>
-        <div class="flex items-center gap-2 text-gray-300">
-            <input type="checkbox" id="url-safe-checkbox" class="h-4 w-4 rounded bg-gray-900 border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer">
-            <label for="url-safe-checkbox" class="cursor-pointer select-none">Formato URL-Safe</label>
+            <div class="rounded-2xl border border-gray-700/80 bg-gray-900/60 p-4">
+                <h2 class="text-sm font-semibold text-gray-200 mb-3">Acciones</h2>
+                <div class="flex flex-col gap-3">
+                    <button id="encode-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl transition-all duration-200 transform hover:scale-105">
+                        Codificar
+                    </button>
+                    <button id="decode-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-2xl transition-all duration-200 transform hover:scale-105">
+                        Decodificar
+                    </button>
+                    <button id="copy-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-2xl transition-all duration-200 transform hover:scale-105">
+                        Copiar Salida
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <div id="error-message" class="hidden bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-2xl text-sm transition-all"></div>
     </div>
 </div>
 
@@ -40,6 +70,8 @@
     const decodeBtn = document.getElementById('decode-btn');
     const copyBtn = document.getElementById('copy-btn');
     const urlSafeCheckbox = document.getElementById('url-safe-checkbox') as HTMLInputElement;
+    const urlEncodedCheckbox = document.getElementById('url-encoded-checkbox') as HTMLInputElement;
+    const encodingSelect = document.getElementById('text-encoding-select') as HTMLSelectElement;
     const errorMessageDiv = document.getElementById('error-message') as HTMLDivElement;
 
     function hideError() {
@@ -53,50 +85,106 @@
         output.value = '';
     }
 
+    function bytesToBase64(bytes: Uint8Array) {
+        let binary = '';
+        for (const byte of bytes) {
+            binary += String.fromCharCode(byte);
+        }
+        return btoa(binary);
+    }
+
+    function base64ToBytes(base64: string) {
+        const binary = atob(base64);
+        return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    }
+
+    function encodeText(text: string) {
+        let bytes: Uint8Array;
+
+        if (encodingSelect.value === 'utf-8') {
+            bytes = new TextEncoder().encode(text);
+        } else if (encodingSelect.value === 'ascii') {
+            const asciiArray = new Uint8Array(text.length);
+            for (let i = 0; i < text.length; i++) {
+                const code = text.charCodeAt(i);
+                if (code > 127) {
+                    throw new Error(`El caracter "${text[i]}" no es válido en ASCII.`);
+                }
+                asciiArray[i] = code;
+            }
+            bytes = asciiArray;
+        } else {
+            const latin1Array = new Uint8Array(text.length);
+            for (let i = 0; i < text.length; i++) {
+                const code = text.charCodeAt(i);
+                if (code > 255) {
+                    throw new Error(`El caracter "${text[i]}" no es válido en Latin1.`);
+                }
+                latin1Array[i] = code;
+            }
+            bytes = latin1Array;
+        }
+
+        return bytesToBase64(bytes);
+    }
+
+    function decodeText(bytes: Uint8Array) {
+        if (encodingSelect.value === 'utf-8') {
+            return new TextDecoder('utf-8').decode(bytes);
+        }
+
+        if (encodingSelect.value === 'ascii') {
+            for (const byte of bytes) {
+                if (byte > 127) {
+                    throw new Error('El array de bytes contiene valores fuera del rango ASCII.');
+                }
+            }
+        }
+
+        return String.fromCharCode(...bytes);
+    }
+
     encodeBtn?.addEventListener('click', () => {
         hideError();
         if (!input.value) return;
 
         try {
-            // Esta técnica asegura que los caracteres Unicode (emojis, tildes) se codifiquen correctamente.
-            let base64 = btoa(unescape(encodeURIComponent(input.value)));
+            let base64 = encodeText(input.value);
             if (urlSafeCheckbox.checked) {
                 base64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
             }
-            output.value = base64;
+            output.value = urlEncodedCheckbox.checked ? encodeURIComponent(base64) : base64;
         } catch (e) {
-            // Este error es muy raro con la técnica anterior, pero es una salvaguarda.
-            showError('Error inesperado: La entrada contiene caracteres que no se pudieron procesar.');
+            showError(e instanceof Error ? e.message : 'Error inesperado: la entrada no se pudo procesar.');
         }
     });
 
     decodeBtn?.addEventListener('click', () => {
         hideError();
-        const text = input.value.trim();
+        let text = input.value.trim();
         if (!text) return;
 
-        // Pre-validación: Comprobar si hay caracteres que definitivamente no son Base64.
-        // Se permiten A-Z, a-z, 0-9, +, /, =, -, _ (para URL-safe).
+        if (urlEncodedCheckbox.checked) {
+            try {
+                text = decodeURIComponent(text);
+            } catch (e) {
+                showError('Error: la entrada no es una URL válida.');
+                return;
+            }
+        }
+
         if (/[^A-Za-z0-9\+\/=\-_]/.test(text)) {
-            showError('Error: La entrada contiene caracteres inválidos (como espacios, comas, etc.) que no pertenecen al alfabeto Base64.');
+            showError('Error: la entrada contiene caracteres inválidos que no pertenecen al Base64 o Base64 URL-Safe.');
             return;
         }
 
         try {
-            // Normalizar la entrada: convertir URL-safe a Base64 estándar.
-            let str = text.replace(/-/g, '+').replace(/_/g, '/');
-
-            // Añadir el padding necesario. atob() es estricto con esto.
-            while (str.length % 4) {
-                str += '=';
-            }
-
-            // Decodificar y asegurar que el resultado Unicode se muestre bien.
-            const decoded = decodeURIComponent(escape(atob(str)));
-            output.value = decoded;
+            let normalized = text.replace(/-/g, '+').replace(/_/g, '/');
+            while (normalized.length % 4) normalized += '=';
+            const bytes = base64ToBytes(normalized);
+            output.value = decodeText(bytes);
         } catch (e) {
-            // atob() falla si el padding o la longitud son incorrectos, incluso después de nuestros arreglos.
-            showError('Error: La entrada parece Base64 pero tiene un formato incorrecto. Revisa la longitud o el relleno ("=").');
+            showError('Error: la entrada parece Base64 pero no se pudo decodificar. Revisa la cadena o el padding.');
         }
     });
 
