@@ -2,19 +2,25 @@
 // JSON Formatter Component
 ---
 
-<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
-    <div id="status-message" class="h-10 mb-4 flex items-center"></div>
-    
-    <textarea id="json-input" rows="15" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Pega tu JSON aquí..."></textarea>
+<div class="tool-panel max-w-4xl mx-auto space-y-4">
+    <div id="status-message" class="min-h-[2.5rem] flex items-center"></div>
 
-    <div class="flex items-center justify-center flex-wrap gap-4 mt-6">
-        <button id="format-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+    <div>
+        <label for="json-input" class="tool-label">JSON</label>
+        <textarea id="json-input" rows="16" class="tool-textarea" placeholder="Pega tu JSON aquí..."></textarea>
+    </div>
+
+    <div class="flex items-center flex-wrap gap-3 pt-1">
+        <button id="format-btn" class="tool-btn tool-btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" /></svg>
             Formatear
         </button>
-        <button id="minify-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+        <button id="minify-btn" class="tool-btn tool-btn-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>
             Minificar
         </button>
-        <button id="copy-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+        <button id="copy-btn" class="tool-btn tool-btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
             Copiar
         </button>
     </div>
@@ -29,28 +35,18 @@
 
     function showStatus(message: string, type: 'success' | 'error') {
         statusMessage.textContent = message;
-        if (type === 'success') {
-            statusMessage.className = 'h-10 mb-4 flex items-center text-green-400';
-        } else {
-            statusMessage.className = 'h-10 mb-4 flex items-center text-red-400';
-        }
+        statusMessage.className = type === 'success'
+            ? 'min-h-[2.5rem] flex items-center text-sm font-semibold text-emerald-400'
+            : 'min-h-[2.5rem] flex items-center text-sm font-semibold text-red-400';
     }
 
     function handleJSON(action: 'format' | 'minify') {
         const text = input.value.trim();
-        if (!text) {
-            showStatus('El área de texto está vacía.', 'error');
-            return;
-        }
-
+        if (!text) { showStatus('El área de texto está vacía.', 'error'); return; }
         try {
             const jsonObject = JSON.parse(text);
-            const newText = action === 'format' 
-                ? JSON.stringify(jsonObject, null, 4) 
-                : JSON.stringify(jsonObject);
-            
-            input.value = newText;
-            showStatus('JSON Válido y procesado correctamente.', 'success');
+            input.value = action === 'format' ? JSON.stringify(jsonObject, null, 4) : JSON.stringify(jsonObject);
+            showStatus('✓ JSON válido y procesado correctamente.', 'success');
         } catch (e: any) {
             showStatus(`Error de sintaxis: ${e.message}`, 'error');
         }
@@ -62,12 +58,10 @@
     copyBtn?.addEventListener('click', () => {
         if (input.value) {
             navigator.clipboard.writeText(input.value).then(() => {
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = '¡Copiado!';
+                const orig = copyBtn.innerHTML;
+                copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> ¡Copiado!`;
                 showStatus('Contenido copiado al portapapeles.', 'success');
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                }, 2000);
+                setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
             });
         }
     });

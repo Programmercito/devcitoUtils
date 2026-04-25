@@ -2,12 +2,26 @@
 // Markdown Previewer Component
 ---
 
-<div class="w-full max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-[70vh]">
-        <div>
-            <textarea id="markdown-input" class="w-full h-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+<div class="w-full max-w-7xl mx-auto tool-panel !p-0 overflow-hidden">
+    <div class="flex items-center border-b border-gray-800/60 bg-gray-900/40 px-4 py-2 gap-6">
+        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+            Editor
+        </span>
+        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+            Vista previa
+        </span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2" style="height: 70vh;">
+        <div class="border-r border-gray-800/60">
+            <textarea id="markdown-input" class="w-full h-full p-4 resize-none outline-none"
+                style="background: rgba(3,7,18,0.6); color: #f1f5f9; font-family: 'JetBrains Mono','Fira Code',monospace; font-size: 0.8rem; line-height: 1.7;">
+            </textarea>
         </div>
-        <div id="html-output" class="w-full h-full p-4 bg-gray-900/70 border-2 border-gray-700 rounded-lg overflow-y-auto prose"></div>
+        <div id="html-output" class="w-full h-full p-5 overflow-y-auto prose"
+            style="background: rgba(3,7,18,0.3);">
+        </div>
     </div>
 </div>
 
@@ -31,61 +45,27 @@
 
         function initialize() {
             markdownInput.addEventListener('input', renderMarkdown);
-            const placeholder = `# ¡Bienvenido!\n\n## Título de ejemplo\n\nEscribe **Markdown** en el panel de la izquierda.\n\n- Las listas se renderizan\n- El código se resalta\n\n\
-\
-\`\`\`javascript\nconsole.log("Hola, Markdown!");\n\`\`\`
-\
- `; 
+            const placeholder = `# ¡Bienvenido!\n\n## Título de ejemplo\n\nEscribe **Markdown** en el panel de la izquierda.\n\n- Las listas se renderizan\n- El código se resalta\n\n\`\`\`javascript\nconsole.log("Hola, Markdown!");\n\`\`\`\n`;
             markdownInput.value = placeholder;
             renderMarkdown();
         }
 
-        // Poll until marked.js is loaded from the CDN
         const interval = setInterval(() => {
             // @ts-ignore
-            if (window.marked) {
-                clearInterval(interval);
-                initialize();
-            }
+            if (window.marked) { clearInterval(interval); initialize(); }
         }, 50);
     });
 </script>
 
 <style is:global>
-    /* Basic prose styles for a dark theme */
-    .prose {
-        color: #d1d5db; /* text-gray-300 */
-        line-height: 1.6;
-    }
-    .prose :where(h1, h2, h3, h4, strong):not(:where([class~="not-prose"] *)) {
-        color: #f9fafb; /* text-gray-50 */
-    }
+    .prose { color: #d1d5db; line-height: 1.6; }
+    .prose :where(h1, h2, h3, h4, strong):not(:where([class~="not-prose"] *)) { color: #f9fafb; }
     .prose :where(h1):not(:where([class~="not-prose"] *)) { font-size: 2em; font-weight: 700; margin-top: 1.2em; margin-bottom: 0.5em; }
     .prose :where(h2):not(:where([class~="not-prose"] *)) { font-size: 1.5em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
     .prose :where(h3):not(:where([class~="not-prose"] *)) { font-size: 1.25em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
-    .prose :where(code):not(:where([class~="not-prose"] *)) {
-        color: #f3f4f6;
-        background-color: #374151;
-        padding: .2em .4em;
-        border-radius: .25rem;
-        font-weight: 600;
-        font-size: 0.9em;
-    }
-    .prose :where(pre):not(:where([class~="not-prose"] *)) {
-        background-color: #1f2937;
-        padding: 1em;
-        border-radius: .5rem;
-    }
-    .prose :where(pre code):not(:where([class~="not-prose"] *)) {
-        background-color: transparent;
-        padding: 0;
-    }
-    .prose :where(blockquote):not(:where([class~="not-prose"] *)) {
-        border-left-color: #4b5563;
-        padding-left: 1em;
-        font-style: italic;
-    }
-    .prose :where(a):not(:where([class~="not-prose"] *)) {
-        color: #60a5fa; /* text-blue-400 */
-    }
+    .prose :where(code):not(:where([class~="not-prose"] *)) { color: #f3f4f6; background-color: #374151; padding: .2em .4em; border-radius: .25rem; font-weight: 600; font-size: 0.9em; }
+    .prose :where(pre):not(:where([class~="not-prose"] *)) { background-color: #1f2937; padding: 1em; border-radius: .5rem; }
+    .prose :where(pre code):not(:where([class~="not-prose"] *)) { background-color: transparent; padding: 0; }
+    .prose :where(blockquote):not(:where([class~="not-prose"] *)) { border-left-color: #4b5563; padding-left: 1em; font-style: italic; }
+    .prose :where(a):not(:where([class~="not-prose"] *)) { color: #60a5fa; }
 </style>

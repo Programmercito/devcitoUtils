@@ -111,67 +111,153 @@ const tools = [
     title="Devcito Utils | Herramientas Online para Desarrolladores"
     description="Una colección de herramientas online gratuitas para desarrolladores: conversor Base64, formateador JSON, decodificador JWT, generador de hashes y más."
 >
-    <main>
-        <!-- Hero Section -->
-        <section
-            id="hero"
-            class="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center p-4"
-        >
-            <div class="max-w-4xl">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-white">
-                    <span
-                        class="bg-gradient-to-r from-blue-500 via-teal-500 via-yellow-500 to-red-500 bg-clip-text text-transparent"
-                    >
-                        DevcitoUtils
-                    </span>
-                </h1>
-                <p class="text-lg md:text-xl text-gray-400 mb-8">
-                    Una colección de herramientas útiles para desarrolladores,
-                    directamente en tu navegador.
-                </p>
-                <a
-                    href="#tools"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
-                >
-                    Explorar Herramientas
-                </a>
-            </div>
-        </section>
 
-        <!-- Tools Section -->
-        <section id="tools" class="py-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center mb-12 text-white">
-                    Herramientas Disponibles
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    {tools.map((tool) => <ToolCard {...tool} />)}
-                </div>
-            </div>
-        </section>
+<style>
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-24px) scale(1.04); }
+  }
+  @keyframes float-med {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-16px) scale(1.02); }
+  }
+  .orb-1 { animation: float-slow 9s ease-in-out infinite; }
+  .orb-2 { animation: float-med 7s ease-in-out infinite 1.5s; }
+  .orb-3 { animation: float-slow 11s ease-in-out infinite 3s; }
 
-        <!-- About Section -->
-        <footer
-            id="about"
-            class="text-center py-16 border-t border-gray-800/50"
-        >
-            <div class="max-w-4xl mx-auto px-4">
-                <h3 class="text-3xl font-bold mb-4 text-white">
-                    Acerca de Devcito Utils
-                </h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    Devcito Utils es un proyecto para crear herramientas de
-                    acceso rápido que simplifiquen tareas comunes de desarrollo.
-                    Todo corre en el cliente, asegurando que tus datos
-                    permanezcan privados.
-                </p>
-                <p class="text-gray-400 max-w-2xl mx-auto mt-4">
-                    Hecho con amor ❤️ por
-                    <a href="https://devcito.org" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">Devcito</a>.
-                </p>
-            </div>
-        </footer>
-    </main>
+  @keyframes shine {
+    from { background-position: -200% center; }
+    to   { background-position:  200% center; }
+  }
+  .shimmer-text {
+    background: linear-gradient(90deg, #60a5fa, #34d399, #f59e0b, #f472b6, #60a5fa);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shine 5s linear infinite;
+  }
+
+  @keyframes card-in {
+    from { opacity:0; transform: translateY(20px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .tools-grid > * {
+    opacity: 0;
+    animation: card-in 0.4s ease forwards;
+  }
+  .tools-grid > *:nth-child(1)  { animation-delay: 0.05s; }
+  .tools-grid > *:nth-child(2)  { animation-delay: 0.10s; }
+  .tools-grid > *:nth-child(3)  { animation-delay: 0.15s; }
+  .tools-grid > *:nth-child(4)  { animation-delay: 0.20s; }
+  .tools-grid > *:nth-child(5)  { animation-delay: 0.25s; }
+  .tools-grid > *:nth-child(6)  { animation-delay: 0.30s; }
+  .tools-grid > *:nth-child(7)  { animation-delay: 0.35s; }
+  .tools-grid > *:nth-child(8)  { animation-delay: 0.40s; }
+  .tools-grid > *:nth-child(9)  { animation-delay: 0.45s; }
+  .tools-grid > *:nth-child(10) { animation-delay: 0.50s; }
+  .tools-grid > *:nth-child(11) { animation-delay: 0.55s; }
+  .tools-grid > *:nth-child(12) { animation-delay: 0.60s; }
+</style>
+
+<main class="relative overflow-x-hidden">
+
+  <!-- Ambient background orbs -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden -z-10" aria-hidden="true">
+    <div class="orb-1 absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full opacity-[0.07]" style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%);"></div>
+    <div class="orb-2 absolute top-1/2 -right-48 w-[480px] h-[480px] rounded-full opacity-[0.06]" style="background: radial-gradient(circle, #06b6d4 0%, transparent 70%);"></div>
+    <div class="orb-3 absolute -bottom-32 left-1/3 w-[400px] h-[400px] rounded-full opacity-[0.05]" style="background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);"></div>
+  </div>
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  <section id="hero" class="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center px-4 py-24">
+    <div class="max-w-4xl">
+
+      <!-- Eyebrow -->
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+        Herramientas de desarrollo
+      </div>
+
+      <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight leading-none">
+        <span class="shimmer-text">DevcitoUtils</span>
+      </h1>
+
+      <p class="text-lg md:text-xl text-gray-400 mb-4 max-w-2xl mx-auto leading-relaxed">
+        Una colección de herramientas gratuitas para desarrolladores.
+        <br class="hidden md:block">
+        <span class="text-gray-300">Rápidas, privadas y sin registro.</span>
+      </p>
+
+      <!-- Stats row -->
+      <div class="flex items-center justify-center gap-8 mb-10 mt-8">
+        <div class="text-center">
+          <div class="text-2xl font-black text-white">{tools.length}</div>
+          <div class="text-xs text-gray-500 uppercase tracking-wider">Herramientas</div>
+        </div>
+        <div class="w-px h-8 bg-gray-800"></div>
+        <div class="text-center">
+          <div class="text-2xl font-black text-white">100%</div>
+          <div class="text-xs text-gray-500 uppercase tracking-wider">En el cliente</div>
+        </div>
+        <div class="w-px h-8 bg-gray-800"></div>
+        <div class="text-center">
+          <div class="text-2xl font-black text-white">0</div>
+          <div class="text-xs text-gray-500 uppercase tracking-wider">Datos enviados</div>
+        </div>
+      </div>
+
+      <a href="#tools"
+        class="group inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 px-8 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg shadow-blue-900/50 hover:shadow-blue-700/60 text-sm">
+        Explorar Herramientas
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Tools Grid ─────────────────────────────────────────────────────────── -->
+  <section id="tools" class="pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Section header -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+        <div>
+          <p class="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-2">Catálogo completo</p>
+          <h2 class="text-3xl md:text-4xl font-black text-white">Herramientas disponibles</h2>
+        </div>
+        <span class="text-sm text-gray-600 font-mono bg-gray-800/60 px-3 py-1.5 rounded-lg border border-gray-700/60 self-start sm:self-auto">
+          {tools.length} tools
+        </span>
+      </div>
+
+      <!-- Grid -->
+      <div class="tools-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {tools.map((tool) => <ToolCard {...tool} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer / About ──────────────────────────────────────────────────────── -->
+  <footer id="about" class="border-t border-gray-800/50 py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-800/60 border border-gray-700/60 mb-5">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h3 class="text-2xl font-black text-white mb-3">Acerca de Devcito Utils</h3>
+      <p class="text-gray-400 max-w-xl mx-auto leading-relaxed">
+        Un proyecto de acceso rápido que simplifica tareas comunes de desarrollo.
+        Todo corre en el cliente — tus datos nunca salen de tu navegador.
+      </p>
+      <p class="text-gray-600 text-sm mt-6">
+        Hecho con ❤️ por
+        <a href="https://devcito.org" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 transition-colors">Devcito</a>.
+      </p>
+    </div>
+  </footer>
+
+</main>
 </Layout>
