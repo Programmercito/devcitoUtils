@@ -2,29 +2,28 @@
 // Text Counter Component
 ---
 
-<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
-    <div class="space-y-4">
-        <div>
-            <textarea id="text-input" rows="10" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Escribe o pega tu texto aquí..."></textarea>
-        </div>
+<div class="tool-panel max-w-4xl mx-auto space-y-5">
+    <div>
+        <label for="text-input" class="tool-label">Texto</label>
+        <textarea id="text-input" rows="10" class="tool-textarea" placeholder="Escribe o pega tu texto aquí..."></textarea>
+    </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div class="bg-gray-900/70 p-4 rounded-lg">
-                <p class="text-sm text-gray-400">Caracteres</p>
-                <p id="char-count" class="text-2xl font-bold text-white">0</p>
-            </div>
-            <div class="bg-gray-900/70 p-4 rounded-lg">
-                <p class="text-sm text-gray-400">Palabras</p>
-                <p id="word-count" class="text-2xl font-bold text-white">0</p>
-            </div>
-            <div class="bg-gray-900/70 p-4 rounded-lg">
-                <p class="text-sm text-gray-400">Líneas</p>
-                <p id="line-count" class="text-2xl font-bold text-white">0</p>
-            </div>
-            <div class="bg-gray-900/70 p-4 rounded-lg">
-                <p class="text-sm text-gray-400">Tamaño (Bytes)</p>
-                <p id="byte-count" class="text-2xl font-bold text-white">0</p>
-            </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="tool-stat-card">
+            <p class="tool-label mb-1">Caracteres</p>
+            <p id="char-count" class="text-3xl font-black text-white">0</p>
+        </div>
+        <div class="tool-stat-card">
+            <p class="tool-label mb-1">Palabras</p>
+            <p id="word-count" class="text-3xl font-black text-white">0</p>
+        </div>
+        <div class="tool-stat-card">
+            <p class="tool-label mb-1">Líneas</p>
+            <p id="line-count" class="text-3xl font-black text-white">0</p>
+        </div>
+        <div class="tool-stat-card">
+            <p class="tool-label mb-1">Bytes</p>
+            <p id="byte-count" class="text-3xl font-black text-white">0</p>
         </div>
     </div>
 </div>
@@ -38,23 +37,13 @@
 
     function updateCounts() {
         const text = input.value;
-
-        // Characters
         charCount.textContent = text.length.toLocaleString('es-ES');
-
-        // Words
         const words = text.trim().split(/\s+/).filter(Boolean);
         wordCount.textContent = text.trim() === '' ? '0' : words.length.toLocaleString('es-ES');
-
-        // Lines
-        const lines = text.split('\n');
-        lineCount.textContent = text === '' ? '0' : lines.length.toLocaleString('es-ES');
-
-        // Bytes (UTF-8)
-        const byteLength = new TextEncoder().encode(text).length;
-        byteCount.textContent = byteLength.toLocaleString('es-ES');
+        lineCount.textContent = text === '' ? '0' : text.split('\n').length.toLocaleString('es-ES');
+        byteCount.textContent = new TextEncoder().encode(text).length.toLocaleString('es-ES');
     }
 
     input.addEventListener('input', updateCounts);
-    updateCounts(); // Initial count
+    updateCounts();
 </script>

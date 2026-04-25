@@ -1,13 +1,191 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&display=swap');
 @import "tailwindcss";
 
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     font-family: 'Sora', sans-serif;
     background-color: #0B1120;
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.1), transparent 1px);
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06), transparent 1px);
     background-size: 2rem 2rem;
+}
+
+/* ── Shared tool design system ──────────────────────────────────────── */
+.tool-panel {
+    background: rgba(17,24,39,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(75,85,99,0.5);
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.06);
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.tool-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+.tool-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(3,7,18,0.7);
+    color: #f1f5f9;
+    border: 1px solid rgba(75,85,99,0.5);
+    border-radius: 0.75rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+.tool-input:focus {
+    border-color: rgba(59,130,246,0.6);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.tool-input::placeholder { color: #4b5563; }
+
+.tool-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: rgba(3,7,18,0.7);
+    color: #f1f5f9;
+    border: 1px solid rgba(75,85,99,0.5);
+    border-radius: 0.75rem;
+    font-family: 'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+.tool-textarea:focus {
+    border-color: rgba(59,130,246,0.6);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.tool-textarea::placeholder { color: #4b5563; }
+
+.tool-select {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background: rgba(3,7,18,0.7);
+    color: #f1f5f9;
+    border: 1px solid rgba(75,85,99,0.5);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.tool-select:focus { border-color: rgba(59,130,246,0.6); }
+
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: 0.75rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.tool-btn:hover { transform: translateY(-1px); }
+.tool-btn:active { transform: scale(0.97); }
+
+.tool-btn-primary {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+}
+.tool-btn-primary:hover { box-shadow: 0 6px 20px rgba(59,130,246,0.5); }
+
+.tool-btn-success {
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: white;
+    box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+}
+.tool-btn-success:hover { box-shadow: 0 6px 20px rgba(16,185,129,0.45); }
+
+.tool-btn-warning {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    color: white;
+    box-shadow: 0 4px 14px rgba(245,158,11,0.3);
+}
+.tool-btn-warning:hover { box-shadow: 0 6px 20px rgba(245,158,11,0.45); }
+
+.tool-btn-ghost {
+    background: rgba(55,65,81,0.6);
+    color: #d1d5db;
+    border: 1px solid rgba(75,85,99,0.5);
+}
+.tool-btn-ghost:hover { background: rgba(75,85,99,0.7); color: white; }
+
+.tool-output-panel {
+    background: rgba(3,7,18,0.8);
+    border: 1px solid rgba(75,85,99,0.4);
+    border-radius: 0.875rem;
+    padding: 1rem 1.25rem;
+    font-family: 'JetBrains Mono','Fira Code',monospace;
+    font-size: 0.8rem;
+    color: #e2e8f0;
+    overflow-x: auto;
+}
+
+.tool-stat-card {
+    background: rgba(3,7,18,0.7);
+    border: 1px solid rgba(75,85,99,0.4);
+    border-radius: 0.875rem;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.tool-stat-card:hover { border-color: rgba(59,130,246,0.35); }
+
+.tool-error {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: rgba(127,29,29,0.4);
+    border: 1px solid rgba(220,38,38,0.4);
+    color: #fca5a5;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    animation: toolFadeIn 0.2s ease;
+}
+.tool-success-msg {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: rgba(6,78,59,0.4);
+    border: 1px solid rgba(16,185,129,0.4);
+    color: #6ee7b7;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+}
+.tool-info-msg {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: rgba(120,53,15,0.4);
+    border: 1px solid rgba(245,158,11,0.4);
+    color: #fcd34d;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+}
+
+@keyframes toolFadeIn {
+    from { opacity:0; transform: translateY(6px); }
+    to   { opacity:1; transform: translateY(0); }
 }

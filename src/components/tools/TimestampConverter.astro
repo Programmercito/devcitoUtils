@@ -2,74 +2,57 @@
 // Timestamp Converter Component
 ---
 
-<div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
-
-    <div class="text-center mb-6">
-        <button id="now-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105">
+<div class="tool-panel max-w-4xl mx-auto space-y-6">
+    <div class="flex justify-center">
+        <button id="now-btn" class="tool-btn tool-btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             Usar fecha y hora actual
         </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        <!-- Timestamp to Date -->
-        <div class="space-y-4">
-            <div>
-                <label for="timestamp-input" class="block text-sm font-bold text-gray-300 mb-2">Unix Timestamp (segundos)</label>
-                <input type="number" id="timestamp-input" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Ej: 1672531200">
-            </div>
-            <div id="date-output" class="p-4 bg-gray-900/70 rounded-lg min-h-[100px] text-gray-300 space-y-2">
-                <p><strong>Hora Local:</strong> <span id="local-time"></span></p>
-                <p><strong>Hora UTC:</strong> <span id="utc-time"></span></p>
-                <p><strong>Relativo:</strong> <span id="relative-time"></span></p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Timestamp → Date -->
+        <div class="space-y-3">
+            <p class="tool-label">Unix Timestamp → Fecha</p>
+            <input type="number" id="timestamp-input" class="tool-input" placeholder="Ej: 1672531200">
+            <div class="tool-output-panel space-y-2">
+                <p class="flex justify-between"><span class="text-gray-500 text-xs uppercase tracking-wider">Local</span><span id="local-time" class="text-blue-300">—</span></p>
+                <p class="flex justify-between"><span class="text-gray-500 text-xs uppercase tracking-wider">UTC</span><span id="utc-time" class="text-blue-300">—</span></p>
+                <p class="flex justify-between"><span class="text-gray-500 text-xs uppercase tracking-wider">Relativo</span><span id="relative-time" class="text-emerald-400 font-semibold">—</span></p>
             </div>
         </div>
 
-        <!-- Date to Timestamp -->
-        <div class="space-y-4">
-            <div>
-                <label for="date-input" class="block text-sm font-bold text-gray-300 mb-2">Fecha y Hora</label>
-                <input type="datetime-local" id="date-input" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-            </div>
-            <div class="p-4 bg-gray-900/70 rounded-lg min-h-[100px] flex items-center justify-center">
-                <p class="text-2xl font-mono text-green-400" id="timestamp-output"></p>
+        <!-- Date → Timestamp -->
+        <div class="space-y-3">
+            <p class="tool-label">Fecha → Unix Timestamp</p>
+            <input type="datetime-local" id="date-input" class="tool-input">
+            <div class="tool-output-panel flex items-center justify-center min-h-[80px]">
+                <p class="text-3xl font-black font-mono text-emerald-400 tracking-widest" id="timestamp-output">—</p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Inputs
     const timestampInput = document.getElementById('timestamp-input') as HTMLInputElement;
     const dateInput = document.getElementById('date-input') as HTMLInputElement;
     const nowBtn = document.getElementById('now-btn');
-
-    // Outputs
     const localTimeOutput = document.getElementById('local-time')!;
     const utcTimeOutput = document.getElementById('utc-time')!;
     const relativeTimeOutput = document.getElementById('relative-time')!;
     const timestampOutput = document.getElementById('timestamp-output')!;
-
     const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
 
     function updateDates() {
         const timestamp = parseInt(timestampInput.value, 10);
-        if (isNaN(timestamp)) {
-            localTimeOutput.textContent = '--';
-            utcTimeOutput.textContent = '--';
-            relativeTimeOutput.textContent = '--';
-            return;
-        }
-
+        if (isNaN(timestamp)) { localTimeOutput.textContent = '—'; utcTimeOutput.textContent = '—'; relativeTimeOutput.textContent = '—'; return; }
         const date = new Date(timestamp * 1000);
         localTimeOutput.textContent = date.toLocaleString('es-ES');
         utcTimeOutput.textContent = date.toUTCString();
-        
         const seconds = Math.round((date.getTime() - Date.now()) / 1000);
         const minutes = Math.round(seconds / 60);
         const hours = Math.round(minutes / 60);
         const days = Math.round(hours / 24);
-
         if (Math.abs(days) > 0) relativeTimeOutput.textContent = rtf.format(days, 'day');
         else if (Math.abs(hours) > 0) relativeTimeOutput.textContent = rtf.format(hours, 'hour');
         else if (Math.abs(minutes) > 0) relativeTimeOutput.textContent = rtf.format(minutes, 'minute');
@@ -77,28 +60,20 @@
     }
 
     function updateTimestamp() {
-        if (!dateInput.value) {
-            timestampOutput.textContent = '--';
-            return;
-        }
-        const date = new Date(dateInput.value);
-        timestampOutput.textContent = String(Math.floor(date.getTime() / 1000));
+        if (!dateInput.value) { timestampOutput.textContent = '—'; return; }
+        timestampOutput.textContent = String(Math.floor(new Date(dateInput.value).getTime() / 1000));
     }
 
     function setNow() {
         const now = new Date();
-        // Ajustar a la zona horaria local para el input datetime-local
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
         dateInput.value = now.toISOString().slice(0, 16);
         timestampInput.value = String(Math.floor(Date.now() / 1000));
-        updateDates();
-        updateTimestamp();
+        updateDates(); updateTimestamp();
     }
 
     timestampInput.addEventListener('input', updateDates);
     dateInput.addEventListener('input', updateTimestamp);
     nowBtn?.addEventListener('click', setNow);
-
-    // Init with current time
     setNow();
 </script>
