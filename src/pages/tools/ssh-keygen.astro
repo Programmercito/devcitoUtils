@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SSHKeyGenerator from '../../components/tools/SSHKeyGenerator.astro';
+---
+
+<Layout
+    title="Generador de Llaves SSH RSA Online Gratis | Devcito Utils"
+    description="Genera un par de llaves SSH RSA (privada y pública) de forma gratuita y segura directo en tu navegador. Elige entre 2048, 4096 u 8192 bits. Sin enviar datos al servidor — toda la criptografía ocurre localmente."
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Generador de Llaves SSH</h1>
+            <p class="text-lg text-gray-400 mt-2 max-w-2xl mx-auto">
+                Crea un par de llaves <strong class="text-gray-300">RSA</strong> (privada y pública) para SSH directamente en tu navegador.
+                Sin servidores, sin rastreo — 100% local y seguro.
+            </p>
+        </div>
+
+        <div class="w-full max-w-4xl">
+            <SSHKeyGenerator />
+        </div>
+
+        <!-- SEO: descriptive content block for search engines -->
+        <section class="w-full max-w-4xl mt-14 border-t border-gray-800/60 pt-10 pb-6">
+            <h2 class="text-xl font-bold text-white mb-4">¿Cómo funciona el generador de llaves SSH?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-400">
+                <div class="bg-gray-800/40 rounded-xl p-5 border border-gray-700/60">
+                    <div class="text-blue-400 font-semibold mb-2 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0012 11" /></svg>
+                        Entropía real del mouse
+                    </div>
+                    <p>Cada movimiento del cursor genera datos impredecibles usados como semilla criptográfica, maximizando la aleatoriedad de la llave generada.</p>
+                </div>
+                <div class="bg-gray-800/40 rounded-xl p-5 border border-gray-700/60">
+                    <div class="text-blue-400 font-semibold mb-2 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" /></svg>
+                        Criptografía RSA en el navegador
+                    </div>
+                    <p>Usa la <strong class="text-gray-300">Web Crypto API</strong> nativa del navegador para generar llaves RSA de 2048, 4096 u 8192 bits. Nunca se envía nada a un servidor.</p>
+                </div>
+                <div class="bg-gray-800/40 rounded-xl p-5 border border-gray-700/60">
+                    <div class="text-blue-400 font-semibold mb-2 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        Formato estándar OpenSSH
+                    </div>
+                    <p>Descarga la llave privada (<code class="bg-gray-700/60 px-1 rounded">id_rsa</code>) y la pública (<code class="bg-gray-700/60 px-1 rounded">id_rsa.pub</code>) en formato compatible con OpenSSH y <code class="bg-gray-700/60 px-1 rounded">authorized_keys</code>.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</Layout>
