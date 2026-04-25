@@ -1,0 +1,458 @@
+---
+// SSH Key Generator Component
+---
+
+<div id="ssh-keygen-root" class="w-full space-y-6">
+
+  <!-- Step 1: Key size -->
+  <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/80">
+    <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+      <span class="flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-sm font-bold">1</span>
+      Tamaño de la llave
+    </h2>
+    <div class="flex flex-wrap gap-3 mb-4">
+      <button data-bits="2048" class="preset-btn px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:border-blue-500 hover:text-white transition-all text-sm font-semibold">2048 bits</button>
+      <button data-bits="4096" class="preset-btn px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:border-blue-500 hover:text-white transition-all text-sm font-semibold">4096 bits</button>
+      <button data-bits="8192" class="preset-btn px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:border-blue-500 hover:text-white transition-all text-sm font-semibold">8192 bits</button>
+    </div>
+    <div class="flex items-center gap-3">
+      <label for="bits-custom" class="text-sm text-gray-400 whitespace-nowrap">O escribe un valor:</label>
+      <input id="bits-custom" type="number" min="512" max="16384" step="256" value="2048"
+        class="w-40 p-2 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
+      <span class="text-gray-500 text-sm">bits (múltiplo de 256, mín 512)</span>
+    </div>
+    <p id="bits-warning" class="text-yellow-400 text-xs mt-2 hidden">⚠️ Las llaves de más de 4096 bits pueden tardar varios segundos en generarse.</p>
+  </div>
+
+  <!-- Step 2: Mouse entropy canvas -->
+  <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/80">
+    <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+      <span class="flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-sm font-bold">2</span>
+      Genera entropía moviendo el mouse
+    </h2>
+    <p class="text-gray-400 text-sm mb-4">Mueve el cursor libremente por el área de abajo. Los datos del movimiento se usan como semilla para la generación de llaves.</p>
+
+    <div class="relative">
+      <canvas id="entropy-canvas"
+        height="440"
+        class="w-full rounded-xl border-2 border-dashed border-gray-600 cursor-crosshair bg-gray-900/60 touch-none"
+        style="height: 440px; display: block;"
+      ></canvas>
+      <div id="entropy-overlay" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none rounded-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-6-6m0 0l6-6m-6 6h12" />
+        </svg>
+        <p id="entropy-hint" class="text-gray-500 text-sm">Mueve el mouse aquí para comenzar</p>
+      </div>
+    </div>
+
+    <div class="mt-4 flex items-center gap-3">
+      <div class="flex-1 bg-gray-900 rounded-full h-3 overflow-hidden border border-gray-700">
+        <div id="entropy-bar" class="h-3 rounded-full transition-all duration-150"
+          style="width: 0%; background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);"></div>
+      </div>
+      <span id="entropy-pct" class="text-sm text-gray-400 w-12 text-right">0%</span>
+      <button id="clear-canvas-btn" title="Limpiar lienzo"
+        class="flex items-center gap-1.5 text-xs bg-gray-700/60 hover:bg-red-500/20 border border-gray-600 hover:border-red-500/50 text-gray-400 hover:text-red-400 px-3 py-1.5 rounded-lg transition-all duration-200 whitespace-nowrap">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Limpiar
+      </button>
+    </div>
+    <p id="entropy-status" class="text-xs text-gray-500 mt-1">Mueve el mouse por todo el lienzo para recopilar suficiente entropía.</p>
+  </div>
+
+  <!-- Step 3: Generate button -->
+  <div class="flex justify-center">
+    <button id="generate-btn" disabled
+      class="flex items-center gap-2 bg-blue-600 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition-all duration-200 shadow-lg shadow-blue-900/30 hover:scale-105 disabled:scale-100 text-base">
+      <svg id="gen-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" />
+      </svg>
+      <span id="gen-label">Genera entropía primero</span>
+    </button>
+  </div>
+
+  <!-- Spinner -->
+  <div id="gen-spinner" class="hidden flex-col items-center gap-3 py-4">
+    <svg class="animate-spin h-10 w-10 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>
+    <p class="text-gray-400 text-sm">Generando llaves RSA... puede tomar unos segundos.</p>
+  </div>
+
+  <!-- Step 4: Output -->
+  <div id="output-section" class="hidden space-y-5">
+    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-green-700/50">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-bold text-green-400 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Llave Privada (Guárdala en secreto)
+        </h3>
+        <button id="copy-private" class="flex items-center gap-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          Copiar
+        </button>
+      </div>
+      <textarea id="private-key-out" rows="10" readonly
+        class="w-full p-3 bg-gray-900/80 text-green-300 font-mono text-xs border border-gray-700 rounded-lg resize-none focus:outline-none"></textarea>
+      <button id="download-private" class="mt-3 flex items-center gap-2 text-sm bg-green-700/30 hover:bg-green-700/60 text-green-300 px-4 py-2 rounded-lg transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+        Descargar id_rsa
+      </button>
+    </div>
+
+    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-blue-700/50">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-bold text-blue-400 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" />
+          </svg>
+          Llave Pública (Puedes compartirla)
+        </h3>
+        <button id="copy-public" class="flex items-center gap-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+          Copiar
+        </button>
+      </div>
+      <textarea id="public-key-out" rows="4" readonly
+        class="w-full p-3 bg-gray-900/80 text-blue-300 font-mono text-xs border border-gray-700 rounded-lg resize-none focus:outline-none"></textarea>
+      <button id="download-public" class="mt-3 flex items-center gap-2 text-sm bg-blue-700/30 hover:bg-blue-700/60 text-blue-300 px-4 py-2 rounded-lg transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+        Descargar id_rsa.pub
+      </button>
+    </div>
+
+    <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 text-yellow-300 text-sm">
+      <strong>⚠️ Recuerda:</strong> La llave privada nunca debe compartirse. Guárdala en <code class="bg-yellow-900/40 px-1 rounded">~/.ssh/id_rsa</code> con permisos <code class="bg-yellow-900/40 px-1 rounded">chmod 600</code>.
+    </div>
+
+    <div class="flex justify-center pt-2">
+      <button id="reset-btn"
+        class="group flex items-center gap-2.5 bg-gray-800/80 hover:bg-gray-700/80 border border-gray-600/60 hover:border-blue-500/60 text-gray-300 hover:text-white font-semibold py-3 px-7 rounded-xl transition-all duration-200 shadow-md hover:shadow-blue-900/30 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400 group-hover:rotate-180 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Generar otro par de llaves
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Entropy Canvas ───────────────────────────────────────────────────────────
+const canvas = document.getElementById('entropy-canvas') as HTMLCanvasElement;
+const ctx = canvas.getContext('2d')!;
+const entropyBar = document.getElementById('entropy-bar') as HTMLDivElement;
+const entropyPct = document.getElementById('entropy-pct') as HTMLSpanElement;
+const entropyStatus = document.getElementById('entropy-status') as HTMLParagraphElement;
+const entropyHint = document.getElementById('entropy-hint') as HTMLParagraphElement;
+const entropyOverlay = document.getElementById('entropy-overlay') as HTMLDivElement;
+const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+const genLabel = document.getElementById('gen-label') as HTMLSpanElement;
+const bitsInput = document.getElementById('bits-custom') as HTMLInputElement;
+const bitsWarning = document.getElementById('bits-warning') as HTMLParagraphElement;
+const outputSection = document.getElementById('output-section') as HTMLDivElement;
+const genSpinner = document.getElementById('gen-spinner') as HTMLDivElement;
+const privateKeyOut = document.getElementById('private-key-out') as HTMLTextAreaElement;
+const publicKeyOut = document.getElementById('public-key-out') as HTMLTextAreaElement;
+
+const ENTROPY_GOAL = 600;
+let entropyPoints: number[] = [];
+let lastX = -1, lastY = -1;
+let isCollecting = true;
+
+const CANVAS_HEIGHT = 440;
+
+function resizeCanvas() {
+  // Only adjust WIDTH — height is fixed at 440 via HTML attribute and CSS
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width || canvas.offsetWidth || 600;
+  // Never touch canvas.height — it resets the drawing buffer to 150 default
+}
+requestAnimationFrame(() => { resizeCanvas(); });
+window.addEventListener('resize', resizeCanvas);
+
+function getPos(e: MouseEvent | TouchEvent): {x: number, y: number} {
+  const rect = canvas.getBoundingClientRect();
+  if (e instanceof TouchEvent) {
+    const t = e.touches[0];
+    return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+  }
+  return { x: (e as MouseEvent).clientX - rect.left, y: (e as MouseEvent).clientY - rect.top };
+}
+
+function onMove(e: MouseEvent | TouchEvent) {
+  if (!isCollecting) return;
+  e.preventDefault();
+  const { x, y } = getPos(e);
+
+  // Collect entropy from position + timestamp
+  const t = performance.now();
+  entropyPoints.push(x, y, t);
+
+  // Draw trail
+  ctx.beginPath();
+  if (lastX !== -1) {
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    const hue = (entropyPoints.length / 3) * 3 % 360;
+    ctx.strokeStyle = `hsl(${hue}, 80%, 65%)`;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+  }
+  lastX = x; lastY = y;
+
+  // Progress
+  const pts = Math.min(entropyPoints.length / 3, ENTROPY_GOAL);
+  const pct = Math.round((pts / ENTROPY_GOAL) * 100);
+  entropyBar.style.width = pct + '%';
+  entropyPct.textContent = pct + '%';
+
+  if (pts >= ENTROPY_GOAL) {
+    isCollecting = false;
+    entropyStatus.textContent = '✅ Entropía suficiente recopilada.';
+    entropyStatus.className = 'text-xs text-green-400 mt-1';
+    entropyOverlay.classList.add('hidden');
+    if (generateBtn) {
+      generateBtn.disabled = false;
+      genLabel.textContent = 'Generar Par de Llaves SSH';
+    }
+  } else {
+    entropyHint.textContent = `${Math.round(pts)} / ${ENTROPY_GOAL} puntos`;
+    entropyStatus.textContent = `Sigue moviendo el mouse (${pct}% completado)`;
+    entropyOverlay.classList.remove('hidden');
+  }
+}
+
+canvas.addEventListener('mousemove', onMove);
+canvas.addEventListener('touchmove', onMove, { passive: false });
+
+// ─── Key size presets ─────────────────────────────────────────────────────────
+document.querySelectorAll<HTMLButtonElement>('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const bits = parseInt(btn.dataset.bits!);
+    bitsInput.value = String(bits);
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      b.classList.remove('border-blue-500', 'text-white', 'bg-blue-600/20');
+      b.classList.add('border-gray-600', 'text-gray-300');
+    });
+    btn.classList.add('border-blue-500', 'text-white', 'bg-blue-600/20');
+    btn.classList.remove('border-gray-600', 'text-gray-300');
+    bitsWarning.classList.toggle('hidden', bits <= 4096);
+  });
+});
+
+bitsInput.addEventListener('input', () => {
+  const v = parseInt(bitsInput.value);
+  bitsWarning.classList.toggle('hidden', v <= 4096);
+  document.querySelectorAll('.preset-btn').forEach(b => {
+    b.classList.remove('border-blue-500', 'text-white', 'bg-blue-600/20');
+    b.classList.add('border-gray-600', 'text-gray-300');
+  });
+});
+
+// ─── RSA Generation using Web Crypto ─────────────────────────────────────────
+async function generateRSAKeys(bits: number): Promise<{ privatePem: string, publicPem: string }> {
+  const keyPair = await window.crypto.subtle.generateKey(
+    {
+      name: 'RSASSA-PKCS1-v1_5',
+      modulusLength: bits,
+      publicExponent: new Uint8Array([1, 0, 1]),
+      hash: 'SHA-256',
+    },
+    true,
+    ['sign', 'verify']
+  );
+
+  const [privDer, pubDer] = await Promise.all([
+    crypto.subtle.exportKey('pkcs8', keyPair.privateKey),
+    crypto.subtle.exportKey('spki', keyPair.publicKey),
+  ]);
+
+  return {
+    privatePem: toPem(privDer, 'RSA PRIVATE KEY'),
+    publicPem: toOpenSSHPublicKey(pubDer, bits),
+  };
+}
+
+function toPem(der: ArrayBuffer, label: string): string {
+  const b64 = btoa(String.fromCharCode(...new Uint8Array(der)));
+  const lines = b64.match(/.{1,64}/g)!.join('\n');
+  return `-----BEGIN ${label}-----\n${lines}\n-----END ${label}-----\n`;
+}
+
+// Convert SPKI to OpenSSH authorized_keys format
+function toOpenSSHPublicKey(spki: ArrayBuffer, bits: number): string {
+  // We build the OpenSSH wire format: ssh-rsa key
+  // Extract n and e from DER SPKI
+  const bytes = new Uint8Array(spki);
+  const { n, e } = extractRsaParamsFromSpki(bytes);
+
+  const keyType = 'ssh-rsa';
+  const typeBytes = encodeString(new TextEncoder().encode(keyType));
+  const eBytes = encodeMpint(e);
+  const nBytes = encodeMpint(n);
+
+  const payload = new Uint8Array(typeBytes.length + eBytes.length + nBytes.length);
+  payload.set(typeBytes, 0);
+  payload.set(eBytes, typeBytes.length);
+  payload.set(nBytes, typeBytes.length + eBytes.length);
+
+  const b64 = btoa(String.fromCharCode(...payload));
+  return `ssh-rsa ${b64} devcito-utils-generated\n`;
+}
+
+function encodeString(bytes: Uint8Array): Uint8Array {
+  const len = new Uint8Array(4);
+  new DataView(len.buffer).setUint32(0, bytes.length, false);
+  const result = new Uint8Array(4 + bytes.length);
+  result.set(len);
+  result.set(bytes, 4);
+  return result;
+}
+
+function encodeMpint(bytes: Uint8Array): Uint8Array {
+  // Remove leading zeros
+  let start = 0;
+  while (start < bytes.length - 1 && bytes[start] === 0) start++;
+  let data = bytes.slice(start);
+  // If high bit set, prepend 0x00
+  if (data[0] & 0x80) {
+    const padded = new Uint8Array(data.length + 1);
+    padded.set(data, 1);
+    data = padded;
+  }
+  return encodeString(data);
+}
+
+function extractRsaParamsFromSpki(bytes: Uint8Array): { n: Uint8Array, e: Uint8Array } {
+  // SPKI: SEQUENCE { SEQUENCE { OID, NULL }, BIT STRING { SEQUENCE { INTEGER n, INTEGER e } } }
+  let pos = 0;
+  const readLen = (buf: Uint8Array, p: number): { len: number, advance: number } => {
+    if (buf[p] < 0x80) return { len: buf[p], advance: 1 };
+    const numBytes = buf[p] & 0x7f;
+    let len = 0;
+    for (let i = 0; i < numBytes; i++) len = (len << 8) | buf[p + 1 + i];
+    return { len, advance: 1 + numBytes };
+  };
+
+  // outer SEQUENCE
+  pos++; // 0x30
+  let { advance } = readLen(bytes, pos); pos += advance;
+  // algorithm SEQUENCE
+  pos++; // 0x30
+  let r2 = readLen(bytes, pos); pos += r2.advance; pos += r2.len;
+  // BIT STRING
+  pos++; // 0x03
+  let r3 = readLen(bytes, pos); pos += r3.advance;
+  pos++; // skip leading 0x00 of BIT STRING
+  // inner SEQUENCE
+  pos++; // 0x30
+  let r4 = readLen(bytes, pos); pos += r4.advance;
+  // INTEGER n
+  pos++; // 0x02
+  let rn = readLen(bytes, pos); pos += rn.advance;
+  const n = bytes.slice(pos, pos + rn.len); pos += rn.len;
+  // INTEGER e
+  pos++; // 0x02
+  let re = readLen(bytes, pos); pos += re.advance;
+  const e = bytes.slice(pos, pos + re.len);
+
+  return { n, e };
+}
+
+// ─── Generate button ──────────────────────────────────────────────────────────
+generateBtn.addEventListener('click', async () => {
+  let bits = parseInt(bitsInput.value);
+  if (isNaN(bits) || bits < 512) bits = 2048;
+  if (bits % 256 !== 0) bits = Math.round(bits / 256) * 256;
+
+  generateBtn.classList.add('hidden');
+  genSpinner.classList.remove('hidden');
+  genSpinner.classList.add('flex');
+  outputSection.classList.add('hidden');
+
+  try {
+    await new Promise(r => setTimeout(r, 50)); // let UI update
+    const { privatePem, publicPem } = await generateRSAKeys(bits);
+    privateKeyOut.value = privatePem;
+    publicKeyOut.value = publicPem;
+    outputSection.classList.remove('hidden');
+  } catch (err) {
+    alert('Error generando las llaves: ' + err);
+    generateBtn.classList.remove('hidden');
+  } finally {
+    genSpinner.classList.add('hidden');
+    genSpinner.classList.remove('flex');
+  }
+});
+
+// ─── Copy buttons ─────────────────────────────────────────────────────────────
+function makeCopyBtn(btnId: string, sourceId: string) {
+  const btn = document.getElementById(btnId)!;
+  const src = document.getElementById(sourceId) as HTMLTextAreaElement;
+  btn.addEventListener('click', () => {
+    navigator.clipboard.writeText(src.value).then(() => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> ¡Copiado!';
+      btn.classList.add('text-green-400');
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('text-green-400'); }, 2000);
+    });
+  });
+}
+makeCopyBtn('copy-private', 'private-key-out');
+makeCopyBtn('copy-public', 'public-key-out');
+
+// ─── Download buttons ─────────────────────────────────────────────────────────
+function makeDownloadBtn(btnId: string, sourceId: string, filename: string) {
+  const btn = document.getElementById(btnId)!;
+  const src = document.getElementById(sourceId) as HTMLTextAreaElement;
+  btn.addEventListener('click', () => {
+    const blob = new Blob([src.value], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+makeDownloadBtn('download-private', 'private-key-out', 'id_rsa');
+makeDownloadBtn('download-public', 'public-key-out', 'id_rsa.pub');
+
+// ─── Shared clear-entropy helper ──────────────────────────────────────────────
+function clearEntropy() {
+  entropyPoints = [];
+  lastX = -1; lastY = -1;
+  isCollecting = true;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  entropyBar.style.width = '0%';
+  entropyPct.textContent = '0%';
+  entropyStatus.textContent = 'Necesitas al menos 100 puntos de entropía.';
+  entropyStatus.className = 'text-xs text-gray-500 mt-1';
+  entropyHint.textContent = 'Mueve el mouse aquí para comenzar';
+  entropyOverlay.classList.remove('hidden');
+  generateBtn.disabled = true;
+  genLabel.textContent = 'Genera entropía primero';
+  generateBtn.classList.remove('hidden');
+}
+
+// ─── Limpiar lienzo button ────────────────────────────────────────────────────
+document.getElementById('clear-canvas-btn')!.addEventListener('click', () => {
+  clearEntropy();
+});
+
+// ─── Reset (generar otro par) ─────────────────────────────────────────────────
+document.getElementById('reset-btn')!.addEventListener('click', () => {
+  clearEntropy();
+  outputSection.classList.add('hidden');
+  privateKeyOut.value = '';
+  publicKeyOut.value = '';
+  // Scroll suavemente de vuelta al inicio
+  document.getElementById('ssh-keygen-root')!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
