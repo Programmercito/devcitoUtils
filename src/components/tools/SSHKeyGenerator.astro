@@ -163,25 +163,48 @@
       </button>
     </div>
 
-    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-blue-700/50">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-base font-bold text-blue-400 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" />
-          </svg>
-          Llave Pública (Puedes compartirla)
-        </h3>
-        <button id="copy-public" class="flex items-center gap-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-          Copiar
+    <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl border border-blue-700/50 space-y-5">
+      <div class="space-y-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-bold text-blue-400 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" />
+            </svg>
+            Llave Pública PEM
+          </h3>
+          <button id="copy-public" class="flex items-center gap-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            Copiar
+          </button>
+        </div>
+        <textarea id="public-key-out" rows="10" readonly
+          class="w-full p-3 bg-gray-900/80 text-blue-300 font-mono text-xs border border-gray-700 rounded-lg resize-none focus:outline-none"></textarea>
+        <button id="download-public-pem" class="mt-3 flex items-center gap-2 text-sm bg-blue-700/30 hover:bg-blue-700/60 text-blue-300 px-4 py-2 rounded-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+          Descargar id_rsa_pub.pem
         </button>
       </div>
-      <textarea id="public-key-out" rows="4" readonly
-        class="w-full p-3 bg-gray-900/80 text-blue-300 font-mono text-xs border border-gray-700 rounded-lg resize-none focus:outline-none"></textarea>
-      <button id="download-public" class="mt-3 flex items-center gap-2 text-sm bg-blue-700/30 hover:bg-blue-700/60 text-blue-300 px-4 py-2 rounded-lg transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-        Descargar id_rsa.pub
-      </button>
+
+      <div class="space-y-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-bold text-cyan-400 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" />
+            </svg>
+            Llave Pública OpenSSH
+          </h3>
+          <button id="copy-public-ssh" class="flex items-center gap-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            Copiar
+          </button>
+        </div>
+        <textarea id="public-key-ssh-out" rows="3" readonly
+          class="w-full p-3 bg-gray-900/80 text-cyan-300 font-mono text-xs border border-gray-700 rounded-lg resize-none focus:outline-none"></textarea>
+        <button id="download-public-ssh" class="mt-3 flex items-center gap-2 text-sm bg-cyan-700/30 hover:bg-cyan-700/60 text-cyan-300 px-4 py-2 rounded-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+          Descargar id_rsa.pub
+        </button>
+      </div>
     </div>
 
     <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 text-yellow-300 text-sm">
@@ -217,6 +240,7 @@ const outputSection = document.getElementById('output-section') as HTMLDivElemen
 const genSpinner = document.getElementById('gen-spinner') as HTMLDivElement;
 const privateKeyOut = document.getElementById('private-key-out') as HTMLTextAreaElement;
 const publicKeyOut = document.getElementById('public-key-out') as HTMLTextAreaElement;
+const publicKeySshOut = document.getElementById('public-key-ssh-out') as HTMLTextAreaElement;
 const compatBanner = document.getElementById('compat-banner') as HTMLDivElement;
 const genError = document.getElementById('gen-error') as HTMLDivElement;
 const genErrorMsg = document.getElementById('gen-error-msg') as HTMLParagraphElement;
@@ -335,7 +359,7 @@ bitsInput.addEventListener('input', () => {
 });
 
 // ─── RSA Generation using Web Crypto ─────────────────────────────────────────
-async function generateRSAKeys(bits: number): Promise<{ privatePem: string, publicPem: string }> {
+async function generateRSAKeys(bits: number): Promise<{ privatePem: string, publicPem: string, publicOpenSsh: string }> {
   const keyPair = await window.crypto.subtle.generateKey(
     {
       name: 'RSASSA-PKCS1-v1_5',
@@ -353,8 +377,9 @@ async function generateRSAKeys(bits: number): Promise<{ privatePem: string, publ
   ]);
 
   return {
-    privatePem: toPem(privDer, 'RSA PRIVATE KEY'),
-    publicPem: toOpenSSHPublicKey(pubDer, bits),
+    privatePem: toPem(privDer, 'PRIVATE KEY'),
+    publicPem: toPem(pubDer, 'PUBLIC KEY'),
+    publicOpenSsh: toOpenSSHPublicKey(pubDer),
   };
 }
 
@@ -365,7 +390,7 @@ function toPem(der: ArrayBuffer, label: string): string {
 }
 
 // Convert SPKI to OpenSSH authorized_keys format
-function toOpenSSHPublicKey(spki: ArrayBuffer, bits: number): string {
+function toOpenSSHPublicKey(spki: ArrayBuffer): string {
   // We build the OpenSSH wire format: ssh-rsa key
   // Extract n and e from DER SPKI
   const bytes = new Uint8Array(spki);
@@ -457,9 +482,10 @@ generateBtn.addEventListener('click', async () => {
 
   try {
     await new Promise(r => setTimeout(r, 50)); // let UI update
-    const { privatePem, publicPem } = await generateRSAKeys(bits);
+    const { privatePem, publicPem, publicOpenSsh } = await generateRSAKeys(bits);
     privateKeyOut.value = privatePem;
     publicKeyOut.value = publicPem;
+    publicKeySshOut.value = publicOpenSsh;
     outputSection.classList.remove('hidden');
     genError.classList.add('hidden');
   } catch (err) {
@@ -488,6 +514,7 @@ function makeCopyBtn(btnId: string, sourceId: string) {
 }
 makeCopyBtn('copy-private', 'private-key-out');
 makeCopyBtn('copy-public', 'public-key-out');
+makeCopyBtn('copy-public-ssh', 'public-key-ssh-out');
 
 // ─── Download buttons ─────────────────────────────────────────────────────────
 function makeDownloadBtn(btnId: string, sourceId: string, filename: string) {
@@ -502,7 +529,8 @@ function makeDownloadBtn(btnId: string, sourceId: string, filename: string) {
   });
 }
 makeDownloadBtn('download-private', 'private-key-out', 'id_rsa');
-makeDownloadBtn('download-public', 'public-key-out', 'id_rsa.pub');
+makeDownloadBtn('download-public-pem', 'public-key-out', 'id_rsa_pub.pem');
+makeDownloadBtn('download-public-ssh', 'public-key-ssh-out', 'id_rsa.pub');
 
 // ─── Shared clear-entropy helper ──────────────────────────────────────────────
 function clearEntropy() {
