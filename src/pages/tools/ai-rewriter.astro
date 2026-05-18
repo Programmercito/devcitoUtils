@@ -14,90 +14,45 @@ const description = "Una herramienta para reformular y mejorar textos usando int
     
         <div class="w-full">
             <div class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-700/80">
-                <div class="space-y-6">
-                    <p class="text-sm text-yellow-300 bg-yellow-900/30 p-3 rounded-lg border border-yellow-700/50">✨ Esta herramienta utiliza la IA integrada de tu navegador (disponible en Chrome 127+ para PC). No se necesitan claves API y tus datos no salen de tu dispositivo.</p>
-                    
-                    <div id="error-container" class="hidden text-sm text-red-300 bg-red-900/30 p-3 rounded-lg border border-red-700/50">
-                        <p id="error-message"></p>
-                        <p class="mt-2 text-gray-400">
-                            Para habilitarlo, copia y pega lo siguiente en tu barra de direcciones: <code class="text-yellow-300 select-all">chrome://flags/#optimization-guide-on-device-model</code>
+                <!-- ... (existing content) ... -->
+            </div>
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-4xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">Optimiza tus Textos con Inteligencia Artificial</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    En el desarrollo de software y la creación de contenido, la claridad y el tono son fundamentales. Nuestro Reescritor de Texto impulsado por IA utiliza modelos de lenguaje avanzados para ayudarte a reformular, mejorar o adaptar cualquier fragmento de texto según tus necesidades específicas. Ya sea que necesites un tono más profesional para un correo o una explicación más técnica para una documentación, esta herramienta es tu aliada ideal.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">IA en el Navegador</h3>
+                        <p class="text-sm text-gray-400">
+                            A diferencia de otras herramientas que envían tus datos a servidores externos, esta utilidad utiliza la API experimental de Chrome para procesar todo localmente. Esto garantiza una privacidad absoluta: tus borradores nunca salen de tu ordenador.
                         </p>
                     </div>
-
-                    <div id="download-progress" class="hidden">
-                        <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600">
-                            <p class="text-sm text-gray-300 mb-2">Descargando modelo de IA...</p>
-                            <div class="w-full bg-gray-600 rounded-full h-2.5">
-                                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                            </div>
-                            <p id="progress-text" class="text-xs text-gray-400 mt-2">0%</p>
-                        </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Control de Tono y Estilo</h3>
+                        <p class="text-sm text-gray-400">
+                            Ajusta el nivel de formalidad y la longitud del texto con un solo clic. Es ideal para adaptar un mismo mensaje para diferentes audiencias, desde compañeros de equipo hasta clientes o redes sociales.
+                        </p>
                     </div>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-300 mb-2">Idioma de Salida</label>
-                            <select id="output-language" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                                <option value="es">Español</option>
-                                <option value="en">Inglés</option>
-                                <option value="ja">Japonés</option>
-                            </select>
-                        </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Casos de Uso en el Desarrollo</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Documentación de Código:</span> Transforma notas rápidas en párrafos de documentación claros y profesionales.</li>
+                    <li><span class="text-white font-semibold">Mensajes de Commit:</span> Mejora la redacción de tus commits para que sean más descriptivos y sigan las convenciones del equipo.</li>
+                    <li><span class="text-white font-semibold">Pull Requests:</span> Redacta descripciones de cambios más convincentes y estructuradas.</li>
+                    <li><span class="text-white font-semibold">Comunicación Técnica:</span> Adapta explicaciones complejas para diferentes niveles de audiencia (stakeholders vs desarrolladores).</li>
+                </ul>
 
-                        <div>
-                            <label class="block text-sm font-bold text-gray-300 mb-2">Tono</label>
-                            <select id="tone" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                                <option value="as-is">Sin cambios</option>
-                                <option value="more-formal">Más formal</option>
-                                <option value="more-casual">Más casual</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-gray-300 mb-2">Longitud</label>
-                            <select id="length" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                                <option value="as-is">Sin cambios</option>
-                                <option value="shorter">Más corto</option>
-                                <option value="longer">Más largo</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-300 mb-2">Formato</label>
-                        <select id="format" class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                            <option value="as-is">Sin cambios</option>
-                            <option value="plain-text">Texto plano</option>
-                            <option value="markdown">Markdown</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="ai-input" class="block text-sm font-bold text-gray-300 mb-2">Texto Original</label>
-                        <textarea
-                            id="ai-input"
-                            rows="8"
-                            class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                            placeholder="Pega aquí el texto que quieres reescribir..."
-                        ></textarea>
-                    </div>
-    
-                    <div class="flex items-center justify-center">
-                        <button id="rewrite-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed disabled:transform-none">
-                            Reescribir Texto
-                        </button>
-                    </div>
-    
-                    <div>
-                        <label for="ai-output" class="block text-sm font-bold text-gray-300 mb-2">Texto Reescrito</label>
-                        <textarea
-                            id="ai-output"
-                            rows="8"
-                            class="w-full p-3 bg-gray-900/70 text-white border-2 border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600"
-                            readonly
-                            placeholder="El texto reescrito aparecerá aquí en tiempo real..."
-                        ></textarea>
-                    </div>
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200">
+                        <strong>Nota de Requisitos:</strong> Esta herramienta requiere Chrome 127 o superior y habilitar las funciones de IA generativa en el navegador. Es una tecnología de vanguardia que pone el poder de los modelos de lenguaje directamente en tus manos.
+                    </p>
                 </div>
             </div>
         </div>

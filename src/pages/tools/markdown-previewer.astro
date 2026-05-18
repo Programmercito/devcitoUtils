@@ -15,5 +15,43 @@ import MarkdownPreviewer from '../../components/tools/MarkdownPreviewer.astro';
         <div class="w-full">
             <MarkdownPreviewer />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">Domina el Formato Markdown</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Markdown es un lenguaje de marcado ligero que permite aplicar formato a un texto de forma sencilla y rápida, utilizando una sintaxis fácil de leer y escribir. Se ha convertido en el estándar indiscutible para la documentación de software, READMEs en GitHub y contenido para plataformas web. Nuestro previsualizador te permite ver el resultado final en HTML en tiempo real mientras escribes.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Edición en Tiempo Real</h3>
+                        <p class="text-sm text-gray-400">
+                            Olvídate de "guardar y refrescar". Nuestra herramienta renderiza instantáneamente tus cambios, permitiéndote ajustar el diseño, las tablas y las listas de forma fluida y sin interrupciones.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Soporte Completo GFM</h3>
+                        <p class="text-sm text-gray-400">
+                            Soportamos GitHub Flavored Markdown, incluyendo tablas, bloques de código con resaltado, listas de tareas y enlaces automáticos. Es el entorno de pruebas perfecto antes de subir tus cambios a producción.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Por qué usar Markdown?</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Portabilidad:</span> Los archivos `.md` son archivos de texto plano que se pueden abrir y leer en cualquier dispositivo.</li>
+                    <li><span class="text-white font-semibold">Control de Versiones:</span> Al ser texto plano, es ideal para ser gestionado con herramientas como Git, permitiendo ver diferencias (diffs) claras.</li>
+                    <li><span class="text-white font-semibold">Enfoque en el Contenido:</span> La sintaxis minimalista te permite concentrarte en escribir en lugar de pelear con menús de formato complejos.</li>
+                </ul>
+
+                <div class="bg-emerald-600/10 border-l-4 border-emerald-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-emerald-200">
+                        <strong>Truco Rápido:</strong> Puedes usar nuestro previsualizador para redactar rápidamente el contenido de un post de blog o una página estática y luego copiar el código Markdown listo para ser procesado por generadores de sitios estáticos como Hugo, Jekyll o Astro.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

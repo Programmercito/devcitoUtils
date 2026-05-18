@@ -15,5 +15,43 @@ import HMACVerifier from '../../components/tools/HMACVerifier.astro';
         <div class="w-full">
             <HMACVerifier />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué es HMAC y cómo funciona?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    HMAC (Hash-based Message Authentication Code) es un tipo específico de código de autenticación de mensajes que utiliza una función hash criptográfica combinada con una **clave secreta**. A diferencia de un hash estándar, el HMAC proporciona tanto integridad como **autenticidad**, asegurando que el mensaje no solo es correcto, sino que proviene de una fuente legítima que posee la clave.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Autenticación de APIs</h3>
+                        <p class="text-sm text-gray-400">
+                            Muchos servicios web (como AWS o pasarelas de pago) utilizan HMAC para firmar las solicitudes. Esto permite al servidor verificar que la petición no fue modificada en tránsito y que fue firmada por alguien con acceso a la clave secreta.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Seguridad contra Atajos</h3>
+                        <p class="text-sm text-gray-400">
+                            HMAC está diseñado para resistir ataques de extensión de longitud que podrían afectar a las implementaciones ingenuas que solo concatenan la clave con el mensaje antes de aplicar el hash.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Cuándo usar este verificador?</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Depuración de Webhooks:</span> Verifica si las firmas enviadas por servicios como Stripe o GitHub son correctas.</li>
+                    <li><span class="text-white font-semibold">Pruebas de Integración:</span> Genera firmas manualmente para probar tus endpoints protegidos.</li>
+                    <li><span class="text-white font-semibold">Validación de Comunicaciones:</span> Asegura que el canal de comunicación entre dos microservicios sea íntegro.</li>
+                </ul>
+
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200 italic">
+                        <strong>Privacidad Total:</strong> Al igual que todas nuestras utilidades, el cálculo del HMAC ocurre en tu navegador. Tu clave secreta nunca sale de tu dispositivo, garantizando la máxima confidencialidad para tus credenciales.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

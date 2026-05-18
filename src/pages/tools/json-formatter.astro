@@ -15,5 +15,44 @@ import JSONFormatter from '../../components/tools/JSONFormatter.astro';
         <div class="w-full">
             <JSONFormatter />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Por qué usar un Formateador JSON?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    JSON (JavaScript Object Notation) es el estándar de facto para el intercambio de datos en la web moderna. Sin embargo, los servicios web a menudo entregan JSON en un formato "minificado" (en una sola línea) para ahorrar ancho de banda, lo que hace que sea casi imposible de leer para un humano. Nuestro formateador JSON soluciona esto aplicando indentación y resaltado de sintaxis profesional.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Validación en Tiempo Real</h3>
+                        <p class="text-sm text-gray-400">
+                            No solo embellecemos el código; también validamos su estructura. Si olvidas una coma, cierras mal una llave o usas comillas simples, nuestro validador te indicará exactamente dónde está el error para que puedas corregirlo al instante.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Minificación para Producción</h3>
+                        <p class="text-sm text-gray-400">
+                            ¿Necesitas reducir el tamaño de tus archivos para mejorar el rendimiento de tu aplicación? Usa la función de minificación para eliminar todos los espacios en blanco y saltos de línea innecesarios, optimizando la transferencia de datos.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Ventajas de nuestra herramienta</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">100% Privado:</span> Tu código JSON se procesa localmente en tu navegador. Nada se envía a nuestros servidores.</li>
+                    <li><span class="text-white font-semibold">Resaltado de Sintaxis:</span> Colores claros para distinguir entre claves, strings, números y valores booleanos.</li>
+                    <li><span class="text-white font-semibold">Manejo de Errores:</span> Mensajes descriptivos que te ayudan a depurar estructuras de datos complejas.</li>
+                    <li><span class="text-white font-semibold">Copiado Rápido:</span> Botón dedicado para copiar el resultado directamente a tu portapapeles.</li>
+                </ul>
+
+                <div class="bg-emerald-600/10 border-l-4 border-emerald-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-emerald-200 font-medium">
+                        <strong>Tip Pro:</strong> Un JSON bien formateado no solo ayuda a leer los datos, sino que facilita enormemente el proceso de depuración (debugging) cuando estás integrando APIs de terceros o revisando logs de errores.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

@@ -15,5 +15,53 @@ import TextCounter from '../../components/tools/TextCounter.astro';
         <div class="w-full">
             <TextCounter />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">Análisis Preciso de Texto</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Ya sea que estés redactando contenido para SEO, escribiendo mensajes para redes sociales con límites estrictos o analizando archivos de configuración extensos, conocer las dimensiones exactas de tu texto es vital. Nuestro contador de texto proporciona métricas detalladas en tiempo real para que nunca pierdas de vista los límites de tu contenido.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                        <span class="block text-2xl font-black text-blue-400">Caracteres</span>
+                        <p class="text-xs text-gray-500 mt-1">Con y sin espacios</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                        <span class="block text-2xl font-black text-cyan-400">Palabras</span>
+                        <p class="text-xs text-gray-500 mt-1">Conteo semántico</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                        <span class="block text-2xl font-black text-purple-400">Líneas</span>
+                        <p class="text-xs text-gray-500 mt-1">Estructura del texto</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                        <span class="block text-2xl font-black text-emerald-400">Bytes</span>
+                        <p class="text-xs text-gray-500 mt-1">Tamaño en memoria (UTF-8)</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Por qué es importante el tamaño en Bytes?</h3>
+                <p class="text-gray-300 mb-6">
+                    En el desarrollo web, el tamaño de los datos importa. Muchos protocolos de red y bases de datos tienen límites basados en bytes, no en caracteres. Debido a la codificación UTF-8, un carácter especial o un emoji puede ocupar hasta 4 bytes. Nuestra herramienta te da el tamaño real que ocupará tu texto al ser transmitido o almacenado.
+                </p>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Aplicaciones Prácticas</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Redacción SEO:</span> Asegúrate de que tus meta-títulos y meta-descripciones no se corten en los resultados de búsqueda de Google.</li>
+                    <li><span class="text-white font-semibold">Copywriting:</span> Mantente dentro de los límites de caracteres de Twitter, LinkedIn o anuncios de Google Ads.</li>
+                    <li><span class="text-white font-semibold">Desarrollo:</span> Verifica que las cadenas de texto no superen los límites de los campos `VARCHAR` o `TEXT` en tu base de datos.</li>
+                    <li><span class="text-white font-semibold">Calidad de Datos:</span> Identifica rápidamente líneas vacías o espacios redundantes en grandes bloques de texto.</li>
+                </ul>
+
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200">
+                        <strong>Privacidad:</strong> Todo el análisis se realiza localmente. Tu texto nunca se envía a ningún servidor, lo que hace que esta herramienta sea segura incluso para analizar información confidencial.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

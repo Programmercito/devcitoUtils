@@ -15,5 +15,44 @@ import BytesConverter from '../../components/tools/BytesConverter.astro';
         <div class="w-full">
             <BytesConverter />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">Conversión de Texto a Array de Bytes</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    En la computación de bajo nivel y el desarrollo de protocolos, los datos a menudo no se manejan como texto plano, sino como secuencias de números. Un **Array de Bytes** es la representación fundamental de la información en memoria. Nuestra herramienta te permite visualizar exactamente cómo se traduce tu texto a nivel binario, decimal o hexadecimal.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Formatos de Salida</h3>
+                        <p class="text-sm text-gray-400">
+                            Obtén la representación en **Decimal** (0-255), **Hexadecimal** (00-FF) o **Binario** (00000000-11111111). También puedes elegir el separador (coma, espacio, prefijos 0x) para copiar los datos directamente en tu código fuente.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Codificación de Caracteres</h3>
+                        <p class="text-sm text-gray-400">
+                            Soportamos **UTF-8**, que es el estándar universal. Es vital entender que un mismo carácter (especialmente emojis o letras con tildes) puede ocupar múltiples bytes, y esta herramienta te permite inspeccionar ese comportamiento.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Cuándo es útil esta herramienta?</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Debugging de Red:</span> Analiza paquetes de datos crudos capturados en el tráfico de red.</li>
+                    <li><span class="text-white font-semibold">Programación de Microcontroladores:</span> Define constantes de texto para pantallas LCD o almacenamiento en EEPROM.</li>
+                    <li><span class="text-white font-semibold">Criptografía:</span> Prepara datos para ser procesados por algoritmos que requieren entradas en forma de bytes.</li>
+                    <li><span class="text-white font-semibold">Aprendizaje:</span> Entiende cómo se codifican los diferentes alfabetos y caracteres especiales a nivel de máquina.</li>
+                </ul>
+
+                <div class="bg-indigo-600/10 border-l-4 border-indigo-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-indigo-200 italic">
+                        <strong>Dato técnico:</strong> En UTF-8, los caracteres ASCII estándar ocupan 1 byte, mientras que los caracteres internacionales y emojis pueden ocupar de 2 a 4 bytes. Esta herramienta te ayuda a visualizar esa diferencia de forma clara.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

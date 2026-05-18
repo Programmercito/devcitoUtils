@@ -15,5 +15,43 @@ import TimestampConverter from '../../components/tools/TimestampConverter.astro'
         <div class="w-full">
             <TimestampConverter />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">Entendiendo el Unix Timestamp</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    El Unix Timestamp (también conocido como Epoch time) es un sistema para describir instantes en el tiempo, definido como el número de segundos que han transcurrido desde el **1 de enero de 1970 a las 00:00:00 UTC**. Es el formato estándar para manejar fechas y horas en casi todos los sistemas operativos y lenguajes de programación debido a su simplicidad y neutralidad de zona horaria.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Segundos vs Milisegundos</h3>
+                        <p class="text-sm text-gray-400">
+                            Nuestra herramienta detecta automáticamente si estás usando segundos (estándar de Linux/Unix) o milisegundos (estándar de JavaScript y Java). Esto elimina la confusión común al trabajar con diferentes tecnologías.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Zonas Horarias</h3>
+                        <p class="text-sm text-gray-400">
+                            Convierte instantáneamente un timestamp a tu hora local y a formato UTC. Esto es fundamental para depurar logs de servidores que suelen estar configurados en tiempo universal.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Por qué usar timestamps?</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Eficiencia:</span> Ocupan mucho menos espacio que una cadena de texto de fecha completa.</li>
+                    <li><span class="text-white font-semibold">Aritmética de Fechas:</span> Es extremadamente fácil calcular la diferencia de tiempo restando dos números enteros.</li>
+                    <li><span class="text-white font-semibold">Ordenamiento:</span> Al ser números incrementales, ordenar eventos cronológicamente en una base de datos es trivial.</li>
+                </ul>
+
+                <div class="bg-gray-800 border-l-4 border-gray-500 p-6 rounded-r-2xl">
+                    <p class="text-xs text-gray-400 font-mono">
+                        Dato curioso: El 19 de enero de 2038, los sistemas de 32 bits experimentarán el "Efecto 2038", ya que el contador de segundos superará el valor máximo permitido para un entero de 32 bits con signo.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

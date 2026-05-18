@@ -15,5 +15,43 @@ import HashGenerator from '../../components/tools/HashGenerator.astro';
         <div class="w-full">
             <HashGenerator />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué es una Función Hash?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Una función criptográfica hash es un algoritmo que toma una entrada de cualquier tamaño (un mensaje, un archivo, etc.) y devuelve una cadena de caracteres de longitud fija. Esta "huella digital" es única para cada entrada distinta; incluso el cambio de un solo bit en el archivo original producirá un hash completamente diferente (efecto avalancha).
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Integridad de Datos</h3>
+                        <p class="text-sm text-gray-400">
+                            Los hashes son esenciales para verificar que un archivo no ha sido alterado o corrompido durante su descarga o almacenamiento. Si el hash que calculas coincide con el proporcionado por la fuente original, puedes estar seguro de que el archivo es idéntico.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Algoritmos Soportados</h3>
+                        <p class="text-sm text-gray-400">
+                            Nuestra herramienta soporta los estándares más robustos de la industria: SHA-256, SHA-384, SHA-512 y SHA-1. Estos algoritmos están diseñados para ser resistentes a colisiones y ataques de preimagen.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Por qué es importante?</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Almacenamiento de Contraseñas:</span> Los sistemas modernos nunca guardan tu contraseña real, sino su hash, para que nadie pueda leerla incluso si la base de datos es comprometida.</li>
+                    <li><span class="text-white font-semibold">Firma Digital:</span> Se utilizan para asegurar que el contenido de un documento digital sea auténtico y no haya sido modificado.</li>
+                    <li><span class="text-white font-semibold">Tecnología Blockchain:</span> Es la base fundamental que encadena bloques de información de forma inmutable.</li>
+                </ul>
+
+                <div class="bg-red-600/10 border-l-4 border-red-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-red-200">
+                        <strong>Nota Importante:</strong> Un hash es una función unidireccional. No se puede "revertir" un hash para obtener el texto original. Solo se puede comparar con un hash conocido para verificar la igualdad.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

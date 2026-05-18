@@ -15,5 +15,44 @@ import Base64Converter from '../../components/tools/Base64Converter.astro';
         <div class="w-full">
             <Base64Converter />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué es la Codificación Base64?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    La codificación Base64 es un sistema de numeración posicional que utiliza una base de 64. Es la forma más común de codificar datos binarios (como imágenes o archivos) en una cadena de texto ASCII. Esto es fundamental en el desarrollo web para transmitir datos a través de medios que solo soportan texto, como el cuerpo de un correo electrónico o parámetros en una URL.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">¿Cómo funciona?</h3>
+                        <p class="text-sm text-gray-400">
+                            El proceso toma grupos de 3 bytes (24 bits) y los divide en 4 grupos de 6 bits cada uno. Cada grupo de 6 bits se traduce en uno de los 64 caracteres del alfabeto Base64 (A-Z, a-z, 0-9, + y /).
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">¿Qué es Base64 URL-Safe?</h3>
+                        <p class="text-sm text-gray-400">
+                            Es una variante que reemplaza los caracteres '+' y '/' por '-' y '_' respectivamente, y elimina el relleno '=', haciendo que la cadena sea segura para usar directamente en direcciones web sin necesidad de escapar caracteres.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Casos de Uso Comunes</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Data URIs:</span> Embeber imágenes pequeñas directamente en archivos CSS o HTML.</li>
+                    <li><span class="text-white font-semibold">Autenticación Básica:</span> Codificar credenciales (usuario:contraseña) en el encabezado Authorization de HTTP.</li>
+                    <li><span class="text-white font-semibold">JWT (JSON Web Tokens):</span> Los tokens de autenticación modernos utilizan Base64 URL-Safe para sus tres partes principales.</li>
+                    <li><span class="text-white font-semibold">Parámetros de URL:</span> Pasar objetos JSON complejos o datos binarios a través de la URL de forma segura.</li>
+                </ul>
+
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200 italic">
+                        <strong>Nota de Seguridad:</strong> Base64 NO es un método de cifrado ni proporciona seguridad. Es simplemente una forma de codificación. Cualquier persona puede decodificar una cadena Base64 fácilmente, por lo que nunca debe usarse para ocultar información sensible sin un cifrado previo.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

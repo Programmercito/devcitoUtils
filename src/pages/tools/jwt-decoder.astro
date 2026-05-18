@@ -15,5 +15,53 @@ import JWTDecoder from '../../components/tools/JWTDecoder.astro';
         <div class="w-full">
             <JWTDecoder />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué es un JSON Web Token (JWT)?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Un JWT es un estándar abierto (RFC 7519) que define una forma compacta y autónoma de transmitir información de forma segura entre las partes como un objeto JSON. Esta información puede ser verificada y confiable porque está firmada digitalmente. Los JWT se utilizan principalmente para autenticación y el intercambio de información en aplicaciones web modernas.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                        <h3 class="text-lg font-bold text-red-400 mb-2">Header</h3>
+                        <p class="text-xs text-gray-400">Contiene el tipo de token y el algoritmo de cifrado utilizado, como HS256 o RS256.</p>
+                    </div>
+                    <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                        <h3 class="text-lg font-bold text-purple-400 mb-2">Payload</h3>
+                        <p class="text-xs text-gray-400">Contiene los "claims" o afirmaciones, que son los datos del usuario (ID, roles) y metadatos del token (expiración).</p>
+                    </div>
+                    <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                        <h3 class="text-lg font-bold text-blue-400 mb-2">Signature</h3>
+                        <p class="text-xs text-gray-400">Se utiliza para verificar que el remitente del JWT es quien dice ser y para asegurar que el mensaje no fue alterado.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Seguridad y Privacidad</h3>
+                <p class="text-gray-300 mb-6">
+                    A diferencia de otros decodificadores online, **Devcito Utils** procesa tu token íntegramente en el cliente. Tu token nunca viaja por la red hacia nuestros servidores. Esto es crucial ya que los JWT a menudo contienen información sensible o credenciales de sesión que no deberían ser compartidas con terceros.
+                </p>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Preguntas Frecuentes</h3>
+                <div class="space-y-4 mb-8">
+                    <details class="group bg-white/5 rounded-xl border border-white/10 overflow-hidden">
+                        <summary class="p-4 cursor-pointer font-bold text-sm text-blue-400 hover:bg-white/5 transition-colors">¿Puedo ver la contraseña de un usuario en un JWT?</summary>
+                        <p class="p-4 pt-0 text-sm text-gray-400 leading-relaxed">No. Un JWT bien diseñado nunca debe contener contraseñas. Solo debe contener identificadores y datos necesarios para la sesión.</p>
+                    </details>
+                    <details class="group bg-white/5 rounded-xl border border-white/10 overflow-hidden">
+                        <summary class="p-4 cursor-pointer font-bold text-sm text-blue-400 hover:bg-white/5 transition-colors">¿Decodificar un JWT es lo mismo que verificarlo?</summary>
+                        <p class="p-4 pt-0 text-sm text-gray-400 leading-relaxed">No. Decodificar es simplemente leer el contenido. Para verificarlo, necesitas la clave secreta o pública utilizada para firmarlo y asegurar que no ha sido manipulado.</p>
+                    </details>
+                </div>
+
+                <div class="bg-amber-600/10 border-l-4 border-amber-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-amber-200 italic">
+                        <strong>Recordatorio importante:</strong> Aunque cualquier persona puede decodificar un JWT para ver su contenido (Payload), solo el servidor con la clave correcta puede verificar su validez. Nunca confíes en los datos de un JWT sin antes verificar su firma.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

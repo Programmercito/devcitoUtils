@@ -15,5 +15,49 @@ import UrlEncoder from '../../components/tools/UrlEncoder.astro';
         <div class="w-full">
             <UrlEncoder />
         </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué es el URL Encoding (Percent-Encoding)?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    El URL Encoding es un mecanismo para codificar información en un Uniform Resource Identifier (URI). Aunque se conoce comúnmente como URL encoding, se utiliza de manera más general dentro del conjunto principal de URIs, que incluye tanto URLs como URNs. Este proceso convierte caracteres especiales en una forma que pueda ser transmitida de manera segura a través de internet.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">¿Cómo funciona?</h3>
+                        <p class="text-sm text-gray-400">
+                            Los caracteres que no están permitidos en una URL se reemplazan por un símbolo de porcentaje `%` seguido de su equivalente hexadecimal en el mapa de caracteres ASCII. Por ejemplo, un espacio se convierte en `%20`.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Caracteres Reservados</h3>
+                        <p class="text-sm text-gray-400">
+                            Ciertos caracteres tienen un significado especial en las URLs (como `?`, `&`, `#`). Si estos caracteres forman parte de los datos (por ejemplo, en un valor de búsqueda), deben ser codificados para evitar romper la estructura de la URL.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">¿Por qué es necesario?</h3>
+                <p class="text-gray-300 mb-6">
+                    Las URLs solo pueden ser enviadas a través de internet utilizando el conjunto de caracteres ASCII. Como las URLs a menudo contienen caracteres fuera de este conjunto (como letras con tildes, caracteres internacionales o símbolos especiales), estos deben ser convertidos a un formato ASCII válido.
+                </p>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Casos de Uso Comunes</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Parámetros de Consulta (Query Strings):</span> Codificar valores en formularios GET para que el servidor los reciba correctamente.</li>
+                    <li><span class="text-white font-semibold">Redirecciones:</span> Pasar una URL completa como parámetro dentro de otra URL.</li>
+                    <li><span class="text-white font-semibold">Deep Linking:</span> Manejar rutas complejas en aplicaciones móviles o web que incluyan caracteres especiales.</li>
+                    <li><span class="text-white font-semibold">Internacionalización:</span> Permitir que palabras en cualquier idioma formen parte de la dirección web.</li>
+                </ul>
+
+                <div class="bg-emerald-600/10 border-l-4 border-emerald-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-emerald-200">
+                        <strong>Seguridad:</strong> Nuestra herramienta de codificación y decodificación URL se ejecuta totalmente en tu navegador. Tus datos no se envían a ningún servidor, garantizando que tus enlaces y parámetros permanezcan privados.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>
