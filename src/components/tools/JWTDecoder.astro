@@ -2,30 +2,36 @@
 // JWT Decoder Component
 ---
 
-<div class="w-full max-w-4xl mx-auto space-y-5">
-    <div>
+<div class="max-w-4xl mx-auto space-y-6">
+    <div class="tool-panel space-y-4">
         <label for="jwt-input" class="tool-label">Token JWT</label>
-        <textarea id="jwt-input" rows="4" class="tool-textarea" placeholder="Pega tu token JWT aquí..."></textarea>
+        <textarea id="jwt-input" rows="4" class="tool-textarea" placeholder="Pega tu token JWT aquí...">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoyNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</textarea>
+        
+        <div id="error-message" class="hidden tool-error mt-4 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+            <span></span>
+        </div>
     </div>
 
-    <div id="error-message" class="hidden tool-error">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
-        <span></span>
-    </div>
+    <div id="jwt-output" class="space-y-6">
+        <div id="jwt-header-section" class="hidden tool-panel !border-red-500/20">
+            <label class="tool-label !text-red-400">Header · Algoritmo y Tipo</label>
+            <pre class="tool-output-panel mt-3 !bg-red-500/5 !text-red-200/90 border-red-500/10"><code></code></pre>
+        </div>
 
-    <div id="jwt-output" class="space-y-4">
-        <div id="jwt-header-section" class="hidden tool-panel border-red-800/40" style="border-color: rgba(153,27,27,0.4);">
-            <p class="tool-label" style="color:#f87171;">Header · Algoritmo y Tipo</p>
-            <pre class="tool-output-panel mt-2" style="color:#fca5a5;"><code></code></pre>
+        <div id="jwt-payload-section" class="hidden tool-panel !border-purple-500/20">
+            <label class="tool-label !text-purple-400">Payload · Datos</label>
+            <pre class="tool-output-panel mt-3 !bg-purple-500/5 !text-purple-200/90 border-purple-500/10"><code></code></pre>
         </div>
-        <div id="jwt-payload-section" class="hidden tool-panel" style="border-color: rgba(109,40,217,0.4);">
-            <p class="tool-label" style="color:#c084fc;">Payload · Datos</p>
-            <pre class="tool-output-panel mt-2" style="color:#e9d5ff;"><code></code></pre>
-        </div>
-        <div id="jwt-signature-section" class="hidden tool-panel" style="border-color: rgba(29,78,216,0.4);">
-            <p class="tool-label" style="color:#60a5fa;">Firma</p>
-            <pre class="tool-output-panel mt-2 break-all" style="color:#bfdbfe;"><code></code></pre>
-            <p class="text-xs text-gray-500 mt-3 leading-relaxed">La firma no se puede decodificar. Se genera en el servidor usando el header, el payload y una clave secreta.</p>
+
+        <div id="jwt-signature-section" class="hidden tool-panel !border-blue-500/20">
+            <label class="tool-label !text-blue-400">Firma</label>
+            <pre class="tool-output-panel mt-3 !bg-blue-500/5 !text-blue-200/90 border-blue-500/10 break-all"><code></code></pre>
+            <p class="text-xs text-gray-500 mt-4 leading-relaxed">
+                La firma no se puede decodificar sin la clave secreta. Se utiliza para verificar que el token no haya sido alterado.
+            </p>
         </div>
     </div>
 </div>
@@ -42,20 +48,33 @@
     function showError(message: string) {
         errorMessageDiv.querySelector('span')!.textContent = message;
         errorMessageDiv.classList.remove('hidden');
-        outputDiv.querySelectorAll('div').forEach(el => el.classList.add('hidden'));
+        outputDiv.querySelectorAll(':scope > div').forEach(el => el.classList.add('hidden'));
     }
 
     function decodeJwtPart(part: string) {
-        const base64 = part.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-        return JSON.stringify(JSON.parse(jsonPayload), null, 2);
+        try {
+            const base64 = part.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+            return JSON.stringify(JSON.parse(jsonPayload), null, 2);
+        } catch (e) {
+            throw new Error('Parte corrupta o inválida');
+        }
     }
 
-    input?.addEventListener('input', () => {
+    function updateOutput() {
         const token = input.value.trim();
-        if (!token) { hideError(); outputDiv.querySelectorAll('div').forEach(el => el.classList.add('hidden')); return; }
+        if (!token) { 
+            hideError(); 
+            outputDiv.querySelectorAll(':scope > div').forEach(el => el.classList.add('hidden')); 
+            return; 
+        }
+        
         const parts = token.split('.');
-        if (parts.length !== 3) { showError('El token JWT no es válido. Debe consistir en tres partes separadas por puntos.'); return; }
+        if (parts.length !== 3) { 
+            showError('El token JWT no es válido. Debe consistir en tres partes separadas por puntos.'); 
+            return; 
+        }
+        
         hideError();
         try {
             headerSection.querySelector('code')!.textContent = decodeJwtPart(parts[0]);
@@ -67,5 +86,12 @@
         } catch (e) {
             showError('Una de las partes del token no es un JSON válido o está corrupta.');
         }
-    });
+    }
+
+    input?.addEventListener('input', updateOutput);
+
+    // Initial load
+    if (input.value) {
+        updateOutput();
+    }
 </script>

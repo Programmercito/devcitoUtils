@@ -83,6 +83,29 @@ body {
 }
 .tool-input::placeholder { color: #374151; }
 
+.tool-select {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    background: rgba(3, 7, 18, 0.6);
+    color: var(--text-main);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+}
+.tool-select:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    background: rgba(3, 7, 18, 0.8);
+}
+
 .tool-textarea {
     width: 100%;
     padding: 1rem 1.25rem;
@@ -137,6 +160,16 @@ body {
     box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.3);
 }
 
+.tool-btn-warning {
+    background: linear-gradient(135deg, #d97706, #fbbf24);
+    color: #451a03;
+    box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.3);
+}
+.tool-btn-warning:hover {
+    box-shadow: 0 20px 25px -5px rgba(217, 119, 6, 0.4);
+    filter: brightness(1.1);
+}
+
 .tool-btn-ghost {
     background: rgba(255, 255, 255, 0.03);
     color: var(--text-muted);
@@ -157,6 +190,39 @@ body {
     font-size: 0.875rem;
     color: #e5e7eb;
     overflow-x: auto;
+}
+
+.tool-stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    transition: all 0.3s ease;
+}
+.tool-stat-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px);
+}
+
+.tool-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+}
+
+.tool-success-msg {
+    color: #34d399;
+}
+
+.tool-info-msg {
+    color: #9ca3af;
 }
 
 /* ── Custom Scrollbar ────────────────────────────────────────────── */

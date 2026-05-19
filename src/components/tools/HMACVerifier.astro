@@ -2,31 +2,42 @@
 // HMAC Generator & Verifier Component
 ---
 
-<div class="tool-panel max-w-2xl mx-auto space-y-5">
-    <div>
-        <label for="hmac-payload" class="tool-label">Payload (Mensaje)</label>
-        <textarea id="hmac-payload" rows="5" class="tool-textarea" placeholder="Pega el payload o mensaje original aquí..."></textarea>
-    </div>
-    <div>
-        <label for="hmac-secret" class="tool-label">Clave Secreta</label>
-        <input type="text" id="hmac-secret" class="tool-input" placeholder="La clave secreta usada para firmar">
-    </div>
-    <div>
-        <label for="hmac-signature" class="tool-label">Firma / Hash (Entrada o Salida)</label>
-        <input type="text" id="hmac-signature" class="tool-input font-mono" placeholder="Pega una firma para verificar, o genera una nueva">
-    </div>
+<div class="max-w-4xl mx-auto">
+    <div class="tool-panel space-y-6">
+        <div id="status-message" class="hidden min-h-[1.5rem]"></div>
 
-    <div id="status-message" class="hidden"></div>
+        <div class="space-y-4">
+            <div>
+                <label for="hmac-payload" class="tool-label">Payload (Mensaje)</label>
+                <textarea id="hmac-payload" rows="6" class="tool-textarea" placeholder="Pega el payload o mensaje original aquí..."></textarea>
+            </div>
 
-    <div class="flex items-center flex-wrap gap-3 pt-1">
-        <button id="generate-btn" class="tool-btn tool-btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" /></svg>
-            Generar Firma
-        </button>
-        <button id="verify-btn" class="tool-btn tool-btn-success">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.944a11.955 11.955 0 0118 0z" /></svg>
-            Verificar Firma
-        </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="hmac-secret" class="tool-label">Clave Secreta</label>
+                    <input type="text" id="hmac-secret" class="tool-input" placeholder="La clave secreta usada para firmar" value="clave-secreta-de-ejemplo">
+                </div>
+                <div>
+                    <label for="hmac-signature" class="tool-label">Firma / Hash</label>
+                    <input type="text" id="hmac-signature" class="tool-input font-mono" placeholder="Pega una firma para verificar, o genera una nueva">
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-6 border-t border-white/5 flex flex-wrap gap-4">
+            <button id="generate-btn" class="tool-btn tool-btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 017.743-5.743z" />
+                </svg>
+                Generar Firma
+            </button>
+            <button id="verify-btn" class="tool-btn tool-btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 20.944a11.955 11.955 0 0118 0z" />
+                </svg>
+                Verificar Firma
+            </button>
+        </div>
     </div>
 </div>
 
@@ -40,8 +51,18 @@
 
     function setStatus(message: string, type: 'success' | 'error' | 'info') {
         statusMessage.textContent = message;
-        statusMessage.className = type === 'success' ? 'tool-success-msg' : type === 'error' ? 'tool-error' : 'tool-info-msg';
+        statusMessage.className = type === 'success' 
+            ? 'tool-success-msg text-center font-semibold' 
+            : type === 'error' 
+                ? 'tool-error flex items-center justify-center gap-2 font-medium' 
+                : 'tool-info-msg text-center font-semibold';
         statusMessage.classList.remove('hidden');
+        
+        if (type === 'success' || type === 'info') {
+            setTimeout(() => {
+                if (statusMessage.textContent === message) statusMessage.classList.add('hidden');
+            }, 3000);
+        }
     }
 
     async function generateSignature() {
@@ -79,4 +100,12 @@
 
     generateBtn?.addEventListener('click', generateSignature);
     verifyBtn?.addEventListener('click', verifySignature);
+
+    // Initial load
+    payloadInput.value = JSON.stringify({
+        user: "admin",
+        action: "delete",
+        timestamp: 1715983200000
+    }, null, 2);
+    generateSignature();
 </script>

@@ -2,223 +2,103 @@
 // Base64 Converter Component
 ---
 
-<style>
-  .b64-textarea {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-    font-size: 0.8rem;
-    line-height: 1.6;
-    resize: none;
-  }
-  .b64-textarea:focus { outline: none; }
+<div id="b64-root" class="max-w-5xl mx-auto">
+    <div class="tool-panel space-y-6">
+        <!-- Top bar: mode indicator + options -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div id="mode-dot" class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] transition-all duration-300"></div>
+                <span id="mode-label" class="tool-label !mb-0">Listo</span>
+            </div>
 
-  .action-btn {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.2s ease;
-  }
-  .action-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.08);
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .action-btn:hover::after { opacity: 1; }
-  .action-btn:active { transform: scale(0.97); }
+            <div class="flex flex-wrap items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Encoding</span>
+                    <select id="text-encoding-select" class="tool-select !py-1.5 !px-3 !text-xs !bg-gray-800/50 w-32">
+                        <option value="utf-8">UTF-8</option>
+                        <option value="ascii">ASCII</option>
+                        <option value="latin1">Latin1</option>
+                    </select>
+                </div>
 
-  .toggle-switch { position: relative; display: inline-block; width: 38px; height: 22px; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-track {
-    position: absolute; cursor: pointer; inset: 0;
-    background: #374151; border-radius: 9999px; transition: background 0.2s;
-  }
-  .toggle-track::before {
-    content: ''; position: absolute;
-    height: 16px; width: 16px; left: 3px; bottom: 3px;
-    background: white; border-radius: 50%; transition: transform 0.2s;
-  }
-  .toggle-switch input:checked + .toggle-track { background: #3b82f6; }
-  .toggle-switch input:checked + .toggle-track::before { transform: translateX(16px); }
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input type="checkbox" id="url-safe-checkbox" class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4 relative"></div>
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-gray-300 transition-colors">URL-Safe</span>
+                    </label>
 
-  .panel-glow {
-    box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 8px 32px rgba(0,0,0,0.4);
-  }
-  @keyframes fadeInUp {
-    from { opacity:0; transform: translateY(8px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-  .fade-in { animation: fadeInUp 0.25s ease forwards; }
-
-  /* Direction arrow animation */
-  #swap-indicator { transition: transform 0.3s ease; }
-  .encoding #swap-indicator { transform: rotate(0deg); }
-  .decoding #swap-indicator { transform: rotate(180deg); }
-</style>
-
-<div id="b64-root" class="w-full max-w-5xl mx-auto space-y-4">
-
-  <!-- Main card -->
-  <div class="bg-gray-900/80 backdrop-blur-md rounded-2xl border border-gray-700/70 panel-glow overflow-hidden">
-
-    <!-- Top bar: mode indicator + options -->
-    <div class="flex items-center justify-between px-5 py-3 border-b border-gray-800/80 bg-gray-800/30">
-      <div class="flex items-center gap-2">
-        <div id="mode-dot" class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-md shadow-blue-500/60 transition-colors duration-300"></div>
-        <span id="mode-label" class="text-xs font-semibold text-gray-400 tracking-widest uppercase transition-colors duration-300">Listo</span>
-      </div>
-
-      <!-- Inline options -->
-      <div class="flex items-center gap-5">
-        <!-- Encoding select -->
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-gray-500">Encoding</span>
-          <select id="text-encoding-select"
-            class="text-xs bg-gray-800 text-gray-300 border border-gray-700 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-            <option value="utf-8">UTF-8</option>
-            <option value="ascii">ASCII</option>
-            <option value="latin1">Latin1</option>
-          </select>
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input type="checkbox" id="url-encoded-checkbox" class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4 relative"></div>
+                        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider group-hover:text-gray-300 transition-colors">URL-Encode</span>
+                    </label>
+                </div>
+            </div>
         </div>
 
-        <!-- URL-Safe toggle -->
-        <div class="flex items-center gap-2">
-          <label class="toggle-switch">
-            <input type="checkbox" id="url-safe-checkbox">
-            <span class="toggle-track"></span>
-          </label>
-          <span class="text-xs text-gray-400 select-none">URL-Safe</span>
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <label class="tool-label !mb-0">Entrada</label>
+                    <div class="flex items-center gap-4">
+                        <span id="input-char-count" class="text-[10px] font-mono text-gray-500 uppercase tracking-tight">0 chars</span>
+                        <button id="clear-input-btn" class="tool-btn tool-btn-ghost !py-1 !px-2 !text-[10px] uppercase tracking-wider">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+                <textarea
+                    id="base64-input"
+                    class="tool-textarea h-64 resize-none"
+                    placeholder="Escribe o pega aquí el texto o Base64..."
+                >DevcitoUtils es una colección de herramientas útiles para desarrolladores. ¡Pruébala!</textarea>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <label class="tool-label !mb-0">Salida</label>
+                    <div class="flex items-center gap-4">
+                        <span id="output-char-count" class="text-[10px] font-mono text-gray-500 uppercase tracking-tight">0 chars</span>
+                        <button id="copy-btn" class="tool-btn tool-btn-ghost !py-1 !px-2 !text-[10px] uppercase tracking-wider">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            Copiar
+                        </button>
+                    </div>
+                </div>
+                <textarea
+                    id="base64-output"
+                    class="tool-textarea h-64 resize-none !text-emerald-300/90 !border-emerald-500/20"
+                    readonly
+                    placeholder="El resultado aparecerá aquí..."
+                ></textarea>
+            </div>
         </div>
 
-        <!-- URL-Encode toggle -->
-        <div class="flex items-center gap-2">
-          <label class="toggle-switch">
-            <input type="checkbox" id="url-encoded-checkbox">
-            <span class="toggle-track"></span>
-          </label>
-          <span class="text-xs text-gray-400 select-none">URL-Encode</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panels -->
-    <div class="grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr]">
-
-      <!-- Input panel -->
-      <div class="flex flex-col">
-        <div class="flex items-center justify-between px-4 pt-4 pb-2">
-          <div class="flex items-center gap-2">
-            <div class="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
-            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Entrada</span>
-          </div>
-          <button id="clear-input-btn" class="text-[10px] text-gray-600 hover:text-gray-400 transition-colors px-2 py-0.5 rounded hover:bg-gray-800">
-            Limpiar
-          </button>
-        </div>
-        <div class="relative px-4 pb-4">
-          <textarea
-            id="base64-input"
-            class="b64-textarea w-full h-72 p-4 bg-gray-950/60 text-gray-100 border border-gray-700/60 rounded-xl
-                   focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 placeholder-gray-700
-                   transition-all duration-200"
-            placeholder="Escribe o pega aquí..."
-          ></textarea>
-          <div id="input-char-count" class="absolute bottom-6 right-6 text-[10px] text-gray-700 font-mono select-none pointer-events-none">0 chars</div>
-        </div>
-      </div>
-
-      <!-- Center divider with swap arrows -->
-      <div class="hidden xl:flex flex-col items-center justify-center px-2 py-8 gap-4">
-        <div class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-700/60 to-transparent"></div>
-        <div id="swap-indicator" class="flex flex-col items-center gap-1 text-gray-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-          </svg>
-        </div>
-        <div class="w-px flex-1 bg-gradient-to-b from-transparent via-gray-700/60 to-transparent"></div>
-      </div>
-
-      <!-- Output panel -->
-      <div class="flex flex-col border-t xl:border-t-0 xl:border-l border-gray-800/60">
-        <div class="flex items-center justify-between px-4 pt-4 pb-2">
-          <div class="flex items-center gap-2">
-            <div id="output-dot" class="w-1.5 h-1.5 rounded-full bg-gray-500 transition-colors duration-300"></div>
-            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Salida</span>
-          </div>
-          <button id="copy-btn"
-            class="flex items-center gap-1 text-[10px] text-gray-500 hover:text-blue-400 transition-colors px-2 py-0.5 rounded hover:bg-gray-800">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        <div id="error-message" class="hidden tool-error flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
             </svg>
-            Copiar
-          </button>
+            <span id="error-text"></span>
         </div>
-        <div class="relative px-4 pb-4">
-          <textarea
-            id="base64-output"
-            class="b64-textarea w-full h-72 p-4 bg-gray-950/60 text-emerald-300/90 border border-gray-700/60 rounded-xl
-                   focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/40 placeholder-gray-700
-                   transition-all duration-200"
-            readonly
-            placeholder="El resultado aparecerá aquí..."
-          ></textarea>
-          <div id="output-char-count" class="absolute bottom-6 right-6 text-[10px] text-gray-700 font-mono select-none pointer-events-none">0 chars</div>
+
+        <div class="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center gap-4">
+            <button id="encode-btn" class="tool-btn tool-btn-primary flex-1 w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                </svg>
+                Codificar → Base64
+            </button>
+            <button id="decode-btn" class="tool-btn tool-btn-success flex-1 w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 15l-4 4-4-4m0-6l4-4 4 4" />
+                </svg>
+                Decodificar ← Base64
+            </button>
         </div>
-      </div>
     </div>
-
-    <!-- Action bar -->
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 px-5 py-4 border-t border-gray-800/80 bg-gray-800/20">
-
-      <button id="encode-btn"
-        class="action-btn flex-1 flex items-center justify-center gap-2 font-bold text-sm py-3 px-6 rounded-xl
-               bg-gradient-to-r from-blue-600 to-blue-500 text-white
-               hover:from-blue-500 hover:to-cyan-500
-               shadow-lg shadow-blue-900/40 hover:shadow-blue-700/50
-               transition-all duration-200 hover:scale-[1.02]">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-        </svg>
-        Codificar → Base64
-      </button>
-
-      <button id="decode-btn"
-        class="action-btn flex-1 flex items-center justify-center gap-2 font-bold text-sm py-3 px-6 rounded-xl
-               bg-gradient-to-r from-emerald-600 to-emerald-500 text-white
-               hover:from-emerald-500 hover:to-teal-400
-               shadow-lg shadow-emerald-900/40 hover:shadow-emerald-700/50
-               transition-all duration-200 hover:scale-[1.02]">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16 15l-4 4-4-4m0-6l4-4 4 4" />
-        </svg>
-        Decodificar ← Base64
-      </button>
-
-      <!-- Tooltip info -->
-      <div class="hidden sm:flex items-center group relative">
-        <button class="text-gray-600 hover:text-gray-400 transition-colors p-2 rounded-lg hover:bg-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </button>
-        <div class="absolute bottom-full right-0 mb-2 w-56 bg-gray-800 border border-gray-700 rounded-xl p-3 text-xs text-gray-400 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity shadow-xl z-10">
-          <strong class="text-gray-200 block mb-1">URL-Safe</strong>
-          Reemplaza <code class="bg-gray-700 px-1 rounded">+/</code> por <code class="bg-gray-700 px-1 rounded">-_</code> y elimina el padding <code class="bg-gray-700 px-1 rounded">=</code>.
-          <strong class="text-gray-200 block mt-2 mb-1">URL-Encode</strong>
-          Aplica <code class="bg-gray-700 px-1 rounded">encodeURIComponent</code> al resultado Base64.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Error message -->
-  <div id="error-message"
-    class="hidden fade-in flex items-center gap-3 bg-red-950/60 border border-red-700/60 text-red-300 px-4 py-3 rounded-xl text-sm">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-    </svg>
-    <span id="error-text"></span>
-  </div>
 </div>
 
 <script>
@@ -235,7 +115,6 @@
   const errText    = document.getElementById('error-text')        as HTMLSpanElement;
   const modeDot    = document.getElementById('mode-dot')          as HTMLDivElement;
   const modeLabel  = document.getElementById('mode-label')        as HTMLSpanElement;
-  const outputDot  = document.getElementById('output-dot')        as HTMLDivElement;
   const inputCount = document.getElementById('input-char-count')  as HTMLDivElement;
   const outputCount= document.getElementById('output-char-count') as HTMLDivElement;
 
@@ -252,17 +131,15 @@
 
   // ── Mode UI helpers ──────────────────────────────────────────────────────────
   function setMode(mode: 'encoding' | 'decoding' | 'ready' | 'error') {
-    const cfg: Record<string, { dot: string; label: string; outDot: string }> = {
-      encoding: { dot: 'bg-blue-500 shadow-blue-500/60',   label: 'text-blue-400',    outDot: 'bg-blue-500' },
-      decoding: { dot: 'bg-emerald-500 shadow-emerald-500/60', label: 'text-emerald-400', outDot: 'bg-emerald-500' },
-      ready:    { dot: 'bg-gray-500',                      label: 'text-gray-400',    outDot: 'bg-gray-500' },
-      error:    { dot: 'bg-red-500 shadow-red-500/60',     label: 'text-red-400',     outDot: 'bg-gray-500' },
+    const cfg: Record<string, { dot: string; label: string; dotColor: string }> = {
+      encoding: { dot: 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]',   label: 'Codificado', dotColor: 'bg-blue-500' },
+      decoding: { dot: 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]', label: 'Decodificado', dotColor: 'bg-emerald-500' },
+      ready:    { dot: 'bg-gray-500 shadow-none',                      label: 'Listo', dotColor: 'bg-gray-500' },
+      error:    { dot: 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]',     label: 'Error', dotColor: 'bg-red-500' },
     };
     const c = cfg[mode];
-    modeDot.className   = `w-2.5 h-2.5 rounded-full shadow-md transition-colors duration-300 ${c.dot}`;
-    modeLabel.className = `text-xs font-semibold uppercase tracking-widest transition-colors duration-300 ${c.label}`;
-    modeLabel.textContent = { encoding: 'Codificado', decoding: 'Decodificado', ready: 'Listo', error: 'Error' }[mode];
-    outputDot.className = `w-1.5 h-1.5 rounded-full transition-colors duration-300 ${c.outDot}`;
+    modeDot.className   = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${c.dot}`;
+    modeLabel.textContent = c.label;
   }
 
   // ── Error helpers ────────────────────────────────────────────────────────────
@@ -275,7 +152,7 @@
     setMode('error');
   }
 
-  // ── Encoding logic (unchanged) ───────────────────────────────────────────────
+  // ── Encoding logic ───────────────────────────────────────────────────────────
   function bytesToBase64(bytes: Uint8Array) {
     let binary = '';
     for (const byte of bytes) binary += String.fromCharCode(byte);
@@ -368,8 +245,14 @@
     navigator.clipboard.writeText(output.value).then(() => {
       const orig = copyBtn.innerHTML;
       copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> ¡Copiado!`;
-      copyBtn.classList.add('text-emerald-400');
-      setTimeout(() => { copyBtn.innerHTML = orig; copyBtn.classList.remove('text-emerald-400'); }, 2000);
+      copyBtn.classList.add('!text-emerald-400');
+      setTimeout(() => { copyBtn.innerHTML = orig; copyBtn.classList.remove('!text-emerald-400'); }, 2000);
     });
   });
+
+  // Initial load
+  if (input.value) {
+    input.dispatchEvent(new Event('input'));
+    encodeBtn.click();
+  }
 </script>

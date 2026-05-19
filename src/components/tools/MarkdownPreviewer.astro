@@ -2,25 +2,37 @@
 // Markdown Previewer Component
 ---
 
-<div class="w-full max-w-7xl mx-auto tool-panel !p-0 overflow-hidden">
-    <div class="flex items-center border-b border-gray-800/60 bg-gray-900/40 px-4 py-2 gap-6">
-        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-            Editor
-        </span>
-        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-            Vista previa
-        </span>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2" style="height: 70vh;">
-        <div class="border-r border-gray-800/60">
-            <textarea id="markdown-input" class="w-full h-full p-4 resize-none outline-none"
-                style="background: rgba(3,7,18,0.6); color: #f1f5f9; font-family: 'JetBrains Mono','Fira Code',monospace; font-size: 0.8rem; line-height: 1.7;">
-            </textarea>
+<div class="max-w-5xl mx-auto">
+    <div class="tool-panel !p-0 overflow-hidden flex flex-col h-[70vh]">
+        <div class="flex items-center justify-between border-b border-white/5 bg-gray-950/40 px-6 py-3">
+            <div class="flex items-center gap-8">
+                <span class="tool-label !mb-0 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Editor
+                </span>
+                <span class="tool-label !mb-0 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    Vista Previa
+                </span>
+            </div>
+            
+            <button id="clear-btn" class="tool-btn tool-btn-ghost !py-1 !px-3 !text-xs">
+                Limpiar
+            </button>
         </div>
-        <div id="html-output" class="w-full h-full p-5 overflow-y-auto prose"
-            style="background: rgba(3,7,18,0.3);">
+        
+        <div class="flex-grow grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+            <div class="border-r border-white/5 flex flex-col">
+                <textarea id="markdown-input" class="w-full h-full p-6 resize-none outline-none bg-transparent text-gray-100 font-mono text-sm leading-relaxed" placeholder="Escribe Markdown aquí..."></textarea>
+            </div>
+            <div class="bg-gray-950/20 flex flex-col overflow-hidden">
+                <div id="html-output" class="w-full h-full p-6 overflow-y-auto prose max-w-none"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -32,6 +44,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const markdownInput = document.getElementById('markdown-input') as HTMLTextAreaElement;
         const htmlOutput = document.getElementById('html-output') as HTMLDivElement;
+        const clearBtn = document.getElementById('clear-btn');
 
         function renderMarkdown() {
             const markdownText = markdownInput.value;
@@ -45,7 +58,15 @@
 
         function initialize() {
             markdownInput.addEventListener('input', renderMarkdown);
+            
+            clearBtn?.addEventListener('click', () => {
+                markdownInput.value = '';
+                renderMarkdown();
+                markdownInput.focus();
+            });
+
             const placeholder = `# ¡Bienvenido!\n\n## Título de ejemplo\n\nEscribe **Markdown** en el panel de la izquierda.\n\n- Las listas se renderizan\n- El código se resalta\n\n\`\`\`javascript\nconsole.log("Hola, Markdown!");\n\`\`\`\n`;
+            
             markdownInput.value = placeholder;
             renderMarkdown();
         }
@@ -59,13 +80,20 @@
 
 <style is:global>
     .prose { color: #d1d5db; line-height: 1.6; }
-    .prose :where(h1, h2, h3, h4, strong):not(:where([class~="not-prose"] *)) { color: #f9fafb; }
-    .prose :where(h1):not(:where([class~="not-prose"] *)) { font-size: 2em; font-weight: 700; margin-top: 1.2em; margin-bottom: 0.5em; }
-    .prose :where(h2):not(:where([class~="not-prose"] *)) { font-size: 1.5em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
-    .prose :where(h3):not(:where([class~="not-prose"] *)) { font-size: 1.25em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; }
-    .prose :where(code):not(:where([class~="not-prose"] *)) { color: #f3f4f6; background-color: #374151; padding: .2em .4em; border-radius: .25rem; font-weight: 600; font-size: 0.9em; }
-    .prose :where(pre):not(:where([class~="not-prose"] *)) { background-color: #1f2937; padding: 1em; border-radius: .5rem; }
-    .prose :where(pre code):not(:where([class~="not-prose"] *)) { background-color: transparent; padding: 0; }
-    .prose :where(blockquote):not(:where([class~="not-prose"] *)) { border-left-color: #4b5563; padding-left: 1em; font-style: italic; }
-    .prose :where(a):not(:where([class~="not-prose"] *)) { color: #60a5fa; }
+    .prose :where(h1, h2, h3, h4, h5, h6, strong):not(:where([class~="not-prose"] *)) { color: #f9fafb; font-weight: 700; }
+    .prose :where(h1):not(:where([class~="not-prose"] *)) { font-size: 1.875rem; margin-top: 0; margin-bottom: 1rem; }
+    .prose :where(h2):not(:where([class~="not-prose"] *)) { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .prose :where(h3):not(:where([class~="not-prose"] *)) { font-size: 1.25rem; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+    .prose :where(p):not(:where([class~="not-prose"] *)) { margin-bottom: 1rem; }
+    .prose :where(ul, ol):not(:where([class~="not-prose"] *)) { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .prose :where(li):not(:where([class~="not-prose"] *)) { margin-bottom: 0.25rem; }
+    .prose :where(ul):not(:where([class~="not-prose"] *)) { list-style-type: disc; }
+    .prose :where(ol):not(:where([class~="not-prose"] *)) { list-style-type: decimal; }
+    .prose :where(code):not(:where([class~="not-prose"] *)) { color: #3b82f6; background-color: rgba(59, 130, 246, 0.1); padding: 0.2rem 0.4rem; border-radius: 0.375rem; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; }
+    .prose :where(pre):not(:where([class~="not-prose"] *)) { background-color: #030712; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 1.25rem; overflow-x: auto; }
+    .prose :where(pre code):not(:where([class~="not-prose"] *)) { background-color: transparent; padding: 0; color: #e5e7eb; font-size: 0.875rem; }
+    .prose :where(blockquote):not(:where([class~="not-prose"] *)) { border-left: 4px solid #3b82f6; padding-left: 1.25rem; font-style: italic; color: #9ca3af; margin-bottom: 1.25rem; }
+    .prose :where(a):not(:where([class~="not-prose"] *)) { color: #3b82f6; text-decoration: underline; text-underline-offset: 4px; }
+    .prose :where(a):hover:not(:where([class~="not-prose"] *)) { color: #60a5fa; }
+    .prose :where(hr):not(:where([class~="not-prose"] *)) { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 2rem 0; }
 </style>

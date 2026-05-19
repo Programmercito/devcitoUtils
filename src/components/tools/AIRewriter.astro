@@ -2,90 +2,204 @@
 // AI Rewriter Component
 ---
 
-<div id="ai-rewriter-root" class="space-y-4 sm:space-y-6">
-    <p class="text-xs sm:text-sm text-yellow-300 bg-yellow-900/30 p-3 rounded-xl border border-yellow-700/50">✨ Esta herramienta utiliza la IA integrada de tu navegador (disponible en Chrome 127+ para PC). No se necesitan claves API y tus datos no salen de tu dispositivo.</p>
+<div class="max-w-4xl mx-auto">
+    <div class="tool-panel space-y-6">
+        <div class="space-y-4">
+            <p class="text-xs sm:text-sm text-yellow-300 bg-yellow-900/30 p-4 rounded-xl border border-yellow-700/50">
+                ✨ Esta herramienta utiliza la IA integrada de tu navegador (disponible en Chrome 127+ para PC). No se necesitan claves API y tus datos no salen de tu dispositivo.
+            </p>
 
-    <div id="error-container" class="hidden text-xs sm:text-sm text-red-300 bg-red-900/30 p-3 rounded-xl border border-red-700/50">
-        <p id="error-message"></p>
-        <p class="mt-2 text-gray-400">
-            Para habilitarlo, copia y pega lo siguiente en tu barra de direcciones: <code class="text-yellow-300 select-all">chrome://flags/#optimization-guide-on-device-model</code>
-        </p>
-    </div>
-
-    <div id="download-progress" class="hidden">
-        <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-600">
-            <p class="text-xs sm:text-sm text-gray-300 mb-2">Descargando modelo de IA...</p>
-            <div class="w-full bg-gray-600 rounded-full h-2">
-                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            <div id="error-container" class="hidden tool-error flex items-start gap-3">
+                <div class="flex flex-col gap-2">
+                    <p id="error-message"></p>
+                    <p class="text-gray-400">
+                        Para habilitarlo, copia y pega lo siguiente en tu barra de direcciones: 
+                        <code class="text-yellow-300 select-all ml-1">chrome://flags/#optimization-guide-on-device-model</code>
+                    </p>
+                </div>
             </div>
-            <p id="progress-text" class="text-[10px] sm:text-xs text-gray-400 mt-2">0%</p>
-        </div>
-    </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-        <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Idioma de Salida</label> 
-            <select id="output-language" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">
-                <option value="es">Español</option>
-                <option value="en">Inglés</option>
-                <option value="ja">Japonés</option>
-            </select>
+            <div id="download-progress" class="hidden">
+                <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-600">
+                    <p class="text-xs sm:text-sm text-gray-300 mb-2">Descargando modelo de IA...</p>
+                    <div class="w-full bg-gray-600 rounded-full h-2">
+                        <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p id="progress-text" class="text-[10px] sm:text-xs text-gray-400 mt-2">0%</p>
+                </div>
+            </div>
         </div>
 
-        <div>
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Tono</label>
-            <select id="tone" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">    
-                <option value="as-is">Sin cambios</option>
-                <option value="more-formal">Más formal</option>
-                <option value="more-casual">Más casual</option>
-            </select>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+                <label class="tool-label">Idioma</label> 
+                <select id="output-language" class="tool-select">
+                    <option value="es">Español</option>
+                    <option value="en">Inglés</option>
+                    <option value="ja">Japonés</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="tool-label">Tono</label>
+                <select id="tone" class="tool-select">    
+                    <option value="as-is">Sin cambios</option>
+                    <option value="more-formal">Más formal</option>
+                    <option value="more-casual">Más casual</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="tool-label">Longitud</label>
+                <select id="length" class="tool-select">  
+                    <option value="as-is">Sin cambios</option>
+                    <option value="shorter">Más corto</option>
+                    <option value="longer">Más largo</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="tool-label">Formato</label>
+                <select id="format" class="tool-select">      
+                    <option value="as-is">Sin cambios</option>
+                    <option value="plain-text">Texto plano</option>
+                    <option value="markdown">Markdown</option>
+                </select>
+            </div>
         </div>
 
-        <div class="sm:col-span-2 md:col-span-1">
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Longitud</label>
-            <select id="length" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">  
-                <option value="as-is">Sin cambios</option>
-                <option value="shorter">Más corto</option>
-                <option value="longer">Más largo</option>
-            </select>
-        </div>
-    </div>
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label for="ai-input" class="tool-label">Texto Original</label>
+                <textarea
+                    id="ai-input"
+                    rows="6"
+                    class="tool-textarea"
+                    placeholder="Pega aquí el texto que quieres reescribir..."
+                >La inteligencia artificial está transformando el mundo del desarrollo de software a un ritmo sin precedentes, permitiendo a los ingenieros automatizar tareas repetitivas y centrarse en la resolución de problemas complejos.</textarea>
+            </div>
 
-    <div>
-        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Formato</label>
-        <select id="format" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">      
-            <option value="as-is">Sin cambios</option>
-            <option value="plain-text">Texto plano</option>
-            <option value="markdown">Markdown</option>
-        </select>
-    </div>
-
-    <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
-        <div>
-            <label for="ai-input" class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Texto Original</label>
-            <textarea
-                id="ai-input"
-                rows="6"
-                class="w-full p-4 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm resize-none"
-                placeholder="Pega aquí el texto que quieres reescribir..."
-            ></textarea>
+            <div class="space-y-2">
+                <label for="ai-output" class="tool-label">Texto Reescrito</label>
+                <textarea
+                    id="ai-output"
+                    rows="6"
+                    class="tool-textarea text-emerald-300/90 border-emerald-500/20"
+                    readonly
+                    placeholder="El texto reescrito aparecerá aquí..."
+                ></textarea>
+            </div>
         </div>
 
-        <div>
-            <label for="ai-output" class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Texto Reescrito</label>
-            <textarea
-                id="ai-output"
-                rows="6"
-                class="w-full p-4 bg-gray-950/50 text-emerald-300/90 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/40 transition-all text-sm resize-none"
-                readonly
-                placeholder="El texto reescrito aparecerá aquí..."
-            ></textarea>
+        <div class="pt-6 border-t border-white/5">
+            <button id="rewrite-btn" class="tool-btn tool-btn-primary w-full sm:w-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Reescribir Texto
+            </button>
         </div>
-    </div>
-
-    <div class="flex items-center justify-center pt-2">
-        <button id="rewrite-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-blue-900/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
-            Reescribir Texto
-        </button>
     </div>
 </div>
+
+<script>
+    declare global {
+        interface Window {
+            ai?: {
+                rewriter: {
+                    create: (options: any) => Promise<any>;
+                    capabilities: () => Promise<any>;
+                }
+            }
+        }
+    }
+
+    const input = document.getElementById('ai-input') as HTMLTextAreaElement;
+    const output = document.getElementById('ai-output') as HTMLTextAreaElement;
+    const rewriteBtn = document.getElementById('rewrite-btn') as HTMLButtonElement;
+    const errorContainer = document.getElementById('error-container');
+    const errorMessage = document.getElementById('error-message');
+    const downloadProgress = document.getElementById('download-progress');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    const outputLanguage = document.getElementById('output-language') as HTMLSelectElement;
+    const tone = document.getElementById('tone') as HTMLSelectElement;
+    const length = document.getElementById('length') as HTMLSelectElement;
+    const format = document.getElementById('format') as HTMLSelectElement;
+
+    function showError(message: string) {
+        if (errorMessage && errorContainer) {
+            errorMessage.textContent = message;
+            errorContainer.classList.remove('hidden');
+        }
+    }
+
+    async function checkCapabilities() {
+        if (!window.ai || !window.ai.rewriter) {
+            showError("API de IA no encontrada. Asegúrate de usar Chrome 127+ y tener habilitadas las funciones experimentales.");
+            rewriteBtn.disabled = true;
+            return false;
+        }
+
+        const capabilities = await window.ai.rewriter.capabilities();
+        if (capabilities.available === 'no') {
+            showError("La IA no está disponible en este dispositivo.");
+            rewriteBtn.disabled = true;
+            return false;
+        }
+
+        return capabilities.available;
+    }
+
+    async function handleRewrite() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        try {
+            rewriteBtn.disabled = true;
+            rewriteBtn.textContent = 'Procesando...';
+            output.value = '';
+
+            const availability = await checkCapabilities();
+            
+            const rewriter = await window.ai.rewriter.create({
+                sharedContext: 'Eres un asistente que reescribe texto de forma profesional.',
+                outputLanguage: outputLanguage.value,
+                tone: tone.value === 'as-is' ? undefined : tone.value,
+                length: length.value === 'as-is' ? undefined : length.value,
+                format: format.value === 'as-is' ? undefined : format.value,
+                monitor(m: any) {
+                    m.addEventListener('downloadprogress', (e: any) => {
+                        if (downloadProgress && progressBar && progressText) {
+                            downloadProgress.classList.remove('hidden');
+                            const percent = Math.round((e.loaded / e.total) * 100);
+                            progressBar.style.width = `${percent}%`;
+                            progressText.textContent = `${percent}%`;
+                        }
+                    });
+                }
+            });
+
+            const result = await rewriter.rewrite(text);
+            output.value = result;
+            
+            if (downloadProgress) downloadProgress.classList.add('hidden');
+        } catch (e: any) {
+            showError(`Error al reescribir: ${e.message}`);
+        } finally {
+            rewriteBtn.disabled = false;
+            rewriteBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Reescribir Texto
+            `;
+        }
+    }
+
+    rewriteBtn?.addEventListener('click', handleRewrite);
+
+    // Initial check
+    checkCapabilities();
+</script>

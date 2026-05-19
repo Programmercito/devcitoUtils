@@ -2,28 +2,35 @@
 // Text Counter Component
 ---
 
-<div class="tool-panel max-w-4xl mx-auto space-y-5">
-    <div>
-        <label for="text-input" class="tool-label">Texto</label>
-        <textarea id="text-input" rows="10" class="tool-textarea" placeholder="Escribe o pega tu texto aquí..."></textarea>
-    </div>
+<div class="max-w-4xl mx-auto">
+    <div class="tool-panel space-y-6">
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <label for="text-input" class="tool-label">Texto de Entrada</label>
+                <button id="clear-btn" class="tool-btn tool-btn-ghost py-1.5 px-3 text-xs">
+                    Limpiar
+                </button>
+            </div>
+            <textarea id="text-input" rows="10" class="tool-textarea" placeholder="Escribe o pega tu texto aquí...">En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda.</textarea>
+        </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div class="tool-stat-card">
-            <p class="tool-label mb-1">Caracteres</p>
-            <p id="char-count" class="text-3xl font-black text-white">0</p>
-        </div>
-        <div class="tool-stat-card">
-            <p class="tool-label mb-1">Palabras</p>
-            <p id="word-count" class="text-3xl font-black text-white">0</p>
-        </div>
-        <div class="tool-stat-card">
-            <p class="tool-label mb-1">Líneas</p>
-            <p id="line-count" class="text-3xl font-black text-white">0</p>
-        </div>
-        <div class="tool-stat-card">
-            <p class="tool-label mb-1">Bytes</p>
-            <p id="byte-count" class="text-3xl font-black text-white">0</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="tool-stat-card">
+                <p class="tool-label !mb-0 text-[10px]">Caracteres</p>
+                <p id="char-count" class="text-2xl font-black text-white">0</p>
+            </div>
+            <div class="tool-stat-card">
+                <p class="tool-label !mb-0 text-[10px]">Palabras</p>
+                <p id="word-count" class="text-2xl font-black text-white">0</p>
+            </div>
+            <div class="tool-stat-card">
+                <p class="tool-label !mb-0 text-[10px]">Líneas</p>
+                <p id="line-count" class="text-2xl font-black text-white">0</p>
+            </div>
+            <div class="tool-stat-card">
+                <p class="tool-label !mb-0 text-[10px]">Bytes</p>
+                <p id="byte-count" class="text-2xl font-black text-white">0</p>
+            </div>
         </div>
     </div>
 </div>
@@ -34,6 +41,7 @@
     const wordCount = document.getElementById('word-count')!;
     const lineCount = document.getElementById('line-count')!;
     const byteCount = document.getElementById('byte-count')!;
+    const clearBtn = document.getElementById('clear-btn');
 
     function updateCounts() {
         const text = input.value;
@@ -45,5 +53,12 @@
     }
 
     input.addEventListener('input', updateCounts);
+    
+    clearBtn?.addEventListener('click', () => {
+        input.value = '';
+        updateCounts();
+        input.focus();
+    });
+
     updateCounts();
 </script>

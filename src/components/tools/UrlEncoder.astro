@@ -2,23 +2,47 @@
 // URL Encoder/Decoder Component
 ---
 
-<div class="tool-panel max-w-4xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-start">
-        <div class="space-y-2">
-            <label for="decoded-input" class="tool-label">Texto Decodificado</label>
-            <textarea id="decoded-input" rows="12" class="tool-textarea" placeholder="Escribe algo para codificar..."></textarea>
+<div class="max-w-4xl mx-auto">
+    <div class="tool-panel">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 items-start">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <label for="decoded-input" class="tool-label">Texto Decodificado</label>
+                </div>
+                <textarea id="decoded-input" rows="12" class="tool-textarea" placeholder="Escribe algo para codificar...">https://www.google.com/search?q=cómo usar astro con tailwind&hl=es&ref=devcito-utils</textarea>
+                <div class="flex justify-end">
+                    <button id="copy-decoded" class="tool-btn tool-btn-ghost py-2 px-4 text-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        Copiar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="hidden md:flex flex-col items-center justify-center pt-12 gap-2 text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+            </div>
+
+            <div class="space-y-4">
+                <label for="encoded-input" class="tool-label">Texto Codificado (URL)</label>
+                <textarea id="encoded-input" rows="12" class="tool-textarea text-blue-400" placeholder="Pega algo para decodificar..."></textarea>
+                <div class="flex justify-end">
+                    <button id="copy-encoded" class="tool-btn tool-btn-ghost py-2 px-4 text-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        Copiar
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Divider -->
-        <div class="hidden md:flex flex-col items-center justify-center pt-8 gap-2 text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-            </svg>
-        </div>
-
-        <div class="space-y-2">
-            <label for="encoded-input" class="tool-label">Texto Codificado (URL)</label>
-            <textarea id="encoded-input" rows="12" class="tool-textarea" style="color: #6ee7b7;" placeholder="Pega algo para decodificar..."></textarea>
+        <!-- Action Bar -->
+        <div class="mt-8 pt-6 border-t border-white/5 flex justify-center">
+            <button id="clear-btn" class="tool-btn tool-btn-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                Limpiar todo
+            </button>
         </div>
     </div>
 </div>
@@ -26,6 +50,9 @@
 <script>
     const decodedInput = document.getElementById('decoded-input') as HTMLTextAreaElement;
     const encodedInput = document.getElementById('encoded-input') as HTMLTextAreaElement;
+    const copyDecoded = document.getElementById('copy-decoded');
+    const copyEncoded = document.getElementById('copy-encoded');
+    const clearBtn = document.getElementById('clear-btn');
 
     decodedInput.addEventListener('input', () => {
         try {
@@ -42,7 +69,32 @@
             encodedInput.style.borderColor = '';
         } catch (e) {
             decodedInput.value = 'Error: URI malformada.';
-            encodedInput.style.borderColor = 'rgba(220,38,38,0.6)';
+            encodedInput.style.borderColor = 'rgba(239, 68, 68, 0.4)';
         }
     });
+
+    copyDecoded?.addEventListener('click', () => {
+        navigator.clipboard.writeText(decodedInput.value);
+        const originalText = copyDecoded.innerHTML;
+        copyDecoded.innerHTML = '¡Copiado!';
+        setTimeout(() => copyDecoded.innerHTML = originalText, 2000);
+    });
+
+    copyEncoded?.addEventListener('click', () => {
+        navigator.clipboard.writeText(encodedInput.value);
+        const originalText = copyEncoded.innerHTML;
+        copyEncoded.innerHTML = '¡Copiado!';
+        setTimeout(() => copyEncoded.innerHTML = originalText, 2000);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+        decodedInput.value = '';
+        encodedInput.value = '';
+        decodedInput.focus();
+    });
+
+    // Initial load
+    if (decodedInput.value) {
+        decodedInput.dispatchEvent(new Event('input'));
+    }
 </script>
