@@ -1,0 +1,91 @@
+---
+// AI Rewriter Component
+---
+
+<div id="ai-rewriter-root" class="space-y-4 sm:space-y-6">
+    <p class="text-xs sm:text-sm text-yellow-300 bg-yellow-900/30 p-3 rounded-xl border border-yellow-700/50">✨ Esta herramienta utiliza la IA integrada de tu navegador (disponible en Chrome 127+ para PC). No se necesitan claves API y tus datos no salen de tu dispositivo.</p>
+
+    <div id="error-container" class="hidden text-xs sm:text-sm text-red-300 bg-red-900/30 p-3 rounded-xl border border-red-700/50">
+        <p id="error-message"></p>
+        <p class="mt-2 text-gray-400">
+            Para habilitarlo, copia y pega lo siguiente en tu barra de direcciones: <code class="text-yellow-300 select-all">chrome://flags/#optimization-guide-on-device-model</code>
+        </p>
+    </div>
+
+    <div id="download-progress" class="hidden">
+        <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-600">
+            <p class="text-xs sm:text-sm text-gray-300 mb-2">Descargando modelo de IA...</p>
+            <div class="w-full bg-gray-600 rounded-full h-2">
+                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="progress-text" class="text-[10px] sm:text-xs text-gray-400 mt-2">0%</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Idioma de Salida</label> 
+            <select id="output-language" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">
+                <option value="es">Español</option>
+                <option value="en">Inglés</option>
+                <option value="ja">Japonés</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Tono</label>
+            <select id="tone" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">    
+                <option value="as-is">Sin cambios</option>
+                <option value="more-formal">Más formal</option>
+                <option value="more-casual">Más casual</option>
+            </select>
+        </div>
+
+        <div class="sm:col-span-2 md:col-span-1">
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Longitud</label>
+            <select id="length" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">  
+                <option value="as-is">Sin cambios</option>
+                <option value="shorter">Más corto</option>
+                <option value="longer">Más largo</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Formato</label>
+        <select id="format" class="w-full p-3 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm">      
+            <option value="as-is">Sin cambios</option>
+            <option value="plain-text">Texto plano</option>
+            <option value="markdown">Markdown</option>
+        </select>
+    </div>
+
+    <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+        <div>
+            <label for="ai-input" class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Texto Original</label>
+            <textarea
+                id="ai-input"
+                rows="6"
+                class="w-full p-4 bg-gray-950/50 text-white border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-sm resize-none"
+                placeholder="Pega aquí el texto que quieres reescribir..."
+            ></textarea>
+        </div>
+
+        <div>
+            <label for="ai-output" class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 ml-1">Texto Reescrito</label>
+            <textarea
+                id="ai-output"
+                rows="6"
+                class="w-full p-4 bg-gray-950/50 text-emerald-300/90 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/40 transition-all text-sm resize-none"
+                readonly
+                placeholder="El texto reescrito aparecerá aquí..."
+            ></textarea>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-center pt-2">
+        <button id="rewrite-btn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-blue-900/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+            Reescribir Texto
+        </button>
+    </div>
+</div>
