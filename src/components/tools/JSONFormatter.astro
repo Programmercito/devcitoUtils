@@ -16,7 +16,7 @@
             <textarea id="json-input" rows="16" class="tool-textarea" placeholder="Pega tu JSON aquí..."></textarea>
         </div>
 
-        <div class="pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="pt-6 border-t border-white/5 grid grid-cols-2 sm:grid-cols-3 gap-4">
             <button id="format-btn" class="tool-btn tool-btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                 Formatear
@@ -24,6 +24,18 @@
             <button id="minify-btn" class="tool-btn tool-btn-warning">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>
                 Minificar
+            </button>
+            <button id="stringify-btn" class="tool-btn tool-btn-info">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                Stringificar
+            </button>
+            <button id="unstringify-btn" class="tool-btn tool-btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                Desstringificar
+            </button>
+            <button id="example-btn" class="tool-btn tool-btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                Ejemplo
             </button>
             <button id="copy-btn" class="tool-btn tool-btn-ghost">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
@@ -37,9 +49,22 @@
     const input = document.getElementById('json-input') as HTMLTextAreaElement;
     const formatBtn = document.getElementById('format-btn');
     const minifyBtn = document.getElementById('minify-btn');
+    const stringifyBtn = document.getElementById('stringify-btn');
+    const unstringifyBtn = document.getElementById('unstringify-btn');
+    const exampleBtn = document.getElementById('example-btn');
     const copyBtn = document.getElementById('copy-btn');
     const clearBtn = document.getElementById('clear-btn');
     const statusMessage = document.getElementById('status-message') as HTMLDivElement;
+
+    function getExampleJSON() {
+        return {
+            id: 1,
+            name: "Devcito Utils",
+            features: ["Fast", "Local", "Private"],
+            settings: { theme: "dark", notifications: true },
+            metadata: { version: "1.0.0", author: "Devcito" }
+        };
+    }
 
     function showStatus(message: string, type: 'success' | 'error') {
         statusMessage.textContent = message;
@@ -54,13 +79,35 @@
         }
     }
 
-    function handleJSON(action: 'format' | 'minify') {
+    const actionMessages: Record<string, string> = {
+        format: '✓ JSON formateado.',
+        minify: '✓ JSON minificado.',
+        stringify: '✓ JSON stringificado.',
+        unstringify: '✓ JSON desstringificado.'
+    };
+
+    function handleJSON(action: 'format' | 'minify' | 'stringify' | 'unstringify') {
         const text = input.value.trim();
         if (!text) { showStatus('El área de texto está vacía.', 'error'); return; }
         try {
-            const jsonObject = JSON.parse(text);
-            input.value = action === 'format' ? JSON.stringify(jsonObject, null, 4) : JSON.stringify(jsonObject);
-            showStatus('✓ JSON procesado correctamente.', 'success');
+            if (action === 'stringify') {
+                const jsonObject = JSON.parse(text);
+                input.value = JSON.stringify(JSON.stringify(jsonObject));
+            } else if (action === 'unstringify') {
+                let firstParse;
+                try {
+                    firstParse = JSON.parse(text);
+                } catch {
+                    // Si no es JSON válido, puede ser un JSON escapado sin comillas externas.
+                    firstParse = JSON.parse('"' + text + '"');
+                }
+                const jsonObject = typeof firstParse === 'string' ? JSON.parse(firstParse) : firstParse;
+                input.value = JSON.stringify(jsonObject, null, 4);
+            } else {
+                const jsonObject = JSON.parse(text);
+                input.value = action === 'format' ? JSON.stringify(jsonObject, null, 4) : JSON.stringify(jsonObject);
+            }
+            showStatus(actionMessages[action], 'success');
         } catch (e: any) {
             showStatus(`Error de sintaxis: ${e.message}`, 'error');
         }
@@ -68,7 +115,15 @@
 
     formatBtn?.addEventListener('click', () => handleJSON('format'));
     minifyBtn?.addEventListener('click', () => handleJSON('minify'));
-    
+    stringifyBtn?.addEventListener('click', () => handleJSON('stringify'));
+    unstringifyBtn?.addEventListener('click', () => handleJSON('unstringify'));
+
+    exampleBtn?.addEventListener('click', () => {
+        input.value = JSON.stringify(getExampleJSON(), null, 4);
+        showStatus('✓ Ejemplo cargado.', 'success');
+        input.focus();
+    });
+
     clearBtn?.addEventListener('click', () => {
         input.value = '';
         statusMessage.textContent = '';
@@ -87,11 +142,5 @@
     });
 
     // Initial load
-    input.value = JSON.stringify({
-        id: 1,
-        name: "Devcito Utils",
-        features: ["Fast", "Local", "Private"],
-        settings: { theme: "dark", notifications: true },
-        metadata: { version: "1.0.0", author: "Devcito" }
-    }, null, 4);
+    input.value = JSON.stringify(getExampleJSON(), null, 4);
 </script>
