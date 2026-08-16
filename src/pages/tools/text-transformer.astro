@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TextTransformer from '../../components/tools/TextTransformer.astro';
+---
+
+<Layout 
+    title="Transformador de Texto | Devcito Utils"
+    description="Transforma texto entre camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, dot.case, path/case, Train-Case y más. Rápido y privado."
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Transformador de Texto</h1>
+            <p class="text-lg text-gray-400 mt-2">Convierte una entrada en múltiples formatos de caso en tiempo real.</p>
+        </div>
+        <div class="w-full">
+            <TextTransformer />
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Cómo funciona?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Escribe o pega cualquier texto y la herramienta lo tokeniza automáticamente usando espacios, signos de puntuación, guiones, barras y cambios de mayúsculas. Cada formato de salida se genera a partir de esos tokens de forma pura y predecible.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Casos para código</h3>
+                        <p class="text-sm text-gray-400">
+                            Obtén camelCase para variables, PascalCase para clases, snake_case para Python, kebab-case para CSS y CONSTANT_CASE para configuraciones sin esfuerzo.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Casos para contenido</h3>
+                        <p class="text-sm text-gray-400">
+                            Convierte títulos a Title Case, frases a Sentence case o genera variantes con puntos, barras y guiones para slugs y rutas.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Ejemplos de uso</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">APIs y variables:</span> <code>hello world</code> → <code>helloWorld</code> o <code>hello_world</code>.</li>
+                    <li><span class="text-white font-semibold">Slugs y URLs:</span> <code>Hello World</code> → <code>hello-world</code> o <code>hello/world</code>.</li>
+                    <li><span class="text-white font-semibold">Clases y constantes:</span> <code>hello world</code> → <code>HelloWorld</code> o <code>HELLO_WORLD</code>.</li>
+                </ul>
+
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200 italic">
+                        <strong>Privacidad:</strong> todo el procesamiento ocurre en tu navegador. El texto nunca se envía a ningún servidor.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>

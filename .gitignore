@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+# agent-generated indexes
+.atl/
+
 # dependencies
 node_modules/
 

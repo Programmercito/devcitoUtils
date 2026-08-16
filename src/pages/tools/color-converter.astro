@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorConverter from '../../components/tools/ColorConverter.astro';
+---
+
+<Layout 
+    title="Conversor de Colores | Devcito Utils"
+    description="Convierte colores entre HEX, RGB, RGBA, HSL, HSV, CMYK y más. Incluye selector nativo, vista previa y copiado rápido."
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Conversor de Colores</h1>
+            <p class="text-lg text-gray-400 mt-2">Transforma colores entre múltiples formatos al instante y copia el resultado.</p>
+        </div>
+        <div class="w-full">
+            <ColorConverter />
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué formatos soporta?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    El conversor trabaja internamente con el modelo sRGBA de 8 bits y permite cambiar entre HEX, RGB/RGBA, HSL/HSLA, HSV/HSVA y CMYK/CMYKA. Todos los valores se normalizan y recortan a rangos válidos automáticamente.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Modelo RGB</h3>
+                        <p class="text-sm text-gray-400">
+                            RGB define colores combinando luz roja, verde y azul. Es el formato nativo de pantallas y navegadores, ideal para CSS y diseño web.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">HSL y HSV</h3>
+                        <p class="text-sm text-gray-400">
+                            HSL (Tono, Saturación, Luminosidad) y HSV (Tono, Saturación, Valor) describen colores de forma más intuitiva para humanos, facilitando ajustes de matiz y brillo.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Casos de uso comunes</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Diseño web:</span> pasa de un selector visual a códigos HEX o RGB listos para CSS.</li>
+                    <li><span class="text-white font-semibold">Impresión:</span> convierte colores digitales a CMYK para preparar archivos de imprenta.</li>
+                    <li><span class="text-white font-semibold">Accesibilidad:</span> ajusta la transparencia alpha manteniendo el color base intacto.</li>
+                </ul>
+
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200 italic">
+                        <strong>Nota:</strong> la conversión entre espacios de color discretos puede producir pequeñas diferencias de redondeo. Los valores se muestran con un decimal para porcentajes y grados, y enteros para canales RGB.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
