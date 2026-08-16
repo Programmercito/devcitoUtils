@@ -1,0 +1,48 @@
+schema: spec-driven
+
+context: |
+  Tech stack: Astro 6.1.9 + Tailwind CSS 4.1.14 + TypeScript (strict), Vite via @tailwindcss/vite
+  Architecture: Static Astro site, tool components under src/components/tools, pages under src/pages/tools
+  Testing: No test runner, linter, or formatter configured; type checking via TypeScript/Astro
+  Style: Tailwind utility-first, glassmorphism, responsive, premium UI
+  Package manager: pnpm
+  Build output: ./docs
+  Site: https://tools.devcito.org
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Prefer small, focused utility additions
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+    - Respect existing Astro/Tailwind patterns in src/components/tools
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+    - Tag browser-only logic requiring client:load or client:only
+  apply:
+    - Follow existing code patterns in src/components/tools
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "pnpm build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
+
+strict_tdd: false
+
+testing:
+  runner: none
+  unit: false
+  integration: false
+  e2e: false
+  coverage: false
+  linter: false
+  type_checker: true
+  formatter: false
