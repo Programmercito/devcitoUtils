@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import JsonToTypescript from '../../components/tools/JsonToTypescript.astro';
+---
+
+<Layout 
+    title="Generador de TypeScript desde JSON | Devcito Utils"
+    description="Convertí JSON en interfaces o types de TypeScript al instante. Detección de fechas ISO, campos opcionales, null como unión y resaltado de sintaxis. 100% privado y local."
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12 max-w-4xl">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Generador de TypeScript desde JSON</h1>
+            <p class="text-lg text-gray-400 mt-4">
+                Pegá tu JSON y obtené <code class="text-blue-400">interface</code> o <code class="text-blue-400">type</code> de TypeScript listos para copiar. Todo se procesa en tu navegador: tus datos nunca salen de tu máquina.
+            </p>
+        </div>
+        <div class="w-full">
+            <JsonToTypescript />
+        </div>
+
+        <!-- SEO / Help Content -->
+        <div class="mt-16 w-full max-w-5xl space-y-12">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Cómo funciona?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Esta herramienta analiza la estructura de tu JSON y genera declaraciones de TypeScript. Para cada objeto anidado crea un tipo con nombre propio, infiere primitivos (<code class="text-emerald-300">string</code>, <code class="text-emerald-300">number</code>, <code class="text-emerald-300">boolean</code>), detecta arrays y mergea objetos cuando un array contiene múltiples elementos.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Detección Inteligente</h3>
+                        <p class="text-sm text-gray-400">
+                            Fechas ISO se tipan como <code class="text-emerald-300">Date | string</code>, los <code class="text-emerald-300">null</code> se convierten en uniones opcionales y los arrays vacíos usan <code class="text-emerald-300">unknown[]</code>.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Campos Opcionales</h3>
+                        <p class="text-sm text-gray-400">
+                            Si una key no aparece en todos los objetos de un array, se marca automáticamente como opcional con <code class="text-emerald-300">?</code>.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-purple-400 mb-3">Sin Dependencias</h3>
+                        <p class="text-sm text-gray-400">
+                            No se envía nada al servidor. El parser, el generador de tipos y el resaltado de sintaxis corren enteramente en tu navegador.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">Ejemplo de uso</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Si pegás este JSON:
+                </p>
+
+                <pre class="tool-output-panel mb-6"><code>{`{
+  "id": 1,
+  "name": "Devcito Utils",
+  "isActive": true,
+  "launchedAt": "2024-01-15T10:30:00Z",
+  "tools": [
+    { "id": "base64", "title": "Base64", "isNew": false },
+    { "id": "json-to-ts", "title": "JSON to TypeScript", "isNew": true, "docsUrl": "https://devcito.org" }
+  ]
+}`}</code></pre>
+
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    La herramienta genera:
+                </p>
+
+                <pre class="tool-output-panel mb-6"><code>{`interface Root {
+  id: number;
+  name: string;
+  isActive: boolean;
+  launchedAt: Date | string;
+  tools: Tool[];
+}
+
+interface Tool {
+  id: string;
+  title: string;
+  isNew: boolean;
+  docsUrl?: string;
+}`}</code></pre>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Ventajas</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">100% Privado:</span> el JSON se parsea localmente, sin backend ni API externa.</li>
+                    <li><span class="text-white font-semibold">Opciones flexibles:</span> elegí entre <code class="text-emerald-300">interface</code> o <code class="text-emerald-300">type</code>, con o sin <code class="text-emerald-300">export</code>.</li>
+                    <li><span class="text-white font-semibold">Resaltado de sintaxis:</span> el código TypeScript resultante se muestra con colores para leerlo más rápido.</li>
+                    <li><span class="text-white font-semibold">Ejemplo incluido:</span> cargá un JSON de muestra con un clic para probar la herramienta.</li>
+                    <li><span class="text-white font-semibold">Manejo de arrays heterogéneos:</span> mergea objetos de un array y detecta campos faltantes.</li>
+                </ul>
+
+                <div class="bg-emerald-600/10 border-l-4 border-emerald-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-emerald-200 font-medium">
+                        <strong>Tip Pro:</strong> si tenés un endpoint que devuelve JSON y querés tipar la respuesta, pegá el payload en el input, ajustá el nombre raíz al modelo (por ejemplo, <code class="text-emerald-300">User</code> o <code class="text-emerald-300">ApiResponse</code>) y copiá el TypeScript directamente en tu proyecto.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>

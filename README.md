@@ -44,6 +44,9 @@
 *   **⏰ Conversor de Timestamp:** Convierte fechas de Unix Epoch a formatos legibles y viceversa.
 *   **🔢 Conversor a Array de Bytes:** Traduce cadenas de texto en su representación en bytes (Hexadecimal, Decimal, Binario).
 *   **📝 Previsualizador de Markdown:** Editor interactivo con renderizado de Markdown a HTML en vivo.
+*   **📐 Generador de TypeScript desde JSON:** Convierte objetos JSON en interfaces o types de TypeScript con detección de fechas ISO, campos opcionales y resaltado de sintaxis.
+*   **🆔 Generador de UUID / GUID:** Genera identificadores únicos en versiones v1, v4, v7, nil y max, con múltiples formatos de salida y validador integrado.
+*   **🚫 Generador de .gitignore:** Crea archivos `.gitignore` completos seleccionando plantillas por lenguaje, framework, sistema operativo, editor y herramientas cloud.
 
 ---
 

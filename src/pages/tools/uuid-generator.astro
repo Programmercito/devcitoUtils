@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import UuidGenerator from '../../components/tools/UuidGenerator.astro';
+---
+
+<Layout 
+    title="Generador de UUID / GUID | Devcito Utils"
+    description="Generá UUIDs v4, v7, v1, nil y max en múltiples formatos: estándar, sin guiones, Base64, Base62, URN, C# Guid y más. Incluye validador. 100% local y privado."
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12 max-w-4xl">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Generador de UUID / GUID</h1>
+            <p class="text-lg text-gray-400 mt-4">
+                Creá identificadores únicos en varias versiones y formatos. Copiá uno, generá cientos o validá un UUID existente. Nada se envía a ningún servidor.
+            </p>
+        </div>
+        <div class="w-full">
+            <UuidGenerator />
+        </div>
+
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Qué es un UUID?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Un UUID (Universally Unique Identifier) es un identificador de 128 bits diseñado para ser único en el espacio y en el tiempo. Se usa en bases de datos, APIs, nombres de archivos, sesiones y cualquier lugar donde necesites un ID que no colisione.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">v4 — Aleatorio</h3>
+                        <p class="text-sm text-gray-400">Generado con aleatoriedad criptográfica. Es el más común cuando no necesitás orden.</p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">v7 — Sortable</h3>
+                        <p class="text-sm text-gray-400">Combina un timestamp de 48 bits con aleatoriedad. Ideal para claves primarias ordenables.</p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-purple-400 mb-3">Múltiples formatos</h3>
+                        <p class="text-sm text-gray-400">Estándar, sin guiones, Base64, Base62, URN, C# Guid, entre llaves o paréntesis.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Ventajas</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Privado:</span> todo se genera localmente en tu navegador.</li>
+                    <li><span class="text-white font-semibold">Versátil:</span> soporta v1, v4, v7, nil y max.</li>
+                    <li><span class="text-white font-semibold">Validador integrado:</span> verificá si un string es un UUID válido y detectá su versión.</li>
+                    <li><span class="text-white font-semibold">Bulk:</span> generá hasta 1000 UUIDs de una vez.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</Layout>

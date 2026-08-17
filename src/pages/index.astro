@@ -19,6 +19,9 @@ const qrIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue
 const diffIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 4H5a2 2 0 00-2 2v12a2 2 0 002 2h4M15 4h4a2 2 0 012 2v12a2 2 0 01-2 2h-4M9 12h6M12 9l3 3-3 3" /></svg>`;
 const colorIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>`;
 const textTransformIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`;
+const tsIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /><path stroke-linecap="round" stroke-linejoin="round" d="M14 12h5m-2.5-2.5v5" /></svg>`;
+const uuidIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m-4-4h8" /></svg>`;
+const gitignoreIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`;
 
 const tools = [
     {
@@ -127,6 +130,27 @@ const tools = [
         icon: textTransformIcon,
         isNew: true,
     },
+    {
+        title: "Generador de TypeScript desde JSON",
+        description: "Convertí JSON en interfaces o types de TypeScript con detección de fechas, opcionales y resaltado de sintaxis.",
+        href: "/tools/json-to-typescript",
+        icon: tsIcon,
+        isNew: true,
+    },
+    {
+        title: "Generador de UUID / GUID",
+        description: "Generá UUIDs v4, v7, v1, nil y max en todos los formatos: estándar, Base64, Base62, URN, C# Guid y más.",
+        href: "/tools/uuid-generator",
+        icon: uuidIcon,
+        isNew: true,
+    },
+    {
+        title: "Generador de .gitignore",
+        description: "Armá archivos .gitignore completos para cualquier stack: lenguajes, frameworks, editores y herramientas cloud.",
+        href: "/tools/gitignore-generator",
+        icon: gitignoreIcon,
+        isNew: true,
+    },
 ];
 ---
 
@@ -193,6 +217,9 @@ const tools = [
   .grid-stagger > *:nth-child(15) { animation-delay: 0.8s; }
   .grid-stagger > *:nth-child(16) { animation-delay: 0.85s; }
   .grid-stagger > *:nth-child(17) { animation-delay: 0.9s; }
+  .grid-stagger > *:nth-child(18) { animation-delay: 0.95s; }
+  .grid-stagger > *:nth-child(19) { animation-delay: 1.0s; }
+  .grid-stagger > *:nth-child(20) { animation-delay: 1.05s; }
 </style>
 
 <main class="relative min-h-screen">

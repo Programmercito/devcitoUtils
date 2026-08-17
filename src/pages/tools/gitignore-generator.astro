@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GitignoreGenerator from '../../components/tools/GitignoreGenerator.astro';
+---
+
+<Layout 
+    title="Generador de .gitignore | Devcito Utils"
+    description="Generá archivos .gitignore completos para cualquier stack. Seleccioná lenguajes, frameworks, editores y herramientas, y descargá el archivo listo para usar."
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12 max-w-4xl">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Generador de .gitignore</h1>
+            <p class="text-lg text-gray-400 mt-4">
+                Armá un <code class="text-blue-400">.gitignore</code> completo en segundos. Elegí tu stack, combiná múltiples plantillas y descargá el archivo. Sin enviar nada al servidor.
+            </p>
+        </div>
+        <div class="w-full">
+            <GitignoreGenerator />
+        </div>
+
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Por qué usar un generador de .gitignore?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Un buen <code class="text-emerald-300">.gitignore</code> evita que archivos innecesarios, sensibles o generados por tu entorno terminen en el repositorio. Cada lenguaje, framework y editor tiene sus propios archivos para ignorar, y armar el archivo a mano es repetitivo y propenso a errores.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">40+ plantillas</h3>
+                        <p class="text-sm text-gray-400">Lenguajes, frameworks, sistemas operativos, editores y herramientas cloud listas para combinar.</p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Sin duplicados</h3>
+                        <p class="text-sm text-gray-400">Las plantillas se concatenan con secciones claras para que el archivo sea fácil de mantener.</p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-purple-400 mb-3">Descarga directa</h3>
+                        <p class="text-sm text-gray-400">Generá, copiá o descargá el archivo <code class="text-emerald-300">.gitignore</code> con un clic.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Cómo funciona</h3>
+                <ol class="list-decimal list-inside text-gray-300 space-y-3 mb-6">
+                    <li>Buscá y seleccioná las plantillas que correspondan a tu proyecto.</li>
+                    <li>Elegí si querés encabezados de sección y orden alfabético.</li>
+                    <li>Copiá el contenido o descargá el archivo <code class="text-emerald-300">.gitignore</code>.</li>
+                </ol>
+            </div>
+        </div>
+    </main>
+</Layout>

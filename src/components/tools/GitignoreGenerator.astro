@@ -1,0 +1,192 @@
+---
+import { gitignoreTemplates } from '../../data/gitignore-templates';
+
+const categories = {
+  language: 'Lenguajes',
+  framework: 'Frameworks',
+  os: 'Sistemas operativos',
+  editor: 'Editores / IDEs',
+  tool: 'Herramientas / Cloud',
+};
+
+const templatesByCategory = Object.entries(categories).map(([key, label]) => ({
+  key,
+  label,
+  templates: gitignoreTemplates.filter(t => t.category === key),
+}));
+---
+
+<div class="max-w-6xl mx-auto space-y-6" data-templates={JSON.stringify(gitignoreTemplates.map(t => ({ id: t.id, name: t.name, category: t.category })))}>
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <!-- Templates Panel -->
+        <div class="tool-panel lg:col-span-2 space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-sm font-bold text-white uppercase tracking-wider">Plantillas</h2>
+                <button id="clear-all-btn" class="tool-btn tool-btn-ghost !py-1.5 !px-3 !text-[11px]">Limpiar</button>
+            </div>
+
+            <input id="search-input" type="text" placeholder="Buscar plantilla..." class="tool-input" />
+
+            <div id="templates-list" class="space-y-5 max-h-[32rem] overflow-y-auto pr-1">
+                {templatesByCategory.map(({ key, label, templates }) => (
+                    templates.length > 0 && (
+                        <div class="template-category" data-category={key}>
+                            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{label}</h3>
+                            <div class="grid grid-cols-1 gap-1">
+                                {templates.map(t => (
+                                    <label class="template-item flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors group" data-name={t.name.toLowerCase()} data-id={t.id}>
+                                        <input type="checkbox" value={t.id} class="template-checkbox h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500" />
+                                        <span class="text-sm text-gray-300 group-hover:text-white transition-colors">{t.name}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    )
+                ))}
+            </div>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="tool-panel lg:col-span-3 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <h2 class="text-sm font-bold text-white uppercase tracking-wider">.gitignore generado</h2>
+                <div class="flex gap-2">
+                    <button id="copy-btn" class="tool-btn tool-btn-ghost !py-1.5 !px-3 !text-[11px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        Copiar
+                    </button>
+                    <button id="download-btn" class="tool-btn tool-btn-primary !py-1.5 !px-3 !text-[11px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        Descargar
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input id="include-headers" type="checkbox" checked class="h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500" />
+                    <span class="text-sm text-gray-300 group-hover:text-white transition-colors">Incluir encabezados de sección</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input id="sort-alpha" type="checkbox" class="h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500" />
+                    <span class="text-sm text-gray-300 group-hover:text-white transition-colors">Ordenar alfabéticamente</span>
+                </label>
+            </div>
+
+            <textarea id="output" rows="20" class="tool-textarea" readonly placeholder="Seleccioná al menos una plantilla para generar tu .gitignore..."></textarea>
+
+            <div id="stats" class="flex flex-wrap gap-4 text-xs text-gray-500">
+                <span id="selected-count">0 plantillas seleccionadas</span>
+                <span>·</span>
+                <span id="line-count">0 líneas</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Reconstruct template metadata from data attribute
+    const container = document.querySelector('[data-templates]') as HTMLElement;
+    const templateMeta: { id: string; name: string; category: string }[] = JSON.parse(container.dataset.templates || '[]');
+
+    // Full template content is inlined in the build; we fetch it from a hidden map generated at runtime
+    // To avoid shipping all content twice, we use the same module imported by Astro above.
+    // We re-import it dynamically in the client.
+    let templates: Record<string, { id: string; name: string; category: string; content: string }> = {};
+
+    async function loadTemplates() {
+        const mod = await import('../../data/gitignore-templates');
+        mod.gitignoreTemplates.forEach(t => { templates[t.id] = t; });
+        update();
+    }
+
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const output = document.getElementById('output') as HTMLTextAreaElement;
+    const includeHeaders = document.getElementById('include-headers') as HTMLInputElement;
+    const sortAlpha = document.getElementById('sort-alpha') as HTMLInputElement;
+    const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+    const downloadBtn = document.getElementById('download-btn') as HTMLButtonElement;
+    const clearAllBtn = document.getElementById('clear-all-btn') as HTMLButtonElement;
+    const selectedCount = document.getElementById('selected-count') as HTMLSpanElement;
+    const lineCount = document.getElementById('line-count') as HTMLSpanElement;
+    const checkboxes = document.querySelectorAll<HTMLInputElement>('.template-checkbox');
+
+    function getSelectedIds(): string[] {
+        return Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+    }
+
+    function update() {
+        const ids = getSelectedIds();
+        selectedCount.textContent = `${ids.length} plantilla${ids.length !== 1 ? 's' : ''} seleccionada${ids.length !== 1 ? 's' : ''}`;
+
+        if (ids.length === 0) {
+            output.value = '';
+            lineCount.textContent = '0 líneas';
+            return;
+        }
+
+        let orderedIds = [...ids];
+        if (sortAlpha.checked) {
+            orderedIds.sort((a, b) => templates[a].name.localeCompare(templates[b].name));
+        }
+
+        const sections: string[] = [];
+        orderedIds.forEach((id, index) => {
+            const t = templates[id];
+            if (!t) return;
+            if (includeHeaders.checked) {
+                if (index > 0) sections.push('');
+                sections.push(`# ─── ${t.name} ─────────────────────────────────────────────────────────`);
+            }
+            sections.push(t.content.trim());
+        });
+
+        const result = sections.join('\n');
+        output.value = result;
+        lineCount.textContent = `${result.split('\n').length} líneas`;
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', update));
+    includeHeaders.addEventListener('change', update);
+    sortAlpha.addEventListener('change', update);
+
+    searchInput.addEventListener('input', () => {
+        const term = searchInput.value.trim().toLowerCase();
+        document.querySelectorAll<HTMLElement>('.template-item').forEach(item => {
+            const name = item.dataset.name || '';
+            item.style.display = name.includes(term) ? '' : 'none';
+        });
+        document.querySelectorAll<HTMLElement>('.template-category').forEach(cat => {
+            const visible = cat.querySelectorAll('.template-item:not([style*="none"])').length > 0;
+            cat.style.display = visible ? '' : 'none';
+        });
+    });
+
+    clearAllBtn.addEventListener('click', () => {
+        checkboxes.forEach(cb => cb.checked = false);
+        update();
+    });
+
+    copyBtn.addEventListener('click', () => {
+        if (!output.value) return;
+        navigator.clipboard.writeText(output.value).then(() => {
+            const original = copyBtn.innerHTML;
+            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> ¡Copiado!`;
+            copyBtn.classList.add('!text-emerald-400');
+            setTimeout(() => { copyBtn.innerHTML = original; copyBtn.classList.remove('!text-emerald-400'); }, 2000);
+        });
+    });
+
+    downloadBtn.addEventListener('click', () => {
+        if (!output.value) return;
+        const blob = new Blob([output.value], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '.gitignore';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    loadTemplates();
+</script>

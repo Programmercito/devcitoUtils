@@ -1,0 +1,535 @@
+---
+// JSON to TypeScript Interface/Type Generator
+---
+
+<div class="max-w-6xl mx-auto space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Input Panel -->
+        <div class="tool-panel space-y-4">
+            <div class="flex items-center justify-between">
+                <label for="json-input" class="tool-label !mb-0">JSON de Entrada</label>
+                <button id="load-example-btn" class="tool-btn tool-btn-ghost !py-1.5 !px-3 !text-[11px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    Cargar ejemplo
+                </button>
+            </div>
+            <textarea id="json-input" rows="14" class="tool-textarea" placeholder="Pega tu JSON aquí..."></textarea>
+            <p id="input-error" class="hidden tool-error text-xs"></p>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="tool-panel space-y-4">
+            <div class="flex items-center justify-between">
+                <label class="tool-label !mb-0">TypeScript Generado</label>
+                <button id="copy-btn" class="tool-btn tool-btn-ghost !py-1.5 !px-3 !text-[11px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    Copiar
+                </button>
+            </div>
+            <pre id="ts-output" class="ts-highlight"><code id="ts-output-code"></code></pre>
+            <p class="text-xs text-gray-500">Se genera automáticamente al detectar cambios válidos en el JSON.</p>
+        </div>
+    </div>
+
+    <!-- Options Panel -->
+    <div class="tool-panel space-y-6">
+        <div class="flex items-center gap-3">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-[10px] font-bold text-white">⚙</span>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Opciones de Generación</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="space-y-2">
+                <label for="root-name" class="tool-label !mb-0 !text-[10px]">Nombre Raíz</label>
+                <input id="root-name" type="text" value="Root" class="tool-input" />
+            </div>
+
+            <div class="space-y-2">
+                <label for="output-kind" class="tool-label !mb-0 !text-[10px]">Declaración</label>
+                <select id="output-kind" class="tool-select">
+                    <option value="interface">interface</option>
+                    <option value="type">type</option>
+                </select>
+            </div>
+
+            <div class="space-y-2">
+                <label for="export-toggle" class="tool-label !mb-0 !text-[10px]">Exportar</label>
+                <select id="export-toggle" class="tool-select">
+                    <option value="no">Sin export</option>
+                    <option value="yes">export</option>
+                </select>
+            </div>
+
+            <div class="space-y-2">
+                <label for="empty-array-type" class="tool-label !mb-0 !text-[10px]">Arrays vacíos</label>
+                <select id="empty-array-type" class="tool-select">
+                    <option value="unknown">unknown[]</option>
+                    <option value="any">any[]</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <label class="flex items-start gap-3 cursor-pointer group">
+                <input id="optional-nulls" type="checkbox" checked class="mt-1 h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500" />
+                <div>
+                    <span class="block text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">Campos opcionales si faltan</span>
+                    <span class="block text-xs text-gray-500">Marca con ? las keys que no están en todos los objetos de un array.</span>
+                </div>
+            </label>
+
+            <label class="flex items-start gap-3 cursor-pointer group">
+                <input id="null-as-union" type="checkbox" checked class="mt-1 h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500" />
+                <div>
+                    <span class="block text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">null como unión</span>
+                    <span class="block text-xs text-gray-500">Convierte valores null en <code class="text-emerald-300">tipo | null</code>.</span>
+                </div>
+            </label>
+
+            <label class="flex items-start gap-3 cursor-pointer group">
+                <input id="detect-dates" type="checkbox" checked class="mt-1 h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500" />
+                <div>
+                    <span class="block text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">Detectar fechas ISO</span>
+                    <span class="block text-xs text-gray-500">Strings con formato ISO se tipan como <code class="text-emerald-300">Date | string</code>.</span>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="flex flex-wrap gap-4 justify-center">
+        <button id="clear-btn" class="tool-btn tool-btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            Limpiar
+        </button>
+        <button id="convert-btn" class="tool-btn tool-btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+            Generar TypeScript
+        </button>
+    </div>
+</div>
+
+<script>
+    // ─── Schema model ───────────────────────────────────────────────────────────
+    type Schema =
+        | { kind: 'primitive'; type: string }
+        | { kind: 'object'; name: string; fields: Record<string, { schema: Schema; optional: boolean }> }
+        | { kind: 'array'; item: Schema }
+        | { kind: 'union'; types: Schema[] };
+
+    interface Options {
+        rootName: string;
+        useInterface: boolean;
+        exportTypes: boolean;
+        optionalNulls: boolean;
+        nullAsUnion: boolean;
+        detectDates: boolean;
+        emptyArrayType: 'unknown' | 'any';
+    }
+
+    // ─── Helpers ─────────────────────────────────────────────────────────────────
+    function isValidIdentifier(name: string): boolean {
+        return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name);
+    }
+
+    function escapeKey(name: string): string {
+        if (isValidIdentifier(name)) return name;
+        return `"${name.replace(/"/g, '\\"')}"`;
+    }
+
+    function toPascalCase(name: string): string {
+        return name
+            .replace(/[^a-zA-Z0-9]+/g, '_')
+            .split('_')
+            .filter(Boolean)
+            .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+            .join('');
+    }
+
+    function singularize(word: string): string {
+        if (word.length <= 2) return word;
+        if (word.endsWith('ies')) return word.slice(0, -3) + 'y';
+        if (word.endsWith('sses') || word.endsWith('xes') || word.endsWith('ches') || word.endsWith('shes')) return word.slice(0, -2);
+        if (word.endsWith('s')) return word.slice(0, -1);
+        return word;
+    }
+
+    function looksLikeDate(value: string): boolean {
+        return /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})?)?$/.test(value);
+    }
+
+    function uniqueName(base: string, used: Set<string>): string {
+        if (!used.has(base)) return base;
+        let i = 2;
+        while (used.has(`${base}${i}`)) i++;
+        return `${base}${i}`;
+    }
+
+    function inferPrimitive(value: unknown, options: Options): string {
+        if (value === null) return 'null';
+        if (value === undefined) return 'undefined';
+        if (typeof value === 'boolean') return 'boolean';
+        if (typeof value === 'number') return 'number';
+        if (typeof value === 'string') {
+            if (options.detectDates && looksLikeDate(value)) return 'Date | string';
+            return 'string';
+        }
+        return 'any';
+    }
+
+    // ─── Schema builders ─────────────────────────────────────────────────────────
+    function primitive(type: string): Schema {
+        return { kind: 'primitive', type };
+    }
+
+    function mergeSchemas(a: Schema, b: Schema): Schema {
+        if (a.kind === 'primitive' && b.kind === 'primitive' && a.type === b.type) return a;
+        const types: Schema[] = [];
+        const add = (s: Schema) => {
+            if (s.kind === 'union') s.types.forEach(add);
+            else {
+                const key = schemaKey(s);
+                if (!types.some(t => schemaKey(t) === key)) types.push(s);
+            }
+        };
+        add(a);
+        add(b);
+        if (types.length === 1) return types[0];
+        return { kind: 'union', types };
+    }
+
+    function schemaKey(s: Schema): string {
+        switch (s.kind) {
+            case 'primitive': return s.type;
+            case 'object': return `obj:${s.name}`;
+            case 'array': return `arr:${schemaKey(s.item)}`;
+            case 'union': return s.types.map(schemaKey).sort().join('|');
+        }
+    }
+
+    function collectObjectFields(objs: Record<string, unknown>[], options: Options): Record<string, { schema: Schema; optional: boolean }> {
+        const allKeys = new Set<string>();
+        objs.forEach(obj => Object.keys(obj).forEach(k => allKeys.add(k)));
+
+        const fields: Record<string, { schema: Schema; optional: boolean }> = {};
+        allKeys.forEach(key => {
+            const present = objs.filter(obj => Object.prototype.hasOwnProperty.call(obj, key));
+            let schema: Schema | null = null;
+            present.forEach(obj => {
+                const valueSchema = valueToSchema(obj[key], key, options);
+                schema = schema ? mergeSchemas(schema, valueSchema) : valueSchema;
+            });
+
+            const optional = options.optionalNulls && present.length < objs.length;
+            const hasNull = objs.some(obj => Object.prototype.hasOwnProperty.call(obj, key) && obj[key as keyof typeof obj] === null);
+
+            if (schema) {
+                if (options.nullAsUnion && hasNull && !schemaIncludesNull(schema)) {
+                    schema = mergeSchemas(schema, primitive('null'));
+                }
+                fields[key] = { schema, optional };
+            }
+        });
+        return fields;
+    }
+
+    function schemaIncludesNull(s: Schema): boolean {
+        if (s.kind === 'primitive' && s.type === 'null') return true;
+        if (s.kind === 'union') return s.types.some(schemaIncludesNull);
+        return false;
+    }
+
+    function valueToSchema(value: unknown, suggestedName: string, options: Options): Schema {
+        if (value === null) return primitive('null');
+        if (Array.isArray(value)) {
+            if (value.length === 0) return { kind: 'array', item: primitive(options.emptyArrayType) };
+            let itemSchema: Schema | null = null;
+            value.forEach(item => {
+                const s = valueToSchema(item, suggestedName, options);
+                itemSchema = itemSchema ? mergeSchemas(itemSchema, s) : s;
+            });
+            return { kind: 'array', item: itemSchema || primitive('unknown') };
+        }
+        if (typeof value === 'object' && value !== null) {
+            const fields = collectObjectFields([value as Record<string, unknown>], options);
+            return { kind: 'object', name: toPascalCase(singularize(suggestedName)) || 'Anonymous', fields };
+        }
+        return primitive(inferPrimitive(value, options));
+    }
+
+    // ─── Name assignment pass ────────────────────────────────────────────────────
+    function assignNames(schema: Schema, options: Options, usedNames: Set<string> = new Set(), parentKey = ''): void {
+        if (schema.kind !== 'object' && schema.kind !== 'array') return;
+
+        if (schema.kind === 'object') {
+            schema.name = uniqueName(schema.name || 'Root', usedNames);
+            usedNames.add(schema.name);
+            Object.entries(schema.fields).forEach(([key, field]) => {
+                if (field.schema.kind === 'object') {
+                    const base = toPascalCase(singularize(key));
+                    field.schema.name = base;
+                    assignNames(field.schema, options, usedNames, key);
+                } else if (field.schema.kind === 'array' && field.schema.item.kind === 'object') {
+                    const base = toPascalCase(singularize(key));
+                    field.schema.item.name = base;
+                    assignNames(field.schema.item, options, usedNames, key);
+                } else {
+                    assignNames(field.schema, options, usedNames, key);
+                }
+            });
+        } else if (schema.kind === 'array') {
+            if (schema.item.kind === 'object') {
+                const base = toPascalCase(singularize(parentKey)) || 'Item';
+                schema.item.name = base;
+                assignNames(schema.item, options, usedNames, parentKey);
+            } else {
+                assignNames(schema.item, options, usedNames, parentKey);
+            }
+        }
+    }
+
+    // ─── Rendering ───────────────────────────────────────────────────────────────
+    function renderSchemaInline(schema: Schema, options: Options, indent = 2): string {
+        switch (schema.kind) {
+            case 'primitive':
+                return schema.type;
+            case 'object':
+                // Reference the named type; the full declaration is emitted separately.
+                return schema.name;
+            case 'array':
+                return `${renderSchemaInline(schema.item, options, indent)}[]`;
+            case 'union': {
+                const parts = schema.types.map(t => renderSchemaInline(t, options, indent));
+                return parts.join(' | ');
+            }
+        }
+    }
+
+    function renderObjectBody(schema: Schema & { kind: 'object' }, options: Options, indent = 2): string {
+        const pad = ' '.repeat(indent);
+        const entries = Object.entries(schema.fields);
+        if (entries.length === 0) return '{}';
+        const lines = entries.map(([key, field]) => {
+            const prop = `${pad}${escapeKey(key)}${field.optional ? '?' : ''}: ${renderSchemaInline(field.schema, options, indent + 2)};`;
+            return prop;
+        });
+        return `{\n${lines.join('\n')}\n${' '.repeat(indent - 2)}}`;
+    }
+
+    function renderDeclaration(schema: Schema & { kind: 'object' }, options: Options): string {
+        const prefix = options.exportTypes ? 'export ' : '';
+        const body = renderObjectBody(schema, options, 2);
+        if (options.useInterface) {
+            return `${prefix}interface ${schema.name} ${body}`;
+        }
+        return `${prefix}type ${schema.name} = ${body}`;
+    }
+
+    function collectDeclarations(schema: Schema, options: Options): string[] {
+        const declarations: string[] = [];
+        const visited = new Set<string>();
+
+        function visit(s: Schema) {
+            if (s.kind === 'object') {
+                if (visited.has(s.name)) return;
+                visited.add(s.name);
+                Object.values(s.fields).forEach(f => visit(f.schema));
+                declarations.push(renderDeclaration(s, options));
+            } else if (s.kind === 'array') {
+                visit(s.item);
+            } else if (s.kind === 'union') {
+                s.types.forEach(t => visit(t));
+            }
+        }
+
+        visit(schema);
+        return declarations;
+    }
+
+    function generateTypescript(jsonText: string, options: Options): { code: string; error?: string } {
+        let data: unknown;
+        try {
+            data = JSON.parse(jsonText);
+        } catch (e) {
+            return { code: '', error: `JSON inválido: ${e instanceof Error ? e.message : String(e)}` };
+        }
+
+        if (data === null || Array.isArray(data) || typeof data !== 'object') {
+            return { code: '', error: 'El JSON raíz debe ser un objeto para generar una interface útil.' };
+        }
+
+        const rootSchema = valueToSchema(data, options.rootName, options) as Schema & { kind: 'object' };
+        rootSchema.name = toPascalCase(options.rootName);
+        assignNames(rootSchema, options);
+        const declarations = collectDeclarations(rootSchema, options);
+        return { code: declarations.join('\n\n') };
+    }
+
+    // ─── Syntax highlighting (lightweight, no dependencies) ──────────────────────
+    function escapeHtml(str: string): string {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function highlightTypeScript(code: string): string {
+        const strings: string[] = [];
+        const keywords: string[] = [];
+        const types: string[] = [];
+        const numbers: string[] = [];
+
+        // 1. Protect strings (quoted keys)
+        let masked = code.replace(/"[^"]*"/g, (match) => {
+            const idx = strings.length;
+            strings.push(escapeHtml(match));
+            return `__STR_${idx}__`;
+        });
+
+        // 2. Protect keywords
+        masked = masked.replace(/\b(interface|type|export)\b/g, (match) => {
+            const idx = keywords.length;
+            keywords.push(match);
+            return `__KW_${idx}__`;
+        });
+
+        // 3. Protect primitive types
+        masked = masked.replace(/\b(string|number|boolean|null|undefined|any|unknown|Date)\b/g, (match) => {
+            const idx = types.length;
+            types.push(match);
+            return `__TYPE_${idx}__`;
+        });
+
+        // 4. Protect numbers
+        masked = masked.replace(/\b(\d+)\b/g, (match) => {
+            const idx = numbers.length;
+            numbers.push(match);
+            return `__NUM_${idx}__`;
+        });
+
+        // 5. Escape remaining plain text
+        let highlighted = escapeHtml(masked);
+
+        // 6. Restore tokens with syntax spans
+        highlighted = highlighted.replace(/__STR_(\d+)__/g, (_, i) => `<span class="ts-string">${strings[parseInt(i)]}</span>`);
+        highlighted = highlighted.replace(/__KW_(\d+)__/g, (_, i) => `<span class="ts-keyword">${keywords[parseInt(i)]}</span>`);
+        highlighted = highlighted.replace(/__TYPE_(\d+)__/g, (_, i) => `<span class="ts-type">${types[parseInt(i)]}</span>`);
+        highlighted = highlighted.replace(/__NUM_(\d+)__/g, (_, i) => `<span class="ts-number">${numbers[parseInt(i)]}</span>`);
+
+        // 7. Highlight punctuation (safe now because spans only contain letters/numbers in class names)
+        highlighted = highlighted.replace(/([{}[\]():;?|])/g, '<span class="ts-punct">$1</span>');
+
+        return highlighted;
+    }
+
+    // ─── DOM wiring ──────────────────────────────────────────────────────────────
+    const jsonInput = document.getElementById('json-input') as HTMLTextAreaElement;
+    const tsOutput = document.getElementById('ts-output') as HTMLPreElement;
+    const tsOutputCode = document.getElementById('ts-output-code') as HTMLCodeElement;
+    const inputError = document.getElementById('input-error') as HTMLParagraphElement;
+    const rootNameInput = document.getElementById('root-name') as HTMLInputElement;
+    const outputKindSelect = document.getElementById('output-kind') as HTMLSelectElement;
+    const exportToggle = document.getElementById('export-toggle') as HTMLSelectElement;
+    const emptyArrayType = document.getElementById('empty-array-type') as HTMLSelectElement;
+    const optionalNullsCheck = document.getElementById('optional-nulls') as HTMLInputElement;
+    const nullAsUnionCheck = document.getElementById('null-as-union') as HTMLInputElement;
+    const detectDatesCheck = document.getElementById('detect-dates') as HTMLInputElement;
+    const convertBtn = document.getElementById('convert-btn') as HTMLButtonElement;
+    const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+    const loadExampleBtn = document.getElementById('load-example-btn') as HTMLButtonElement;
+
+    function getOptions(): Options {
+        return {
+            rootName: rootNameInput.value.trim() || 'Root',
+            useInterface: outputKindSelect.value === 'interface',
+            exportTypes: exportToggle.value === 'yes',
+            optionalNulls: optionalNullsCheck.checked,
+            nullAsUnion: nullAsUnionCheck.checked,
+            detectDates: detectDatesCheck.checked,
+            emptyArrayType: emptyArrayType.value as 'unknown' | 'any',
+        };
+    }
+
+    function update() {
+        const text = jsonInput.value.trim();
+        if (!text) {
+            tsOutputCode.innerHTML = '<span class="ts-comment">// El TypeScript aparecerá aquí...</span>';
+            inputError.classList.add('hidden');
+            return;
+        }
+        const result = generateTypescript(text, getOptions());
+        if (result.error) {
+            inputError.textContent = result.error;
+            inputError.classList.remove('hidden');
+            return;
+        }
+        inputError.classList.add('hidden');
+        tsOutputCode.innerHTML = highlightTypeScript(result.code);
+    }
+
+    jsonInput.addEventListener('input', update);
+    rootNameInput.addEventListener('input', update);
+    outputKindSelect.addEventListener('change', update);
+    exportToggle.addEventListener('change', update);
+    emptyArrayType.addEventListener('change', update);
+    optionalNullsCheck.addEventListener('change', update);
+    nullAsUnionCheck.addEventListener('change', update);
+    detectDatesCheck.addEventListener('change', update);
+    convertBtn.addEventListener('click', update);
+
+    clearBtn.addEventListener('click', () => {
+        jsonInput.value = '';
+        tsOutputCode.innerHTML = '<span class="ts-comment">// El TypeScript aparecerá aquí...</span>';
+        inputError.classList.add('hidden');
+        jsonInput.focus();
+    });
+
+    copyBtn.addEventListener('click', () => {
+        const code = tsOutputCode.textContent || '';
+        if (!code.trim()) return;
+        navigator.clipboard.writeText(code).then(() => {
+            const original = copyBtn.innerHTML;
+            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> ¡Copiado!`;
+            copyBtn.classList.add('!text-emerald-400');
+            setTimeout(() => {
+                copyBtn.innerHTML = original;
+                copyBtn.classList.remove('!text-emerald-400');
+            }, 2000);
+        });
+    });
+
+    const EXAMPLE_JSON = JSON.stringify({
+        id: 1,
+        name: "Devcito Utils",
+        isActive: true,
+        launchedAt: "2024-01-15T10:30:00Z",
+        metadata: {
+            version: "1.0.0",
+            stars: 42,
+            license: null
+        },
+        tools: [
+            {
+                id: "base64",
+                title: "Base64",
+                category: "encoding",
+                isNew: false
+            },
+            {
+                id: "json-to-ts",
+                title: "JSON to TypeScript",
+                category: "dev",
+                isNew: true,
+                docsUrl: "https://devcito.org"
+            }
+        ],
+        tags: ["developer", "privacy", "free"]
+    }, null, 2);
+
+    loadExampleBtn.addEventListener('click', () => {
+        jsonInput.value = EXAMPLE_JSON;
+        update();
+    });
+
+    // Initial load
+    jsonInput.value = EXAMPLE_JSON;
+    update();
+</script>

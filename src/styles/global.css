@@ -285,3 +285,29 @@ body {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* ── TypeScript Output Highlighting ──────────────────────────────── */
+.ts-highlight {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    min-height: 22rem;
+    max-height: 28rem;
+    overflow: auto;
+    background: rgba(3, 7, 18, 0.7);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+.ts-highlight code {
+    display: block;
+    white-space: pre;
+}
+.ts-keyword { color: #c084fc; font-weight: 600; }
+.ts-type { color: #38bdf8; }
+.ts-string { color: #a3e635; }
+.ts-number { color: #fbbf24; }
+.ts-comment { color: #6b7280; font-style: italic; }
+.ts-punct { color: #9ca3af; }
+.ts-prop { color: #e5e7eb; }
