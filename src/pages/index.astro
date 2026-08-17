@@ -25,90 +25,9 @@ const gitignoreIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 te
 
 const tools = [
     {
-        title: "Conversor de Archivos",
-        description: "Convierte entre diferentes formatos de archivos de forma rápida y segura.",
-        href: "https://converter.devcito.org",
-        icon: convertIcon,
-        isNew: true,
-    },
-    {
-        title: "Diferenciador de Archivos",
-        description: "Compara archivos y textos en paralelo de manera 100% serverless y privada.",
-        href: "https://diff.devcito.org",
-        icon: diffIcon,
-        isNew: true,
-    },
-    {
-        title: "Generador de Códigos QR",
-        description: "Crea códigos QR personalizados para enlaces, textos y Wi-Fi al instante.",
-        href: "https://qr.devcito.org",
-        icon: qrIcon,
-        isNew: true,
-    },
-    {
-        title: "Generador de Llaves SSH",
-        description: "Genera pares de llaves RSA para SSH usando entropía real del movimiento de tu mouse.",
-        href: "/tools/ssh-keygen",
-        icon: sshIcon,
-        isNew: true,
-    },
-    {
         title: "Codificador / Decodificador Base64",
         description: "Codifica y decodifica texto fácilmente al formato Base64.",
         href: "/tools/base64",
-    },
-    {
-        title: "Reescritor de Texto con IA",
-        description: "Mejora o reformula textos utilizando un prompt personalizado.",
-        href: "/tools/ai-rewriter",
-        icon: aiIcon,
-    },
-    {
-        title: "Formateador, Stringificador y Desstringificador JSON",
-        description: "Formateá, minificá, stringificá, desstringificá, validá, copiá y cargá ejemplos de JSON.",
-        href: "/tools/json-formatter",
-    },
-    {
-        title: "Decodificador de JWT",
-        description: "Inspecciona el contenido de tokens de autenticación (JWT).",
-        href: "/tools/jwt-decoder",
-        icon: jwtIcon,
-    },
-    {
-        title: "Verificador de Firma HMAC",
-        description: "Valida una firma HMAC-SHA256 con una clave secreta.",
-        href: "/tools/hmac-verifier",
-        icon: shieldIcon,
-    },
-    {
-        title: "Conversor de Timestamp",
-        description: "Convierte entre fechas legibles y timestamps de Unix.",
-        href: "/tools/timestamp-converter",
-        icon: clockIcon,
-    },
-    {
-        title: "Conversor a Array de Bytes",
-        description: "Convierte una cadena de texto a su array de bytes (Hex, Dec, Bin).",
-        href: "/tools/bytes-converter",
-        icon: binaryIcon,
-    },
-    {
-        title: "Generador de Hashes (SHA)",
-        description: "Calcula la huella digital de un texto con algoritmos seguros.",
-        href: "/tools/hash-generator",
-        icon: fingerprintIcon,
-    },
-    {
-        title: "Previsualizador de Markdown",
-        description: "Escribe Markdown y ve el resultado en HTML en tiempo real.",
-        href: "/tools/markdown-previewer",
-        icon: markdownIcon,
-    },
-    {
-        title: "Contador de Texto",
-        description: "Cuenta caracteres, palabras, líneas y tamaño en bytes.",
-        href: "/tools/text-counter",
-        icon: textIcon,
     },
     {
         title: "Codificador / Decodificador URL",
@@ -117,18 +36,63 @@ const tools = [
         icon: urlIcon,
     },
     {
+        title: "Conversor a Array de Bytes",
+        description: "Convierte una cadena de texto a su array de bytes (Hex, Dec, Bin).",
+        href: "/tools/bytes-converter",
+        icon: binaryIcon,
+    },
+    {
+        title: "Conversor de Archivos",
+        description: "Convierte entre diferentes formatos de archivos de forma rápida y segura.",
+        href: "https://converter.devcito.org",
+        icon: convertIcon,
+    },
+    {
         title: "Conversor de Colores",
         description: "Convierte entre HEX, RGB, HSL, HSV, CMYK y sus variantes con alpha.",
         href: "/tools/color-converter",
         icon: colorIcon,
-        isNew: true,
     },
     {
-        title: "Transformador de Texto",
-        description: "Transforma texto entre camelCase, snake_case, kebab-case, CONSTANT_CASE y más.",
-        href: "/tools/text-transformer",
-        icon: textTransformIcon,
-        isNew: true,
+        title: "Conversor de Timestamp",
+        description: "Convierte entre fechas legibles y timestamps de Unix.",
+        href: "/tools/timestamp-converter",
+        icon: clockIcon,
+    },
+    {
+        title: "Decodificador de JWT",
+        description: "Inspecciona el contenido de tokens de autenticación (JWT).",
+        href: "/tools/jwt-decoder",
+        icon: jwtIcon,
+    },
+    {
+        title: "Diferenciador de Archivos",
+        description: "Compara archivos y textos en paralelo de manera 100% serverless y privada.",
+        href: "https://diff.devcito.org",
+        icon: diffIcon,
+    },
+    {
+        title: "Formateador, Stringificador y Desstringificador JSON",
+        description: "Formateá, minificá, stringificá, desstringificá, validá, copiá y cargá ejemplos de JSON.",
+        href: "/tools/json-formatter",
+    },
+    {
+        title: "Generador de Códigos QR",
+        description: "Crea códigos QR personalizados para enlaces, textos y Wi-Fi al instante.",
+        href: "https://qr.devcito.org",
+        icon: qrIcon,
+    },
+    {
+        title: "Generador de Hashes (SHA)",
+        description: "Calcula la huella digital de un texto con algoritmos seguros.",
+        href: "/tools/hash-generator",
+        icon: fingerprintIcon,
+    },
+    {
+        title: "Generador de Llaves SSH",
+        description: "Genera pares de llaves RSA para SSH usando entropía real del movimiento de tu mouse.",
+        href: "/tools/ssh-keygen",
+        icon: sshIcon,
     },
     {
         title: "Generador de TypeScript desde JSON",
@@ -151,12 +115,43 @@ const tools = [
         icon: gitignoreIcon,
         isNew: true,
     },
+    {
+        title: "Previsualizador de Markdown",
+        description: "Escribe Markdown y ve el resultado en HTML en tiempo real.",
+        href: "/tools/markdown-previewer",
+        icon: markdownIcon,
+    },
+    {
+        title: "Reescritor de Texto con IA",
+        description: "Mejora o reformula textos utilizando un prompt personalizado.",
+        href: "/tools/ai-rewriter",
+        icon: aiIcon,
+    },
+    {
+        title: "Transformador de Texto",
+        description: "Transforma texto entre camelCase, snake_case, kebab-case, CONSTANT_CASE y más.",
+        href: "/tools/text-transformer",
+        icon: textTransformIcon,
+    },
+    {
+        title: "Verificador de Firma HMAC",
+        description: "Valida una firma HMAC-SHA256 con una clave secreta.",
+        href: "/tools/hmac-verifier",
+        icon: shieldIcon,
+    },
+    {
+        title: "Contador de Texto",
+        description: "Cuenta caracteres, palabras, líneas y tamaño en bytes.",
+        href: "/tools/text-counter",
+        icon: textIcon,
+    },
 ];
 ---
 
 <Layout
-    title="Devcito Utils | Premium Developer Tools"
-    description="Una colección de herramientas premium gratuitas para desarrolladores: conversor Base64, formateador JSON, decodificador JWT y más."
+    title="Devcito Utils | Herramientas Gratuitas para Desarrolladores"
+    description="Colección de herramientas online gratuitas, rápidas y 100% privadas para desarrolladores: Base64, JSON, JWT, UUID, .gitignore, TypeScript desde JSON, hashes, HMAC y más."
+    keywords="herramientas desarrolladores, utilidades online, base64, json formatter, jwt decoder, uuid generator, gitignore generator, typescript json, hash sha, hmac, markdown preview, url encoder"
 >
 
 <style>
@@ -270,8 +265,24 @@ const tools = [
         </div>
       </div>
 
-      <div class="tools-grid grid-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {tools.map((tool) => <ToolCard {...tool} />)}
+      <div class="mb-10 max-w-2xl">
+        <div id="search-box" class="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 backdrop-blur-md transition-all duration-300 focus-within:border-blue-500/50 focus-within:bg-white/[0.07] focus-within:shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+          <div class="h-10 w-10 rounded-xl bg-blue-600/10 flex items-center justify-center border border-blue-500/20 flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input type="text" id="tool-search" placeholder="Buscar herramientas..." class="flex-1 bg-transparent text-white text-base placeholder:text-gray-500 outline-none min-w-0" />
+        </div>
+        <p id="no-results" class="hidden text-sm text-gray-500 mt-4">No se encontraron herramientas para esa búsqueda.</p>
+      </div>
+
+      <div id="tools-grid" class="tools-grid grid-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {tools.map((tool) => (
+          <div class="tool-card-wrapper h-full" data-title={tool.title.toLowerCase()} data-description={tool.description.toLowerCase()}>
+            <ToolCard {...tool} />
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -301,4 +312,23 @@ const tools = [
     <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-600/5 rounded-full blur-[100px]"></div>
   </footer>
 </main>
+
+<script>
+  const searchInput = document.getElementById('tool-search') as HTMLInputElement;
+  const wrappers = document.querySelectorAll<HTMLElement>('.tool-card-wrapper');
+  const noResults = document.getElementById('no-results') as HTMLParagraphElement;
+
+  searchInput?.addEventListener('input', () => {
+    const term = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    wrappers.forEach(w => {
+      const title = w.dataset.title || '';
+      const desc = w.dataset.description || '';
+      const match = !term || title.includes(term) || desc.includes(term);
+      w.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    noResults?.classList.toggle('hidden', visible > 0);
+  });
+</script>
 </Layout>

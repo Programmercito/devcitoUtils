@@ -5,11 +5,13 @@ import "../styles/global.css";
 export interface Props {
 	title: string;
     description: string;
+    keywords?: string;
 }
 
 const { 
     title = 'Devcito Utils | Herramientas para Desarrolladores', 
-    description = 'Una colección de herramientas online gratuitas para desarrolladores.' 
+    description = 'Una colección de herramientas online gratuitas para desarrolladores.',
+    keywords = 'herramientas desarrolladores, utilidades online, base64, json, jwt, uuid, gitignore, desarrollo web'
 } = Astro.props;
 
 const canonicalUrl = Astro.url.href;
@@ -67,7 +69,9 @@ const jsonLd = {
         <meta name="robots" content="index, follow" />
 		<title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
         <meta name="author" content="Devcito Utils" />
+        <meta name="theme-color" content="#030712" />
         <link rel="canonical" href={canonicalUrl} />
         <link rel="alternate" href={canonicalUrl} hrefLang="es" />
         <link rel="alternate" href={canonicalUrl} hrefLang="x-default" />
