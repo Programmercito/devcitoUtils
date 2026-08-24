@@ -1,0 +1,269 @@
+---
+// SQL Formatter Component
+---
+
+<div class="max-w-5xl mx-auto">
+    <div class="tool-panel space-y-6">
+        <div id="status-message" class="min-h-[1.5rem] text-center text-sm font-semibold"></div>
+
+        <!-- Options bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+                <label class="tool-label" for="dialect">Dialecto</label>
+                <select id="dialect" class="tool-select">
+                    <option value="sql" selected>SQL</option>
+                    <option value="bigquery">BigQuery</option>
+                    <option value="clickhouse">ClickHouse</option>
+                    <option value="db2">IBM DB2</option>
+                    <option value="db2i">IBM DB2i</option>
+                    <option value="duckdb">DuckDB</option>
+                    <option value="hive">Hive</option>
+                    <option value="mariadb">MariaDB</option>
+                    <option value="mysql">MySQL</option>
+                    <option value="n1ql">N1QL</option>
+                    <option value="plsql">PL/SQL</option>
+                    <option value="postgresql">PostgreSQL</option>
+                    <option value="redshift">Redshift</option>
+                    <option value="singlestoredb">SingleStoreDB</option>
+                    <option value="snowflake">Snowflake</option>
+                    <option value="spark">Spark</option>
+                    <option value="sqlite">SQLite</option>
+                    <option value="tidb">TiDB</option>
+                    <option value="transactsql">Transact-SQL</option>
+                    <option value="trino">Trino</option>
+                </select>
+            </div>
+            <div>
+                <label class="tool-label" for="indent">Indentación</label>
+                <input id="indent" type="number" min="1" max="8" value="2" class="tool-input" />
+            </div>
+            <div>
+                <label class="tool-label" for="keyword-case">Mayúsculas/minúsculas</label>
+                <select id="keyword-case" class="tool-select">
+                    <option value="preserve" selected>Preservar</option>
+                    <option value="upper">MAYÚSCULAS</option>
+                    <option value="lower">minúsculas</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Input / Output -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="space-y-2">
+                <label for="sql-input" class="tool-label">SQL de entrada</label>
+                <textarea id="sql-input" rows="16" class="tool-textarea" placeholder="Pegá tu SQL aquí..."></textarea>
+            </div>
+            <div class="space-y-2">
+                <label for="sql-output" class="tool-label">Resultado</label>
+                <textarea id="sql-output" rows="16" class="tool-textarea" readonly></textarea>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <button id="format-btn" class="tool-btn tool-btn-primary" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                Formatear
+            </button>
+            <button id="minify-btn" class="tool-btn tool-btn-warning" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" /></svg>
+                Minificar
+            </button>
+            <button id="example-btn" class="tool-btn tool-btn-secondary" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                Ejemplo
+            </button>
+            <button id="copy-btn" class="tool-btn tool-btn-ghost" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                Copiar
+            </button>
+            <button id="clear-btn" class="tool-btn tool-btn-ghost" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                Limpiar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Load sql-formatter library from jsDelivr CDN -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/sql-formatter@15/dist/sql-formatter.min.js"></script>
+
+<script>
+    // TypeScript global declaration for the CDN-loaded library
+    declare global {
+        interface Window {
+            sqlFormatter?: {
+                format: (
+                    sql: string,
+                    opts: {
+                        language?: string;
+                        tabWidth?: number;
+                        keywordCase?: 'upper' | 'lower' | 'preserve';
+                        minify?: boolean;
+                    }
+                ) => string;
+            };
+        }
+    }
+
+    const sqlInput = document.getElementById('sql-input') as HTMLTextAreaElement;
+    const sqlOutput = document.getElementById('sql-output') as HTMLTextAreaElement;
+    const dialectSelect = document.getElementById('dialect') as HTMLSelectElement;
+    const indentInput = document.getElementById('indent') as HTMLInputElement;
+    const keywordCaseSelect = document.getElementById('keyword-case') as HTMLSelectElement;
+    const formatBtn = document.getElementById('format-btn') as HTMLButtonElement;
+    const minifyBtn = document.getElementById('minify-btn') as HTMLButtonElement;
+    const exampleBtn = document.getElementById('example-btn') as HTMLButtonElement;
+    const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+    const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+    const statusMessage = document.getElementById('status-message') as HTMLDivElement;
+
+    const actionButtons = [formatBtn, minifyBtn, exampleBtn, copyBtn, clearBtn];
+
+    function setActionsDisabled(disabled: boolean) {
+        actionButtons.forEach((btn) => { btn.disabled = disabled; });
+    }
+
+    function showStatus(message: string, type: 'success' | 'error' | 'info' = 'info') {
+        statusMessage.textContent = message;
+        const baseClass = 'min-h-[1.5rem] text-center text-sm font-semibold';
+        if (type === 'success') {
+            statusMessage.className = `${baseClass} text-emerald-400`;
+        } else if (type === 'error') {
+            statusMessage.className = `${baseClass} text-red-400`;
+        } else {
+            statusMessage.className = `${baseClass} text-gray-400`;
+        }
+    }
+
+    function getFormatterOptions() {
+        let tabWidth = parseInt(indentInput.value, 10);
+        if (Number.isNaN(tabWidth)) tabWidth = 2;
+        tabWidth = Math.max(1, Math.min(8, tabWidth));
+        indentInput.value = String(tabWidth);
+
+        return {
+            language: dialectSelect.value,
+            tabWidth,
+            keywordCase: keywordCaseSelect.value as 'upper' | 'lower' | 'preserve',
+        };
+    }
+
+    function formatSql() {
+        const text = sqlInput.value.trim();
+        if (!text) {
+            showStatus('El área de entrada está vacía.', 'error');
+            return;
+        }
+
+        const formatter = window.sqlFormatter;
+        if (!formatter) {
+            showStatus('El formateador aún se está cargando...', 'info');
+            return;
+        }
+
+        try {
+            const opts = getFormatterOptions();
+            const result = formatter.format(text, opts);
+            sqlOutput.value = result;
+            showStatus('✓ SQL formateado.', 'success');
+        } catch (e: any) {
+            showStatus(`Error de formato: ${e.message}`, 'error');
+        }
+    }
+
+    function minifySql() {
+        const text = sqlInput.value.trim();
+        if (!text) {
+            showStatus('El área de entrada está vacía.', 'error');
+            return;
+        }
+
+        const formatter = window.sqlFormatter;
+        if (!formatter) {
+            showStatus('El formateador aún se está cargando...', 'info');
+            return;
+        }
+
+        try {
+            const opts = getFormatterOptions();
+            const formatted = formatter.format(text, opts);
+            const minified = formatted
+                .replace(/\/\*[\s\S]*?\*\//g, ' ')
+                .replace(/--[^\n]*/g, ' ')
+                .replace(/\n/g, ' ')
+                .replace(/\s+/g, ' ')
+                .replace(/\s*([(),;.=<>!+\-\/*])\s*/g, '$1')
+                .trim();
+            sqlOutput.value = minified;
+            showStatus('✓ SQL minificado.', 'success');
+        } catch (e: any) {
+            showStatus(`Error de formato: ${e.message}`, 'error');
+        }
+    }
+
+    function loadExample() {
+        const example = `SELECT u.id, u.name, u.email
+FROM users u
+WHERE u.active = 1
+  AND u.created_at >= '2024-01-01'
+ORDER BY u.created_at DESC
+LIMIT 10;`;
+        sqlInput.value = example;
+        sqlOutput.value = '';
+        showStatus('✓ Ejemplo cargado.', 'success');
+        sqlInput.focus();
+    }
+
+    function copyOutput() {
+        const text = sqlOutput.value;
+        if (!text) {
+            showStatus('No hay contenido para copiar.', 'error');
+            return;
+        }
+
+        navigator.clipboard.writeText(text).then(() => {
+            showStatus('✓ Resultado copiado al portapapeles.', 'success');
+        }).catch(() => {
+            showStatus('No se pudo copiar al portapapeles.', 'error');
+        });
+    }
+
+    function clearAll() {
+        sqlInput.value = '';
+        sqlOutput.value = '';
+        statusMessage.textContent = '';
+        sqlInput.focus();
+    }
+
+    formatBtn.addEventListener('click', () => formatSql());
+    minifyBtn.addEventListener('click', () => minifySql());
+    exampleBtn.addEventListener('click', loadExample);
+    copyBtn.addEventListener('click', copyOutput);
+    clearBtn.addEventListener('click', clearAll);
+
+    // Poll for the CDN library availability and enable actions once ready.
+    const POLL_INTERVAL_MS = 50;
+    const TIMEOUT_MS = 10000;
+    const maxAttempts = TIMEOUT_MS / POLL_INTERVAL_MS;
+    let attempts = 0;
+
+    showStatus('Cargando formateador de SQL...', 'info');
+
+    const pollInterval = setInterval(() => {
+        attempts++;
+
+        if (window.sqlFormatter) {
+            clearInterval(pollInterval);
+            setActionsDisabled(false);
+            showStatus('✓ Formateador listo.', 'success');
+            return;
+        }
+
+        if (attempts >= maxAttempts) {
+            clearInterval(pollInterval);
+            setActionsDisabled(true);
+            showStatus('No se pudo cargar el formateador de SQL.', 'error');
+        }
+    }, POLL_INTERVAL_MS);
+</script>

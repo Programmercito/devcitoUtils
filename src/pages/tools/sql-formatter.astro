@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SqlFormatter from '../../components/tools/SqlFormatter.astro';
+---
+
+<Layout
+    title="Formateador y Minificador de SQL | Devcito Utils"
+    description="Formateá y minificá consultas SQL al instante. Elegí dialecto, indentación y mayúsculas/minúsculas. Todo se procesa de forma privada en tu navegador."
+    keywords="sql formatter, formateador sql, minificador sql, beautifier sql, postgresql, mysql, sqlite, sql online, herramientas sql"
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Formateador y Minificador de SQL</h1>
+            <p class="text-lg text-gray-400 mt-2">Pegá tu consulta SQL, elegí el dialecto y las opciones de formato, y obtené el resultado listo para copiar.</p>
+        </div>
+        <div class="w-full">
+            <SqlFormatter />
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Por qué usar un formateador SQL?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Las consultas SQL bien formateadas son más fáciles de leer, depurar y compartir con tu equipo. Ya sea que recibas SQL minificado en una sola línea o necesites estandarizar el estilo de tu código, nuestro formateador te permite aplicar reglas claras de indentación y mayúsculas/minúsculas en segundos.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Múltiples dialectos</h3>
+                        <p class="text-sm text-gray-400">
+                            Soportamos PostgreSQL, MySQL, SQLite, SQL Server, BigQuery, Snowflake, DuckDB y muchos más, para que el formato respete la sintaxis de tu base de datos.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Privacidad garantizada</h3>
+                        <p class="text-sm text-gray-400">
+                            El formateador se carga directamente en tu navegador. Tus consultas nunca se envían a ningún servidor ni quedan almacenadas.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-purple-400 mb-3">Minificación incluida</h3>
+                        <p class="text-sm text-gray-400">
+                            Además de formatear, podés reducir una consulta a una sola línea para incluirla en payloads, logs o configuraciones.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Ventajas de nuestra herramienta</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">100% privado:</span> todo el procesamiento ocurre en el cliente gracias a sql-formatter v15 cargado desde jsDelivr.</li>
+                    <li><span class="text-white font-semibold">Opciones flexibles:</span> elegí el dialecto, el ancho de indentación (de 1 a 8 espacios) y el caso de las palabras clave.</li>
+                    <li><span class="text-white font-semibold">Ejemplo incluido:</span> cargá una consulta de ejemplo para probar el formateador sin escribir nada.</li>
+                    <li><span class="text-white font-semibold">Manejo de errores:</span> mensajes claros en español cuando el SQL no se puede parsear.</li>
+                    <li><span class="text-white font-semibold">Copiado rápido:</span> copiá el resultado al portapapeles con un solo clic.</li>
+                </ul>
+
+                <div class="bg-emerald-600/10 border-l-4 border-emerald-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-emerald-200 font-medium">
+                        <strong>Tip Pro:</strong> si trabajás con varias bases de datos, seleccioná siempre el dialecto correcto. Algunas sintaxis específicas, como los identificadores entre corchetes de T-SQL o los strings con dólar de PostgreSQL, solo se interpretan bien con el dialecto adecuado.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
