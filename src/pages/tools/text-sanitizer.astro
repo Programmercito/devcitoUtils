@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TextSanitizer from '../../components/tools/TextSanitizer.astro';
+---
+
+<Layout
+    title="Sanitizador de Texto | Devcito Utils"
+    description="Limpiá texto pegado de caracteres de control, bytes nulos, espacios de ancho cero y normalizá saltos de línea. Escapá para JSON, HTML o URL. Todo en el navegador."
+    keywords="sanitizador texto, limpiar texto, caracteres de control, espacios en blanco, escape json, escape html, encode url, texto limpio"
+>
+    <main class="flex-grow flex flex-col items-center p-4 sm:p-6 md:p-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Sanitizador de Texto</h1>
+            <p class="text-lg text-gray-400 mt-2">Pegá texto sucio, aplicá reglas de limpieza y obtené un resultado seguro con un registro de lo detectado.</p>
+        </div>
+        <div class="w-full">
+            <TextSanitizer />
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="mt-16 w-full max-w-5xl">
+            <div class="tool-panel prose prose-invert max-w-none">
+                <h2 class="text-3xl font-black text-white mb-6">¿Cómo funciona?</h2>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    El sanitizador procesa el texto completamente en tu navegador. Primero aplica los limpiadores que elijas en un orden fijo, y luego el modo de escape seleccionado. Cada transformación que produzca cambios se registra con la cantidad de caracteres afectados y un ejemplo representativo.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-blue-400 mb-3">Limpiadores</h3>
+                        <p class="text-sm text-gray-400">
+                            Eliminá caracteres de control ASCII, bytes nulos, caracteres Unicode de ancho cero, normalizá saltos de línea a LF, recortá espacios laterales y colapsá espacios consecutivos.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Modos de escape</h3>
+                        <p class="text-sm text-gray-400">
+                            Escapá comillas y barras, prepará una cadena JSON, convertí a entidades HTML o codificá para URLs de forma inmediata y predecible.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-4">Ejemplos de uso</h3>
+                <ul class="list-disc list-inside text-gray-300 space-y-3 mb-6">
+                    <li><span class="text-white font-semibold">Limpieza básica:</span> <code>hola\x02mundo</code> con "Remover caracteres de control" devuelve <code>holamundo</code>.</li>
+                    <li><span class="text-white font-semibold">Saltos de línea:</span> mezclas de <code>\r\n</code>, <code>\r</code> y <code>\n</code> se normalizan a un único <code>\n</code>.</li>
+                    <li><span class="text-white font-semibold">Escape JSON:</span> <code>linea"uno\nlinea"dos</code> se convierte en <code>linea\"uno\\nlinea\"dos</code>.</li>
+                </ul>
+
+                <div class="bg-blue-600/10 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+                    <p class="text-sm text-blue-200 italic">
+                        <strong>Privacidad:</strong> todo el procesamiento ocurre en tu navegador. El texto nunca se envía a ningún servidor.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
