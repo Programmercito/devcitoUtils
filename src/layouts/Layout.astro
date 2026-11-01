@@ -1,5 +1,6 @@
 ---
 import Header from '../components/Header.astro';
+import { canonicalUrl as getCanonicalUrl } from '../utils/seo.mjs';
 import "../styles/global.css";
 
 export interface Props {
@@ -14,43 +15,70 @@ const {
     keywords = 'herramientas desarrolladores, utilidades online, base64, json, jwt, uuid, gitignore, desarrollo web'
 } = Astro.props;
 
-const canonicalUrl = Astro.url.href;
-const image = new URL("/social-card.svg", Astro.url.origin).href;
+if (!Astro.site) throw new Error('Astro site is required for SEO metadata.');
+const canonicalUrl = getCanonicalUrl(Astro.site, Astro.url.pathname);
+const homeUrl = getCanonicalUrl(Astro.site, '/');
+const image = new URL('/social-card.png', Astro.site).href;
+const pageName = title.replace(/\s*\|\s*Devcito Utils$/, '');
+const isToolPage = Astro.url.pathname.startsWith('/tools/');
 const breadcrumbItems = [
   {
     "@type": "ListItem",
     position: 1,
     name: "Inicio",
-    item: Astro.url.origin,
+    item: homeUrl,
   },
 ];
 
-if (Astro.url.pathname !== "/") {
+if (isToolPage) {
   breadcrumbItems.push({
     "@type": "ListItem",
     position: 2,
-    name: title,
+    name: pageName,
     item: canonicalUrl,
   });
 }
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: title,
-  description,
-  url: canonicalUrl,
-  inLanguage: "es",
-  isPartOf: {
+const graph = [
+  {
     "@type": "WebSite",
+    "@id": `${homeUrl}#website`,
     name: "Devcito Utils",
-    url: Astro.url.origin,
+    url: homeUrl,
+    inLanguage: "es",
   },
-  breadcrumb: {
-    "@type": "BreadcrumbList",
-    itemListElement: breadcrumbItems,
+  {
+    "@type": "WebPage",
+    "@id": `${canonicalUrl}#webpage`,
+    name: title,
+    description,
+    url: canonicalUrl,
+    inLanguage: "es",
+    isPartOf: { "@id": `${homeUrl}#website` },
+    ...(isToolPage ? { breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` } } : {}),
   },
-};
+  ...(isToolPage ? [
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      itemListElement: breadcrumbItems,
+    },
+    {
+      "@type": "WebApplication",
+      name: pageName,
+      description,
+      url: canonicalUrl,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web browser",
+      offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
+    },
+  ] : []),
+];
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": graph,
+}).replace(/</g, '\\u003c');
 ---
 
 <html lang="es">
@@ -87,6 +115,9 @@ const jsonLd = {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={image} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Devcito Utils - Herramientas online para desarrolladores" />
 
         <!-- Twitter -->
@@ -97,7 +128,7 @@ const jsonLd = {
         <meta property="twitter:image" content={image} />
         <meta property="twitter:image:alt" content="Devcito Utils - Herramientas online para desarrolladores" />
 
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json" set:html={jsonLd} />
 
 		<meta name="generator" content={Astro.generator} />
         <style>
@@ -110,6 +141,15 @@ const jsonLd = {
         <div class="bg-mesh" aria-hidden="true"></div>
         <Header currentPath={Astro.url.pathname} />
         <div class="h-20"></div>
+        {isToolPage && (
+          <nav aria-label="Ruta de navegación" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 text-sm text-gray-400">
+            <ol class="flex flex-wrap items-center gap-2">
+              <li><a href="/" class="hover:text-white focus-visible:outline-2 focus-visible:outline-blue-400">Inicio</a></li>
+              <li aria-hidden="true">/</li>
+              <li aria-current="page" class="text-gray-300">{pageName}</li>
+            </ol>
+          </nav>
+        )}
 		<slot />
 	</body>
 </html>

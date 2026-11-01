@@ -17,6 +17,7 @@
 - **⚡ Velocidad Increíble:** Construido sobre **Astro 6** y **Tailwind CSS v4** para ofrecer una carga casi instantánea, transiciones sumamente fluidas y cero dependencias innecesarias de backend.
 - **🎨 Interfaz Premium:** Animaciones sutiles, efectos de brillo estilo *mesh gradient*, soporte para pantallas de alta densidad y una UX ultra refinada.
 - **📱 Responsive & Glassmorphism:** Diseñado con un estilo moderno y elegante que se adapta perfectamente tanto a computadoras de escritorio como a dispositivos móviles.
+- **🔎 Búsqueda flexible:** Encuentra herramientas por nombre, función o tecnología, sin preocuparte por las tildes ni el orden de las palabras.
 
 ---
 
@@ -80,6 +81,12 @@ Genera el build optimizado de la aplicación estática en la carpeta `dist/`:
 pnpm build
 ```
 
+### Ejecutar las pruebas
+
+```bash
+pnpm test
+```
+
 ### Previsualizar Compilación de Producción
 
 Ejecuta un servidor local para inspeccionar la versión final compilada:
@@ -87,6 +94,18 @@ Ejecuta un servidor local para inspeccionar la versión final compilada:
 ```bash
 pnpm preview
 ```
+
+### SEO y publicación
+
+El build genera `sitemap.xml` con la portada y todas las herramientas locales, además de `robots.txt` con la dirección del sitemap. Las URLs canónicas usan el dominio configurado en `astro.config.mjs` y una barra final, como el sitio publicado en GitHub Pages.
+
+Después de publicar:
+
+1. Verifica que `https://tools.devcito.org/sitemap.xml` y las URLs del sitemap respondan correctamente.
+2. Revisa el `robots.txt` público: Cloudflare puede modificarlo o servir sus propias reglas de rastreo.
+3. Verifica la propiedad en Google Search Console, envía el sitemap y usa la inspección de URL para comprobar la indexación.
+
+El sitemap y los datos estructurados ayudan a descubrir e interpretar las páginas, pero no garantizan indexación, posiciones ni resultados enriquecidos.
 
 ---
 

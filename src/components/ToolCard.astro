@@ -3,7 +3,7 @@ const { href, title, description, isNew = false, icon = '' } = Astro.props;
 const isExternal = href.startsWith('http');
 ---
 
-<a href={href}
+<a href={isExternal ? href : `${href.replace(/\/+$/, '')}/`}
    target={isExternal ? "_blank" : undefined}
    rel={isExternal ? "noopener noreferrer" : undefined}
    class="tool-card group relative flex flex-col h-full bg-gray-900/40 backdrop-blur-md rounded-3xl overflow-hidden border border-white/5 hover:border-blue-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
