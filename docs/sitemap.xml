@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://tools.devcito.org/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/ai-rewriter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/base64/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/bytes-converter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/color-converter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/gitignore-generator/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/hash-generator/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/hmac-verifier/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/json-formatter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/json-to-typescript/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/jwt-decoder/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/markdown-previewer/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/sql-formatter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/ssh-keygen/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/text-counter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/text-sanitizer/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/text-transformer/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/timestamp-converter/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/url-encoder/</loc></url>
+  <url><loc>https://tools.devcito.org/tools/uuid-generator/</loc></url>
+</urlset>

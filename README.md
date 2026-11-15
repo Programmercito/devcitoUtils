@@ -3,7 +3,7 @@
 > **La navaja suiza para el desarrollo moderno.** Una colección de herramientas premium para desarrolladores, de código abierto, ultrarrápidas y enfocadas en la privacidad. 100% serverless, locales y seguras.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Astro-v6.x-ff5d01?style=for-the-badge&logo=astro&logoColor=white" alt="Astro" />
+  <img src="https://img.shields.io/badge/Astro-v7.x-ff5d01?style=for-the-badge&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4.x-38bdf8?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/TypeScript-Ready-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge" alt="License" />
@@ -14,8 +14,9 @@
 ## ✨ Características Principales
 
 - **🔒 Privacidad Ante Todo:** Todos los cálculos se realizan localmente en tu navegador. Tus datos e información sensible nunca son enviados a servidores externos.
-- **⚡ Velocidad Increíble:** Construido sobre **Astro 6** y **Tailwind CSS v4** para ofrecer una carga casi instantánea, transiciones sumamente fluidas y cero dependencias innecesarias de backend.
+- **⚡ Velocidad Increíble:** Construido sobre **Astro 7** y **Tailwind CSS v4** para ofrecer una carga casi instantánea, transiciones sumamente fluidas y cero dependencias innecesarias de backend.
 - **🎨 Interfaz Premium:** Animaciones sutiles, efectos de brillo estilo *mesh gradient*, soporte para pantallas de alta densidad y una UX ultra refinada.
+- **🌗 Tema claro y oscuro:** Sigue la preferencia del sistema hasta que elijas un tema; tu elección se guarda en el navegador.
 - **📱 Responsive & Glassmorphism:** Diseñado con un estilo moderno y elegante que se adapta perfectamente tanto a computadoras de escritorio como a dispositivos móviles.
 - **🔎 Búsqueda flexible:** Encuentra herramientas por nombre, función o tecnología, sin preocuparte por las tildes ni el orden de las palabras.
 
@@ -24,6 +25,8 @@
 ## 🧰 Catálogo de Herramientas Incluidas
 
 ### 📂 Generales & Redireccionamiento Externo
+*   **[Nuevo] 🎨 Armonic Themes ([themes.devcito.org](https://themes.devcito.org)):** Genera paletas accesibles y expórtalas a Tailwind CSS o variables CSS.
+*   **[Nuevo] 🔀 Switchtool ([switch.devcito.org](https://switch.devcito.org)):** Gestiona versiones de herramientas de desarrollo en Windows.
 *   **[Nuevo] 🔍 Diferenciador de Archivos ([diff.devcito.org](https://diff.devcito.org)):** Compara textos o archivos de código línea por línea sin subir nada a ningún servidor.
 *   **[Nuevo] 📱 Generador de Códigos QR ([qr.devcito.org](https://qr.devcito.org)):** Crea códigos QR personalizados para tus URLs, contraseñas de Wi-Fi, textos y más.
 *   **🔄 Conversor de Archivos ([converter.devcito.org](https://converter.devcito.org)):** Herramienta optimizada para cambiar el formato de tus archivos en segundos.
@@ -57,7 +60,7 @@ Sigue estos sencillos pasos para clonar el repositorio y levantar el entorno de 
 
 ### Requisitos Previos
 
-Asegúrate de tener instalado [Node.js](https://nodejs.org/) y el gestor de paquetes de tu preferencia (`npm`, `pnpm` o `yarn`). Se recomienda el uso de `pnpm`.
+Asegúrate de tener instalado [Node.js](https://nodejs.org/) 22.23.4 o superior y el gestor de paquetes de tu preferencia (`npm`, `pnpm` o `yarn`). Se recomienda el uso de `pnpm`.
 
 ### Instalación de Dependencias
 
@@ -75,7 +78,7 @@ pnpm dev
 
 ### Compilar para Producción
 
-Genera el build optimizado de la aplicación estática en la carpeta `dist/`:
+Genera el build optimizado de la aplicación estática en la carpeta `docs/`:
 
 ```bash
 pnpm build
@@ -101,11 +104,11 @@ El build genera `sitemap.xml` con la portada y todas las herramientas locales, a
 
 Después de publicar:
 
-1. Verifica que `https://tools.devcito.org/sitemap.xml` y las URLs del sitemap respondan correctamente.
-2. Revisa el `robots.txt` público: Cloudflare puede modificarlo o servir sus propias reglas de rastreo.
+1. Verifica que `https://tools.devcito.org/sitemap.xml` y las URLs del sitemap respondan correctamente. Si el sitemap devuelve 404, confirma que se haya publicado la compilación actual de `docs/`.
+2. Revisa el `robots.txt` público: Cloudflare puede modificarlo o servir sus propias reglas de rastreo. Si no anuncia el sitemap, ajusta la configuración de Cloudflare o envíalo directamente en Search Console.
 3. Verifica la propiedad en Google Search Console, envía el sitemap y usa la inspección de URL para comprobar la indexación.
 
-El sitemap y los datos estructurados ayudan a descubrir e interpretar las páginas, pero no garantizan indexación, posiciones ni resultados enriquecidos.
+El sitemap y los datos estructurados ayudan a descubrir e interpretar las páginas, pero no garantizan indexación, posiciones ni resultados enriquecidos. Google exige una reseña o valoración real para los resultados enriquecidos de aplicaciones; no se deben inventar valoraciones.
 
 ---
 

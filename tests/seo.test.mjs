@@ -63,10 +63,17 @@ test('every page emits consistent metadata and valid structured data', () => {
     const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
     assert.ok(title, `Missing title: ${page}`);
     assert.ok(description, `Missing description: ${page}`);
+    assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, `Expected one H1: ${page}`);
+    assert.match(html, /<html lang="es"/, page);
+    assert.match(html, /<meta name="robots" content="index, follow">/, page);
     titles.add(title);
     descriptions.add(description);
     assert.ok(html.includes(`<link rel="canonical" href="${url}">`), page);
+    assert.equal((html.match(/rel="canonical"/g) ?? []).length, 1, page);
     assert.ok(html.includes(`<meta property="og:url" content="${url}">`), page);
+    assert.ok(html.includes(`<meta property="og:title" content="${title}">`), page);
+    assert.ok(html.includes(`<meta property="og:description" content="${description}">`), page);
+    assert.ok(html.includes(`<meta property="twitter:card" content="summary_large_image">`), page);
     assert.ok(html.includes(`<meta property="og:image" content="${site.href}social-card.png">`), page);
     const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
     assert.ok(json, `Missing JSON-LD: ${page}`);
@@ -79,6 +86,9 @@ test('every page emits consistent metadata and valid structured data', () => {
       assert.match(html, /aria-label="Ruta de navegación"/);
     } else {
       for (const slug of slugs) assert.ok(html.includes(`href="/tools/${slug}/"`), slug);
+      for (const url of ['https://themes.devcito.org', 'https://switch.devcito.org']) {
+        assert.match(html, new RegExp(`<a href="${url.replaceAll('.', '\\.')}"[^>]*target="_blank"[^>]*rel="noopener noreferrer"`));
+      }
     }
   }
   assert.equal(titles.size, pages.length);
